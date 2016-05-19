@@ -1,3 +1,11 @@
+function error() {
+    $('#siteMessage').fadeIn('fast', function() {
+        setTimeout(function() {
+            $('#siteMessage').fadeOut('slow');
+        }, 2000);
+    });
+}
+
 $(document).ready(function() {
     $('.linkIcon, .tweetIcon').click(function(event) {
         event.preventDefault();
@@ -12,23 +20,19 @@ $(document).ready(function() {
 
         $.ajax({
             url: url,
-            type: 'POST',
+            type: 'GET',
             dataType: 'json',
             data: {action: action, id: id},
         })
-        .done(function() {
-            $(discardElement).slideUp();
+        .done(function(data) {
+            if(!data || data.err) {
+                error();
+            } else {
+                $(discardElement).slideUp();
+            }
         })
         .fail(function() {
-            $('#siteMessage').fadeIn('fast', function() {
-                setTimeout(function() {
-                    $('#siteMessage').fadeOut('slow');
-                }, 2000);
-            });
-        })
-        .always(function() {
-            console.log("complete");
-        });
-        
+            error();
+        });        
     });
 });

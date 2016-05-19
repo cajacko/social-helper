@@ -20,6 +20,9 @@ if(isset($request[0])) {
         case 'twitter':
             require_once('twitter/index.php');
             break;
+        case 'action':
+            require_once('action.php');
+            break;
         default:
             require_once('home.php');
     }
