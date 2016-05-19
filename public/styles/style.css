@@ -15,3 +15,12 @@
     display: inline-block;
     margin-left: 0.5em;
 }
+
+.siteMessage {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    display: none;
+}
