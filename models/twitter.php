@@ -39,45 +39,22 @@ class Twitter {
                 "oauth_token" => $_GET['oauth_token']
             );
 
-            $access_token = $this->connection->oauth("oauth/access_token", $params);
-            $this->token = $access_token['oauth_token'];
-            $this->token_secret = $access_token['oauth_token_secret'];
+            return $this->connection->oauth("oauth/access_token", $params);
+            // $this->token = $access_token['oauth_token'];
+            // $this->token_secret = $access_token['oauth_token_secret'];
 
-            $_SESSION['oauth_token'] = $this->token;
-            $_SESSION['oauth_token_secret'] = $this->token_secret;
-        } elseif(isset($_SESSION['oauth_token'], $_SESSION['oauth_token_secret'])) {
-            $access_token = array(
-                'oauth_token' => $_SESSION['oauth_token'], 
-                'oauth_token_secret' => $_SESSION['oauth_token_secret']
-            );
-
-            $this->token = $_SESSION['oauth_token'];
-            $this->token_secret = $_SESSION['oauth_token_secret'];
+            // $_SESSION['oauth_token'] = $this->token;
+            // $_SESSION['oauth_token_secret'] = $this->token_secret;
         } else {
             return false;
         }
 
-        $this->connection = new TwitterOAuth(
-            $this->key, $this->secret, 
-            $this->token, 
-            $this->token_secret
-        );
+        // $this->connection = new TwitterOAuth(
+        //     $this->key, $this->secret, 
+        //     $this->token, 
+        //     $this->token_secret
+        // );
 
-        return $access_token;
-    }
-
-    public function get_user() {        
-        $content = $this->connection->get("account/verify_credentials");
-        return $content;
-    }
-
-    public function get_twitter_user() {
-        $tokens = $this->get_tokens();
-
-        if($tokens) {
-            return $this->get_user();
-        } else {
-            return false;
-        }
+        // return $access_token;
     }
 }

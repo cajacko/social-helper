@@ -8,6 +8,8 @@ class Action {
     }
 
     public function process_action($action, $id) {
+        $_SESSION['id'] = 123;
+        
         if(isset($_SESSION['id']) && is_numeric($_SESSION['id'])) {
             switch($action) {
                 case 'linkTweeted':

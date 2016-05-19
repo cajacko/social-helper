@@ -2,24 +2,38 @@
 
 class User {
     private $db;
-    private $twitter;
 
-    public function __construct($db, $twitter) {
+    public function __construct($db) {
         $this->db = $db;
-        $this->twitter = $twitter;
     }
 
-    public function login_user() {
-        $twitter_user = $this->twitter->get_twitter_user();
+    public function register($twitter_id, $token, $secret) {
+        $query = '
+            INSERT INTO users (twitterId, token, secret)
+            VALUES (?, ?, ?)
+        ;';
 
-        if($twitter_user) {
-            return $twitter_user;
+        // prepare and bind
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("sss", $twitter_id, $token, $secret);
+        $stmt->execute();
+
+        if($stmt->insert_id) {
+            return $stmt->insert_id;
         } else {
             return false;
         }
     }
 
-    public function get_user_by_twitter_id($twitter_id) {
+    public function is_user_logged_in() {
+        if(isset($_SESSION['id'], $_SESSION['oauth_token'], $_SESSION['oauth_token_secret'])) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function does_user_exist($twitter_id) {
         $query = '
             SELECT users.id
             FROM users
@@ -35,35 +49,35 @@ class User {
 
         if($res->num_rows) {
             $user = $res->fetch_assoc();
-            return $user;
+            return $user['id'];
         } else {
             return false;
         }
     }
 
-    public function register_user($twitter_id, $token, $secret) {
+    public function update_tokens($user_id, $oauth_token, $oauth_token_secret) {
         $query = '
-            INSERT INTO users (twitterId, token, secret)
-            VALUES (?, ?, ?)
+            UPDATE users
+            SET token = ?, secret = ?
+            WHERE id = ?
         ;';
 
         // prepare and bind
         $stmt = $this->db->prepare($query);
-        $stmt->bind_param("sss", $twitter_id, $token, $secret);
+        $stmt->bind_param("ssi", $oauth_token, $oauth_token_secret, $user_id);
         $stmt->execute();
 
-        if($stmt->insert_id) {
-            return array('id' => $stmt->insert_id);
+        if($stmt) {
+            return true;
         } else {
             return false;
         }
     }
 
-    public function is_user_logged_in() {
-        if(isset($_SESSION['id'], $_SESSION['oauth_token'], $_SESSION['oauth_token_secret'])) {
-            return true;
-        } else {
-            return false;
-        }
+    public function login($user_id, $oauth_token, $oauth_token_secret) {
+        $_SESSION['id'] = $user_id;
+        $_SESSION['oauth_token'] = $oauth_token;
+        $_SESSION['oauth_token_secret'] = $oauth_token_secret;
+        return true;
     }
 }

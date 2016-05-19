@@ -20,7 +20,6 @@ require_once('../models/database.php');
 require_once('../models/action.php');
 
 $action_model = new Action($db);
-$_SESSION['id'] = 123;
 $response = $action_model->process_action($action, $id);
 
 if($response) {
@@ -29,5 +28,4 @@ if($response) {
     action_err('Bad response');
 }
 
-session_destroy();
 exit;
