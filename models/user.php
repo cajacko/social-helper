@@ -27,6 +27,7 @@ class User {
 
     public function is_user_logged_in() {
         if(isset($_SESSION['id'], $_SESSION['oauth_token'], $_SESSION['oauth_token_secret'])) {
+            // TODO: make call to twitter to check tokens are valid
             return true;
         } else {
             return false;
