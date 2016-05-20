@@ -125,7 +125,8 @@ class Links {
         $query = '
             SELECT *
             FROM links
-            ORDER BY id
+            WHERE tweeted = 0 AND retweeted = 0 AND similar = 0 AND discarded = 0 AND favourited = 0
+            ORDER BY id DESC
         ;';
 
         // prepare and bind

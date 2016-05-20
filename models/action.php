@@ -37,34 +37,124 @@ class Action {
     }
 
     public function link_tweeted($id, $user) {
-        return array('hello' => 'test');
+        $query = '
+            UPDATE links
+            SET tweeted = 1
+            WHERE id = ?
+        ;';
+
+        // prepare and bind
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+
+        if($stmt) {
+            return array('response' => true);
+        } else {
+            return array('err' => true, 'err' => 'Error');
+        }
     }
 
     public function link_similar($id, $user) {
-        return array('hello' => 'test');
+        $query = '
+            UPDATE links
+            SET similar = 1
+            WHERE id = ?
+        ;';
+
+        // prepare and bind
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+
+        if($stmt) {
+            return array('response' => true);
+        } else {
+            return array('err' => true, 'err' => 'Error');
+        }
     }
 
     public function discard_link($id, $user) {
-        return array('hello' => 'test');
+        $query = '
+            UPDATE links
+            SET discarded = 1
+            WHERE id = ?
+        ;';
+
+        // prepare and bind
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+
+        if($stmt) {
+            return array('response' => true);
+        } else {
+            return array('err' => true, 'err' => 'Error');
+        }
     }
 
     public function tweet_replied($id, $user) {
-        return array('hello' => 'test');
+        $query = '
+            UPDATE links
+            SET replied = 1
+            WHERE id = ?
+        ;';
+
+        // prepare and bind
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+
+        if($stmt) {
+            return array('response' => true);
+        } else {
+            return array('err' => true, 'err' => 'Error');
+        }
     }
 
     public function tweet_retweeted($id, $user) {
-        return array('hello' => 'test');
+        $query = '
+            UPDATE links
+            SET retweeted = 1
+            WHERE id = ?
+        ;';
+
+        // prepare and bind
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+
+        if($stmt) {
+            return array('response' => true);
+        } else {
+            return array('err' => true, 'err' => 'Error');
+        }
     }
 
     public function tweet_loved($id, $user) {
-        return array('hello' => 'test');
+        $query = '
+            UPDATE links
+            SET favourited = 1
+            WHERE id = ?
+        ;';
+
+        // prepare and bind
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+
+        if($stmt) {
+            return array('response' => true);
+        } else {
+            return array('err' => true, 'err' => 'Error');
+        }
     }
 
     public function tweet_discarded($id, $user) {
-        return array('hello' => 'test');
+        return array('response' => true);
     }
 
     public function remove_tag($id, $user) {
-        return array('hello' => 'test');
+        return array('response' => true);
     }
 }
