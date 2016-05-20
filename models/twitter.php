@@ -13,7 +13,8 @@ class Twitter {
     private $token_secret;
     private $connection_type = false;
 
-    public function __construct($config) {
+    public function __construct($db, $config) {
+        $this->db = $db;
         $this->key = $config->twitter->key;
         $this->secret = $config->twitter->secret;
         $this->callback = $config->twitter->callback;
@@ -73,18 +74,162 @@ class Twitter {
         }
     }
 
-    public function get_tweets() {
+    public function get_tweets($tag) {
         $this->set_app_connection();
 
         $tweet_response = $this->connection->get( "search/tweets", array( 
-            'q' => '#iot filter:links -filter:retweets', 
+            'q' => '#' . $tag['tag'] .' filter:links -filter:retweets', 
             "count" => 10, 
             'exclude_replies' => TRUE,
             'lang' => 'en',
             'result_type' => 'recent',
         ));   
 
-        print_r($tweet_response); exit;
+        return $tweet_response;
+    }
 
+    public function does_tweet_exist($tweet_id) {
+        $query = '
+            SELECT tweets.id
+            FROM tweets
+            WHERE tweets.tweet_id = ?
+            LIMIT 1
+        ;';
+
+        // prepare and bind
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("i", $tweet_id);
+        $stmt->execute();
+        $res = $stmt->get_result();
+
+        if($res->num_rows) {
+            $tweet = $res->fetch_assoc();
+            return $tweet['id'];
+        } else {
+            return false;
+        }
+    }
+
+    public function save_tweet_link($id, $link) {
+        $query = '
+            INSERT INTO tweet_links (tweet_id, link)
+            VALUES (?, ?)
+        ;';
+
+        // prepare and bind
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("is", $id, $link);
+        $stmt->execute();
+
+        if($stmt->insert_id) {
+            return $stmt->insert_id;
+        } else {
+            return false;
+        }
+    }
+
+    public function save_tweet_links($id, $tweet) {
+        foreach($tweet->entities->urls as $link) {
+            $this->save_tweet_link($id, $link->expanded_url);
+        }
+    }
+
+    public function save_tweet_tag($id, $tag) {
+        $query = '
+            INSERT INTO tweet_tags (tweet_id, tag)
+            VALUES (?, ?)
+        ;';
+
+        // prepare and bind
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("is", $id, $tag);
+        $stmt->execute();
+
+        if($stmt->insert_id) {
+            return $stmt->insert_id;
+        } else {
+            return false;
+        }
+    }
+
+    public function save_tweet_tags($id, $tweet) {
+        foreach($tweet->entities->hashtags as $tag) {
+            $this->save_tweet_tag($id, $tag->text);
+        }
+    }
+
+    public function save_tweeet($tweet) {
+        $query = '
+            INSERT INTO tweets (tweet_id, user_id, tweet, date, retweets, favourites)
+            VALUES (?, ?, ?, ?, ?, ?)
+        ;';
+
+        // prepare and bind
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param(
+            "iissii", 
+            $tweet->id, 
+            $tweet->user->id,
+            $tweet->text,
+            $tweet_date,
+            $tweet->retweet_count,
+            $tweet->favorite_count
+        );
+
+        $tweet_date = strtotime($tweet->created_at);
+        $stmt->execute();
+
+        if($stmt->insert_id) {
+            $this->save_tweet_links($stmt->insert_id, $tweet);
+            $this->save_tweet_tags($stmt->insert_id, $tweet);
+            return $stmt->insert_id;
+        } else {
+            return false;
+        }
+    } 
+
+    public function update_tweet($id, $tweet) {
+        $query = '
+            UPDATE tweets
+            SET retweets = ?, favourites = ?
+            WHERE tweet_id = ?
+        ;';
+
+        // prepare and bind
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param(
+            "iii", 
+            $tweet->retweet_count,
+            $tweet->favorite_count,
+            $tweet->id
+        );
+
+        $stmt->execute();
+
+        if($stmt) {
+            return $id;
+        } else {
+            return false;
+        }
+    }
+
+    public function save_new_tweets() {
+        require_once('tags.php');
+        $tags = new Tags($this->db);
+        $tags_to_process = $tags->get_all_tags();
+
+        foreach($tags_to_process as $tag) {
+            $tweets = $this->get_tweets($tag);
+
+            foreach($tweets->statuses as $tweet) {
+                $tweet_id = $this->does_tweet_exist($tweet->id);
+
+                if($tweet_id) {
+                    $this->update_tweet($tweet_id, $tweet);
+                } else {
+                    $tweet_id = $this->save_tweeet($tweet);
+                }
+            }
+        }
     }
 }

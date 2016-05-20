@@ -4,7 +4,7 @@ require_once('../models/user.php');
 require_once('../models/database.php');
 require_once('../models/twitter.php');
 
-$twitter = new Twitter($config->config);
+$twitter = new Twitter($db, $config->config);
 $user = new User($db, $twitter);
 
 if($user->is_user_logged_in()) {
@@ -20,7 +20,7 @@ if($user->is_user_logged_in()) {
 
     require_once('../models/links.php');
 
-    $links = new Links($db);
+    $links = new Links($db, $config->config);
     $links = $links->get_top_links();
 
     if($links) {

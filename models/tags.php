@@ -7,6 +7,31 @@ class Tags {
         $this->db = $db;
     }
 
+    public function get_all_tags() {
+        $tags = array();
+
+        $query = '
+            SELECT tag, id
+            FROM userTrackingTags
+            GROUP BY tag
+        ;';
+
+        // prepare and bind
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $res = $stmt->get_result();
+
+        if($res->num_rows) {
+            while($tag = $res->fetch_assoc()) {
+                $tags[] = array('tag' => $tag['tag'], 'id' => $tag['id']);
+            }
+
+            return $tags;
+        } else {
+            return false;
+        }
+    }
+
     public function get_user_tags() {
         $tags = array();
 
