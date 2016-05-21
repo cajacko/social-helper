@@ -35,10 +35,37 @@ class Links {
     }
 
     public function resolve_url($link) {
-        return $link;
+        require_once('../helpers/parse-url.php');
+        $parser = new Parse_url;
+        return $parser->resolve($link);
+    }
+
+    public function does_link_exist($link) {
+        $query = '
+            SELECT id
+            FROM links
+            WHERE link = ?
+        ;';
+
+        // prepare and bind
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("s", $link);
+        $stmt->execute();
+        $res = $stmt->get_result();
+
+        if($res->num_rows) {
+            $link = $res->fetch_assoc();
+            return $link['id'];
+        } else {
+            return false;
+        }
     }
 
     public function save_link($link) {
+        if($link_id = $this->does_link_exist($link)) {
+            return $link_id;
+        }
+
         $query = '
             INSERT INTO links (link)
             VALUES (?)
@@ -79,7 +106,7 @@ class Links {
 
         foreach($links as $link) {
             $resolved_url = $this->resolve_url($link['link']);
-            $link_id = $this->save_link($link['link']);
+            $link_id = $this->save_link($resolved_url);
             $this->save_link_tweet($link_id, $link['tweet_id']);
         }
     }
