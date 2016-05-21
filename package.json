@@ -1,6 +1,6 @@
 {
   "name": "social-helper",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A web service that helps you find and share great content",
   "main": "./public/index.php",
   "repository": {
