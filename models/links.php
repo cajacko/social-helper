@@ -150,10 +150,17 @@ class Links {
         $links = array();
 
         $query = '
-            SELECT *
+            SELECT links.*
             FROM links
-            WHERE tweeted = 0 AND retweeted = 0 AND similar = 0 AND discarded = 0 AND favourited = 0
-            ORDER BY id DESC
+            LEFT JOIN user_links
+                ON user_links.link_id = links.id
+            WHERE 
+                (user_links.tweeted = 0 OR user_links.tweeted IS NULL) AND 
+                (user_links.retweeted = 0 OR user_links.tweeted IS NULL) AND 
+                (user_links.similar = 0 OR user_links.tweeted IS NULL) AND 
+                (user_links.discarded = 0 OR user_links.tweeted IS NULL) AND 
+                (user_links.favourited = 0 OR user_links.tweeted IS NULL)
+            ORDER BY links.id DESC
         ;';
 
         // prepare and bind
