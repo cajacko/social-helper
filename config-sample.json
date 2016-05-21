@@ -1,0 +1,13 @@
+{
+    "twitter": {
+        "key": "xxx",
+        "secret": "xxx",
+        "callback": "xxxx"
+    },
+    "database": {
+        "host": "xxx",
+        "database": "xxx",
+        "user": "xxx",
+        "password": "xxx"
+    }
+}

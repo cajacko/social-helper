@@ -1,0 +1,84 @@
+{% spaceless %}
+  {% include 'sublayouts/header.twig' %}
+  <h1>Social helper</h1>
+
+  <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+      <div class="panel-heading" role="tab" id="headingOne">
+        <h4 class="panel-title">
+          <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            Tags
+          </a>
+        </h4>
+      </div>
+      <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+        <div class="panel-body">
+          <form action="/action/add-tag" method="POST">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Add new tag</label>
+              <input type="text" name="tag" class="form-control" id="exampleInputEmail1" placeholder="#twitterHasTag">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+          </form>
+          <ul class="list-group">
+            {% for tag in vars.tags %}
+              <li class="list-group-item"><a href="/action/delete-tag?id={{ tag.id }}" class="badge">X</a>#{{ tag.tag }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>Links</h2>
+
+  <div>
+    {% for link in vars.links %}
+      <div class="panel panel-default discardElement">
+        <div class="panel-heading">
+          <a href="{{ link.url }}" class="panel-title" target="_blank">{{ link.url }}</a>
+
+          <div class="pull-right">        
+            <a href="" class="linkIcon" data-action="linkTweeted" data-id="{{ link.id }}"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+            <a href="" class="linkIcon" data-action="linkSimilar" data-id="{{ link.id }}"><i class="fa fa-files-o" aria-hidden="true"></i></a>
+            <a href="" class="linkIcon" data-action="linkDiscard" data-id="{{ link.id }}"><i class="fa fa-times" aria-hidden="true"></i></a> 
+          </div>
+        </div>
+        <div class="panel-body">
+          <a class="embedly-card" href="{{ link.url }}"></a>
+
+          <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-default">
+              <div class="panel-heading" role="tab" id="headingOne">
+                <h4 class="panel-title">
+                  <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ link.id }}" aria-expanded="true" aria-controls="collapse{{ link.id }}">
+                    Tweets
+                  </a>
+                </h4>
+              </div>
+              <div id="collapse{{ link.id }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapse{{ link.id }}">
+                {% for tweet in link.tweets %}
+                  <div class="panel-body discardElement">
+                    <div>
+                      <blockquote class="center-block twitter-tweet" data-lang="en">
+                        <p lang="en" dir="ltr">{{ tweet.tweet }}</p>
+                        {{ tweet.user }} (@{{ tweet.username }}) <a href="{{ tweet.url }}">{{ tweet.date }}</a>
+                      </blockquote>
+                    </div>
+                    <div class="text-center h2">
+                      <a href="" class="tweetIcon" data-action="tweetReply" data-id="{{ tweet.id }}"><i class="fa fa-reply" aria-hidden="true"></i></a>
+                      <a href="" class="tweetIcon" data-action="tweetRetweet" data-id="{{ tweet.id }}"><i class="fa fa-retweet" aria-hidden="true"></i></a>
+                      <a href="" class="tweetIcon" data-action="tweetLove" data-id="{{ tweet.id }}"><i class="fa fa-heart" aria-hidden="true"></i></a>
+                      <a href="" class="tweetIcon" data-action="tweetDiscard" data-id="{{ link.id }}"><i class="fa fa-times" aria-hidden="true"></i></a> 
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  {% include 'sublayouts/footer.twig' %}
+{% endspaceless %}
