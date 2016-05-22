@@ -7,9 +7,7 @@ class Action {
         $this->db = $db;
     }
 
-    public function process_action($action, $id) {
-        $_SESSION['id'] = 123;
-        
+    public function process_action($action, $id) {        
         if(isset($_SESSION['id']) && is_numeric($_SESSION['id'])) {
             switch($action) {
                 case 'linkTweeted':
