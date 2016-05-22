@@ -93,8 +93,6 @@ class Twitter {
             $twitter_search_array['max_id'] = $max_id;
         }
 
-        print_r($twitter_search_array);
-
         $tweet_response = $this->connection->get( "search/tweets", $twitter_search_array);   
 
         return $tweet_response;
@@ -167,6 +165,24 @@ class Twitter {
     public function save_tweet_tags($id, $tweet) {
         foreach($tweet->entities->hashtags as $tag) {
             $this->save_tweet_tag($id, $tag->text);
+        }
+    }
+
+    public function add_tweet_tag_rel($tweet_id, $tracking_tag_id) {
+        $query = '
+            INSERT INTO tweet_tracking_tags (tweet_id, tracking_tag_id)
+            VALUES (?, ?)
+        ;';
+
+        // prepare and bind
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("ii", $tweet_id, $tracking_tag_id);
+        $stmt->execute();
+
+        if($stmt->insert_id) {
+            return $stmt->insert_id;
+        } else {
+            return false;
         }
     }
 
@@ -276,6 +292,7 @@ class Twitter {
                             $this->update_tweet($tweet_id, $tweet); // Need to figure out when we update tweets,or if we do or not?
                         } else {
                             $tweet_id = $this->save_tweeet($tweet);
+                            $this->add_tweet_tag_rel($tweet_id, $tag['id']);
                         }
 
                         $i++;
