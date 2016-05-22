@@ -74,16 +74,28 @@ class Twitter {
         }
     }
 
-    public function get_tweets($tag) {
+    public function get_tweets($tag, $since_id = false, $max_id = false) {
         $this->set_app_connection();
 
-        $tweet_response = $this->connection->get( "search/tweets", array( 
+        $twitter_search_array = array( 
             'q' => '#' . $tag['tag'] .' filter:links -filter:retweets', 
-            "count" => 10, 
+            "count" => 100, 
             'exclude_replies' => TRUE,
             'lang' => 'en',
             'result_type' => 'recent',
-        ));   
+        );
+
+        if($since_id) {
+            $twitter_search_array['since_id'] = $since_id;
+        }
+
+        if($max_id) {
+            $twitter_search_array['max_id'] = $max_id;
+        }
+
+        print_r($twitter_search_array);
+
+        $tweet_response = $this->connection->get( "search/tweets", $twitter_search_array);   
 
         return $tweet_response;
     }
@@ -213,21 +225,66 @@ class Twitter {
         }
     }
 
+    public function update_last_tweet($tweets, $tag) {
+        $query = '
+            UPDATE tracking_tags
+            SET last_processed = ?
+            WHERE id = ?
+        ;';
+
+        $tweet_id = $tweets->statuses[0]->id;
+        $tweet_id++;
+
+        // prepare and bind
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param(
+            "ii", 
+            $tweets->statuses[0]->id,
+            $tag['id']
+        );
+
+        $stmt->execute();
+
+        if($stmt) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function save_new_tweets() {
         require_once('tags.php');
         $tags = new Tags($this->db);
         $tags_to_process = $tags->get_all_tags();
 
         foreach($tags_to_process as $tag) {
-            $tweets = $this->get_tweets($tag);
+            $since_id = $tag['last_processed']; // The most recent tweet we already had for this search
+            $max_id = false; // Oldest tweet id in the current set
+            $continue_while = true;
+            $i = 0;
 
-            foreach($tweets->statuses as $tweet) {
-                $tweet_id = $this->does_tweet_exist($tweet->id);
+            while($continue_while && $i < 100) {
+                $tweets = $this->get_tweets($tag, $since_id, $max_id); 
 
-                if($tweet_id) {
-                    $this->update_tweet($tweet_id, $tweet);
+                if(isset($tweets->statuses) && count($tweets->statuses)) {
+                    $this->update_last_tweet($tweets, $tag);
+
+                    foreach($tweets->statuses as $tweet) {
+                        $tweet_id = $this->does_tweet_exist($tweet->id);
+
+                        if($tweet_id) {
+                            $this->update_tweet($tweet_id, $tweet); // Need to figure out when we update tweets,or if we do or not?
+                        } else {
+                            $tweet_id = $this->save_tweeet($tweet);
+                        }
+
+                        $i++;
+                        $max_id = $tweet->id;
+                        $max_id--;
+                    }
                 } else {
-                    $tweet_id = $this->save_tweeet($tweet);
+                    $continue_while = false;
+                    break;
                 }
             }
         }

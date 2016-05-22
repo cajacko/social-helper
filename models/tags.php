@@ -11,8 +11,8 @@ class Tags {
         $tags = array();
 
         $query = '
-            SELECT tag, id
-            FROM userTrackingTags
+            SELECT tag, id, last_processed
+            FROM tracking_tags
             GROUP BY tag
         ;';
 
@@ -23,7 +23,7 @@ class Tags {
 
         if($res->num_rows) {
             while($tag = $res->fetch_assoc()) {
-                $tags[] = array('tag' => $tag['tag'], 'id' => $tag['id']);
+                $tags[] = array('tag' => $tag['tag'], 'id' => $tag['id'], 'last_processed' => $tag['last_processed']);
             }
 
             return $tags;
