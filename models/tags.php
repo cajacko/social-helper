@@ -13,7 +13,7 @@ class Tags {
         $query = '
             SELECT tag, id, last_processed
             FROM tracking_tags
-            GROUP BY tag
+            ORDER BY last_processed, id 
         ;';
 
         // prepare and bind

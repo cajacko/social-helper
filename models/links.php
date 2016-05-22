@@ -12,11 +12,14 @@ class Links {
         $links = array();
 
         $query = '
-            SELECT tweet_links.link, tweet_links.tweet_id
+            SELECT tweet_links.link, tweet_links.tweet_id, tweet_tracking_tags.tracking_tag_id
             FROM tweets
             INNER JOIN tweet_links
                 ON tweets.id = tweet_links.tweet_id
+            INNER JOIN tweet_tracking_tags
+                ON tweets.id = tweet_tracking_tags.tweet_id
             WHERE tweets.processed IS NULL
+            ORDER BY tweets.id DESC
         ;';
 
         // prepare and bind
@@ -26,7 +29,7 @@ class Links {
 
         if($res->num_rows) {
             while($link = $res->fetch_assoc()) {
-                $links[] = array('tweet_id' => $link['tweet_id'], 'link' => $link['link']);
+                $links[] = array('tweet_id' => $link['tweet_id'], 'link' => $link['link'], 'tracking_tag_id' => $link['tracking_tag_id']);
             }
 
             return $links;
@@ -128,6 +131,24 @@ class Links {
         }
     }
 
+    public function add_link_tracking_tag_rel($link_id, $tracking_tag_id) {
+        $query = '
+            INSERT INTO link_tracking_tags (link_id, tracking_tag_id)
+            VALUES (?, ?)
+        ;';
+
+        // prepare and bind
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("ii", $link_id, $tracking_tag_id);
+        $stmt->execute();
+
+        if($stmt->insert_id) {
+            return $stmt->insert_id;
+        } else {
+            return false;
+        }
+    }
+
     public function process_links() {
         $links = $this->get_links();
 
@@ -136,6 +157,7 @@ class Links {
             $link_id = $this->save_link($resolved_url);
             $this->save_link_tweet($link_id, $link['tweet_id']);
             $this->update_tweet_processed($link['tweet_id']);
+            $this->add_link_tracking_tag_rel($link_id, $link['tracking_tag_id']);
         }
     }
 
@@ -174,7 +196,7 @@ class Links {
         }
     }
 
-    public function get_top_links() {
+    public function get_top_links($user_id) {
         $links = array();
 
         $query = '
@@ -182,18 +204,25 @@ class Links {
             FROM links
             LEFT JOIN user_links
                 ON user_links.link_id = links.id
+            INNER JOIN link_tracking_tags
+                ON link_tracking_tags.link_id = links.id
+            INNER JOIN user_tracking_tags
+                ON user_tracking_tags.tag_id = link_tracking_tags.tracking_tag_id
             WHERE 
                 (user_links.tweeted = 0 OR user_links.tweeted IS NULL) AND 
                 (user_links.retweeted = 0 OR user_links.tweeted IS NULL) AND 
                 (user_links.similar = 0 OR user_links.tweeted IS NULL) AND 
                 (user_links.discarded = 0 OR user_links.tweeted IS NULL) AND 
-                (user_links.favourited = 0 OR user_links.tweeted IS NULL)
+                (user_links.favourited = 0 OR user_links.tweeted IS NULL) AND
+                (user_links.user_id = ? OR user_links.user_id IS NULL) AND
+                user_tracking_tags.user_id = ?
             ORDER BY links.id DESC
             LIMIT 20
         ;';
 
         // prepare and bind
         $stmt = $this->db->prepare($query);
+        $stmt->bind_param("ii", $user_id, $user_id);
         $stmt->execute();
         $res = $stmt->get_result();
 
