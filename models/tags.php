@@ -11,9 +11,9 @@ class Tags {
         $tags = array();
 
         $query = '
-            SELECT tag, id
-            FROM userTrackingTags
-            GROUP BY tag
+            SELECT tag, id, last_processed
+            FROM tracking_tags
+            ORDER BY last_processed, id 
         ;';
 
         // prepare and bind
@@ -23,7 +23,7 @@ class Tags {
 
         if($res->num_rows) {
             while($tag = $res->fetch_assoc()) {
-                $tags[] = array('tag' => $tag['tag'], 'id' => $tag['id']);
+                $tags[] = array('tag' => $tag['tag'], 'id' => $tag['id'], 'last_processed' => $tag['last_processed']);
             }
 
             return $tags;
@@ -36,9 +36,11 @@ class Tags {
         $tags = array();
 
         $query = '
-            SELECT tag, id
-            FROM userTrackingTags
-            WHERE userId = ?
+            SELECT tracking_tags.tag, user_tracking_tags.id
+            FROM user_tracking_tags
+            INNER JOIN tracking_tags
+                ON user_tracking_tags.tag_id = tracking_tags.id
+            WHERE user_tracking_tags.user_id = ?
         ;';
 
         // prepare and bind
@@ -58,11 +60,16 @@ class Tags {
         }
     }
 
+    public function delete_tracking_tag() {
+
+    }
+
     public function delete_user_tag($tag_id) {
         if(isset($_SESSION['id'])) {
+            // If this is the only user with this tag then delete the whole tag
             $query = '
-                DELETE FROM userTrackingTags
-                WHERE id = ? AND userId = ?
+                DELETE FROM user_tracking_tags
+                WHERE id = ? AND user_id = ?
             ;';
 
             // prepare and bind
@@ -80,16 +87,44 @@ class Tags {
         }
     }
 
+    public function does_tracking_tag_exist($tag) {
+
+    }
+
+    public function add_tracking_tag($tag) {
+        $query = '
+            INSERT INTO tracking_tags (tag)
+            VALUES (?)
+        ;';
+
+        // prepare and bind
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("s", $tag);
+        $stmt->execute();
+
+        if($stmt->insert_id) {
+            return $stmt->insert_id;
+        } else {
+            return false;
+        }
+    }
+
     public function add_user_tags($tag) {
         if(isset($_SESSION['id'])) {
+            $tracking_tag_id = $this->does_tracking_tag_exist($tag);
+
+            if(!$tracking_tag_id) {
+                $tracking_tag_id = $this->add_tracking_tag($tag);
+            }
+
             $query = '
-                INSERT INTO userTrackingTags (userId, tag)
+                INSERT INTO user_tracking_tags (user_id, tag_id)
                 VALUES (?, ?)
             ;';
 
             // prepare and bind
             $stmt = $this->db->prepare($query);
-            $stmt->bind_param("is", $_SESSION['id'], $tag);
+            $stmt->bind_param("ii", $_SESSION['id'], $tracking_tag_id);
             $stmt->execute();
 
             if($stmt->insert_id) {
