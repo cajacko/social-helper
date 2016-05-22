@@ -21,7 +21,7 @@ if($user->is_user_logged_in()) {
     require_once('../models/links.php');
 
     $links = new Links($db, $config->config);
-    $links = $links->get_top_links();
+    $links = $links->get_top_links($_SESSION['id']);
 
     if($links) {
         $vars['links'] = $links;

@@ -10,7 +10,7 @@ if(isset($tokens['oauth_token'], $tokens['oauth_token_secret'], $tokens['user_id
     if($user_id = $user->does_user_exist($tokens['user_id'])) {
         $user->update_tokens($user_id, $tokens['oauth_token'], $tokens['oauth_token_secret']);
     } else {
-        $user_id = $user->register($tokens['oauth_token'], $tokens['oauth_token_secret']);
+        $user_id = $user->register($tokens['user_id'], $tokens['oauth_token'], $tokens['oauth_token_secret']);
     }
 
     $user->login($user_id, $tokens['oauth_token'], $tokens['oauth_token_secret']);
