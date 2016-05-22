@@ -16,6 +16,7 @@ class Links {
             FROM tweets
             INNER JOIN tweet_links
                 ON tweets.id = tweet_links.tweet_id
+            WHERE tweets.processed IS NULL
         ;';
 
         // prepare and bind
@@ -101,6 +102,32 @@ class Links {
         }
     }
 
+    public function update_tweet_processed($tweet_id) {
+        $query = '
+            UPDATE tweets
+            SET processed = ?
+            WHERE id = ?
+        ;';
+
+        // prepare and bind
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param(
+            "ii", 
+            $timestamp,
+            $tweet_id
+        );
+
+        $timestamp = time();
+
+        $stmt->execute();
+
+        if($stmt) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function process_links() {
         $links = $this->get_links();
 
@@ -108,6 +135,7 @@ class Links {
             $resolved_url = $this->resolve_url($link['link']);
             $link_id = $this->save_link($resolved_url);
             $this->save_link_tweet($link_id, $link['tweet_id']);
+            $this->update_tweet_processed($link['tweet_id']);
         }
     }
 
@@ -161,6 +189,7 @@ class Links {
                 (user_links.discarded = 0 OR user_links.tweeted IS NULL) AND 
                 (user_links.favourited = 0 OR user_links.tweeted IS NULL)
             ORDER BY links.id DESC
+            LIMIT 20
         ;';
 
         // prepare and bind
