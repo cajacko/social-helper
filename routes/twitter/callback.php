@@ -1,7 +1,7 @@
 <?php
 
-require_once('../models/database.php');
-require_once('../models/user.php');
+require_once('models/database.php');
+require_once('models/user.php');
 
 $user = new User($db, $twitter);
 $tokens = $twitter->get_tokens();

@@ -1,6 +1,6 @@
 <?php
 
-require_once('../vendor/autoload.php');
+require_once('vendor/autoload.php');
 
 // Load twig templating engine
 Twig_Autoloader::register();
@@ -19,16 +19,16 @@ $vars = array();
 if(isset($request[0])) {
     switch($request[0]) {
         case 'twitter':
-            require_once('twitter/index.php');
+            require_once('routes/twitter/index.php');
             break;
         case 'action':
-            require_once('action.php');
+            require_once('routes/action.php');
             break;
         default:
-            require_once('home.php');
+            require_once('routes/home.php');
     }
 } else {
-    require_once('home.php');
+    require_once('routes/home.php');
 }
 
 ob_start("ob_gzhandler");
