@@ -4,7 +4,7 @@ class Parse_url {
     private $resolver;
 
     public function __construct() {
-        require_once('../lib/URLResolver.php/URLResolver.php');
+        require_once('lib/URLResolver.php/URLResolver.php');
         $this->resolver = new URLResolver();
     }
 

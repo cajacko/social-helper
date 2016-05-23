@@ -1,9 +1,11 @@
 <?php
 
-require_once('../models/config.php');
+set_include_path(__DIR__ . '/..');
+
+require_once('models/config.php');
 $config = new Config;
-require_once('../models/database.php');
-require_once('../models/twitter.php');
+require_once('models/database.php');
+require_once('models/twitter.php');
 
 $twitter = new Twitter($db, $config->config);
 $twitter->save_new_tweets();

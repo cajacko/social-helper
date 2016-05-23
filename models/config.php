@@ -6,7 +6,7 @@ class Config {
     public $config;
 
     public function get_json() {
-        $config = file_get_contents('../config.json');
+        $config = file_get_contents('config.json', true);
         return $config;
     }
 
