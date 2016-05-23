@@ -19,8 +19,8 @@ if(isset($request[1])) {
                 exit;
             }
 
-            require_once('../models/database.php');
-            require_once('../models/action.php');
+            require_once('models/database.php');
+            require_once('models/action.php');
 
             $action_model = new Action($db);
             $response = $action_model->process_action($action, $id);
@@ -34,8 +34,8 @@ if(isset($request[1])) {
             exit;
             break;
         case 'add-tag':
-            require_once('../models/database.php');
-            require_once('../models/tags.php');
+            require_once('models/database.php');
+            require_once('models/tags.php');
 
             if(isset($_POST['tag'])) {
                 $tags = new Tags($db);
@@ -55,8 +55,8 @@ if(isset($request[1])) {
 
             break;
         case 'delete-tag':
-            require_once('../models/database.php');
-            require_once('../models/tags.php');
+            require_once('models/database.php');
+            require_once('models/tags.php');
 
             if(isset($_GET['id']) && is_numeric($_GET['id'])) {
                 $tags = new Tags($db);

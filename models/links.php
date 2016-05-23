@@ -39,7 +39,7 @@ class Links {
     }
 
     public function resolve_url($link) {
-        require_once('../helpers/parse-url.php');
+        require_once('helpers/parse-url.php');
         $parser = new Parse_url;
         return $parser->resolve($link);
     }

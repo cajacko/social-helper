@@ -1,6 +1,6 @@
 <?php
 
-require_once('../vendor/autoload.php');
+require_once('vendor/autoload.php');
 use Abraham\TwitterOAuth\TwitterOAuth;
 
 class Twitter {
@@ -269,7 +269,7 @@ class Twitter {
     }
 
     public function save_new_tweets() {
-        require_once('tags.php');
+        require_once('models/tags.php');
         $tags = new Tags($this->db);
         $tags_to_process = $tags->get_all_tags();
 
