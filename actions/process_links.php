@@ -11,7 +11,7 @@ if (flock($fp, LOCK_EX | LOCK_NB)) { // do an exclusive lock
     require_once('models/links.php');
 
     $links = new Links($db, $config->config);
-    // $links->process_links();
+    $links->process_links();
 
     flock($fp, LOCK_UN); // release the lock
 } else {
