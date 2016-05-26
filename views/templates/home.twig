@@ -35,10 +35,10 @@
   <div>
     {% for link in vars.links %}
       <div class="panel panel-default discardElement">
-        <div class="panel-heading">
-          <a href="{{ link.url }}" class="panel-title" target="_blank">{{ link.url }}</a>
+        <div class="link-heading panel-heading">
+          <a href="{{ link.url }}" class="link-link panel-title" target="_blank">{{ link.url }}</a>
 
-          <div class="pull-right">        
+          <div class="link-actions pull-right">        
             <a href="" class="linkIcon" data-action="linkTweeted" data-id="{{ link.id }}"><i class="fa fa-twitter" aria-hidden="true"></i></a>
             <a href="" class="linkIcon" data-action="linkSimilar" data-id="{{ link.id }}"><i class="fa fa-files-o" aria-hidden="true"></i></a>
             <a href="" class="linkIcon" data-action="linkDiscard" data-id="{{ link.id }}"><i class="fa fa-times" aria-hidden="true"></i></a> 

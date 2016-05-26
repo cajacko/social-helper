@@ -4,6 +4,18 @@
 		"selected_items":
 		[
 			[
+				"session_de",
+				"session_destroy"
+			],
+			[
+				"is_nu",
+				"is_numeric"
+			],
+			[
+				"json",
+				"json_encode"
+			],
+			[
 				"brand",
 				"brandBlue"
 			],
@@ -88,32 +100,22 @@
 	"buffers":
 	[
 		{
-			"file": "public/index.php",
+			"contents": "<?php\nclass Links {\n    private $db;\n    private $config;\n\n    public function __construct($db, $config) {\n        $this->db = $db;\n        $this->config = $config;\n    }\n\n    public function get_links() {\n        $links = array();\n\n        $query = '\n            SELECT tweet_links.link, tweet_links.tweet_id, tweet_tracking_tags.tracking_tag_id\n            FROM tweets\n            INNER JOIN tweet_links\n                ON tweets.id = tweet_links.tweet_id\n            INNER JOIN tweet_tracking_tags\n                ON tweets.id = tweet_tracking_tags.tweet_id\n            WHERE tweets.processed IS NULL\n            ORDER BY tweets.id DESC\n        ;';\n\n        // prepare and bind\n        $stmt = $this->db->prepare($query);\n        $stmt->execute();\n        $res = $stmt->get_result();\n\n        if($res->num_rows) {\n            while($link = $res->fetch_assoc()) {\n                $links[] = array('tweet_id' => $link['tweet_id'], 'link' => $link['link'], 'tracking_tag_id' => $link['tracking_tag_id']);\n            }\n\n            return $links;\n        } else {\n            return false;\n        }\n    }\n\n    public function resolve_url($link) {\n        require_once('helpers/parse-url.php');\n        $parser = new Parse_url;\n        return $parser->resolve($link);\n    }\n\n    public function does_link_exist($link) {\n        $query = '\n            SELECT id\n            FROM links\n            WHERE link = ?\n        ;';\n\n        // prepare and bind\n        $stmt = $this->db->prepare($query);\n        $stmt->bind_param(\"s\", $link);\n        $stmt->execute();\n        $res = $stmt->get_result();\n\n        if($res->num_rows) {\n            $link = $res->fetch_assoc();\n            return $link['id'];\n        } else {\n            return false;\n        }\n    }\n\n    public function save_link($link) {\n        if($link_id = $this->does_link_exist($link)) {\n            return $link_id;\n        }\n\n        $query = '\n            INSERT INTO links (link)\n            VALUES (?)\n        ;';\n\n        // prepare and bind\n        $stmt = $this->db->prepare($query);\n        $stmt->bind_param(\"s\", $link);\n        $stmt->execute();\n\n        if($stmt->insert_id) {\n            return $stmt->insert_id;\n        } else {\n            return false;\n        }\n    }\n\n    public function save_link_tweet($link_id, $tweet_id) {\n        $query = '\n            INSERT INTO link_tweets (link_id, tweet_id)\n            VALUES (?, ?)\n        ;';\n\n        // prepare and bind\n        $stmt = $this->db->prepare($query);\n        $stmt->bind_param(\"ii\", $link_id, $tweet_id);\n        $stmt->execute();\n\n        if($stmt->insert_id) {\n            return $stmt->insert_id;\n        } else {\n            return false;\n        }\n    }\n\n    public function update_tweet_processed($tweet_id) {\n        $query = '\n            UPDATE tweets\n            SET processed = ?\n            WHERE id = ?\n        ;';\n\n        // prepare and bind\n        $stmt = $this->db->prepare($query);\n        $stmt->bind_param(\n            \"ii\", \n            $timestamp,\n            $tweet_id\n        );\n\n        $timestamp = time();\n\n        $stmt->execute();\n\n        if($stmt) {\n            return true;\n        } else {\n            return false;\n        }\n    }\n\n    public function add_link_tracking_tag_rel($link_id, $tracking_tag_id) {\n        $query = '\n            INSERT INTO link_tracking_tags (link_id, tracking_tag_id)\n            VALUES (?, ?)\n        ;';\n\n        // prepare and bind\n        $stmt = $this->db->prepare($query);\n        $stmt->bind_param(\"ii\", $link_id, $tracking_tag_id);\n        $stmt->execute();\n\n        if($stmt->insert_id) {\n            return $stmt->insert_id;\n        } else {\n            return false;\n        }\n    }\n\n    public function process_links() {\n        $links = $this->get_links();\n\n        foreach($links as $link) {\n            $resolved_url = $this->resolve_url($link['link']);\n            $link_id = $this->save_link($resolved_url);\n            $this->save_link_tweet($link_id, $link['tweet_id']);\n            $this->update_tweet_processed($link['tweet_id']);\n            $this->add_link_tracking_tag_rel($link_id, $link['tracking_tag_id']);\n        }\n    }\n\n    public function get_link_tweets($id) {\n        $tweets = array();\n\n        $query = '\n            SELECT tweets.*\n            FROM tweets\n            INNER JOIN link_tweets\n                ON link_tweets.tweet_id = tweets.id\n            WHERE link_tweets.link_id = ?\n        ;';\n\n        // prepare and bind\n        $stmt = $this->db->prepare($query);\n        $stmt->bind_param(\"i\", $id);\n        $stmt->execute();\n        $res = $stmt->get_result();\n\n        if($res->num_rows) {\n            while($tweet = $res->fetch_assoc()) {\n                $tweets[] = array(\n                    'tweet' => $tweet['tweet'], \n                    'user' => $tweet['user_id'], \n                    'username' => $tweet['user_id'], \n                    'url' => 'https://twitter.com/Vikiibell/status/' . $tweet['tweet_id'], \n                    'date' => $tweet['date'], \n                    'id' => $tweet['id'], \n                );\n            }\n\n            return $tweets;\n        } else {\n            return false;\n        }\n    }\n\n    public function get_top_links($user_id) {\n        $links = array();\n\n        $query = '\n            SELECT links.*\n            FROM links\n            LEFT JOIN user_links\n                ON user_links.link_id = links.id\n            INNER JOIN link_tracking_tags\n                ON link_tracking_tags.link_id = links.id\n            INNER JOIN user_tracking_tags\n                ON user_tracking_tags.tag_id = link_tracking_tags.tracking_tag_id\n            WHERE \n                (user_links.tweeted = 0 OR user_links.tweeted IS NULL) AND \n                (user_links.retweeted = 0 OR user_links.tweeted IS NULL) AND \n                (user_links.similar = 0 OR user_links.tweeted IS NULL) AND \n                (user_links.discarded = 0 OR user_links.tweeted IS NULL) AND \n                (user_links.favourited = 0 OR user_links.tweeted IS NULL) AND\n                (user_links.user_id = ? OR user_links.user_id IS NULL) AND\n                user_tracking_tags.user_id = ?\n            ORDER BY links.id DESC\n            LIMIT 20\n        ;';\n\n        // prepare and bind\n        $stmt = $this->db->prepare($query);\n        $stmt->bind_param(\"ii\", $user_id, $user_id);\n        $stmt->execute();\n        $res = $stmt->get_result();\n\n        if($res->num_rows) {\n            while($link = $res->fetch_assoc()) {\n                $tweets = $this->get_link_tweets($link['id']);\n                $links[] = array('url' => $link['link'], 'id' => $link['id'], 'tweets' => $tweets);\n            }\n\n            return $links;\n        } else {\n            return false;\n        }\n    }\n}",
+			"file": "models/links.php",
+			"file_size": 7001,
+			"file_write_time": 131084734564151611,
 			"settings":
 			{
-				"buffer_size": 36,
+				"buffer_size": 6762,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "/C/Users/charlie.jackson/AppData/Roaming/Sublime Text 3/Packages/User/Gist.sublime-settings",
+			"file": "models/twitter.php",
 			"settings":
 			{
-				"buffer_size": 59,
+				"buffer_size": 8754,
 				"line_ending": "Windows"
-			}
-		},
-		{
-			"contents": "{\n    // Your GitHub API token\n    // see: https://github.com/condemil/Gist#generating-access-token\n    \"token\": \"\",\n\n    // Show GitHub organizations\n    // Example: \"company1\", \"company2\"\n    \"include_orgs\": [],\n\n    // Show GitHub users\n    // Example: \"user1\", \"user2\"\n    \"include_users\": [],\n\n    // Show the authors of Gists\n    \"show_authors\": false,\n\n    // Prefer first file name instead of description in Open Gist menu\n    \"prefer_filename\": false,\n\n    // Proxy server\n    // Format: \"http://user:pass@proxy:port\"\n    \"https_proxy\": \"\",\n\n    // Enterprise support\n    \"enterprise\": false,\n    // Github URL\n    // Default: Leave empty if you want to use GitHub.com\n    // Example: https://github.domain.com\n    \"url\": \"\",\n\n    // Max Gists to show (max 100 allowed by GitHub API)\n    \"max_gists\": 100,\n\n    // Only use starred gists\n    \"use_starred\": false,\n\n    // Disable the \"save file...\" dialog when closing a Gist\n    \"supress_save_dialog\": true,\n\n    // Update the Gist upon saving the file, suppressing the filename dialog.\n    \"save-update-hook\": true\n\n    // Limit to gists with specific prefix\n    //\"gist_prefix\": \"Snippet:\",\n\n    // Limit to gists with specific tag (#tag)\n    //\"gist_tag\": \"snippet\"\n}\n",
-			"file": "/C/Users/charlie.jackson/AppData/Roaming/Sublime Text 3/Packages/Gist/Gist.sublime-settings",
-			"file_size": -1,
-			"file_write_time": -1,
-			"settings":
-			{
-				"buffer_size": 1230,
-				"line_ending": "Windows",
-				"read_only": true,
-				"scratch": true
 			}
 		}
 	],
@@ -178,11 +180,53 @@
 	},
 	"expanded_folders":
 	[
-		"/C/Data/Personal/social-helper"
+		"/C/Data/Personal/social-helper",
+		"/C/Data/Personal/social-helper/actions",
+		"/C/Data/Personal/social-helper/models",
+		"/C/Data/Personal/social-helper/routes",
+		"/C/Data/Personal/social-helper/routes/twitter"
 	],
 	"file_history":
 	[
+		"/C/Data/Personal/social-helper/models/twitter.php",
+		"/C/Data/Personal/social-helper/actions/get_tweets.php",
+		"/C/Data/Personal/social-helper/actions/process_links.php",
+		"/C/Data/Personal/social-helper/.gitignore",
+		"/C/Data/Personal/social-helper/actions/flock.php",
+		"/C/Data/Personal/social-helper/routes/home.php",
+		"/C/Data/Personal/social-helper/models/config.php",
+		"/C/Data/Personal/social-helper/models/database.php",
 		"/C/Data/Personal/social-helper/public/index.php",
+		"/C/Data/Personal/social-helper/routes/twitter/index.php",
+		"/C/Data/Personal/social-helper/helpers/parse-url.php",
+		"/C/Data/Personal/social-helper/models/links.php",
+		"/C/Data/Personal/social-helper/routes/index.php",
+		"/C/Data/Personal/social-helper/routes/action.php",
+		"/C/Data/Personal/social-helper/routes/twitter/callback.php",
+		"/C/Data/Personal/social-helper/models/action.php",
+		"/C/Data/Personal/social-helper/models/tags.php",
+		"/C/Data/Personal/social-helper/models/user.php",
+		"/C/Data/Personal/social-helper/actions/get_links.php",
+		"/C/Data/Personal/social-helper/helpers/parse-date.php",
+		"/C/Data/Personal/social-helper/views/templates/home.twig",
+		"/C/Data/Personal/social-helper/routes/twitter/login.php",
+		"/C/Data/Personal/social-helper/gulpfile.js",
+		"/C/Data/Personal/social-helper/package.json",
+		"/C/Data/Personal/social-helper/public/js/script.js",
+		"/C/Data/Personal/social-helper/routes/action/index.php",
+		"/C/Data/Personal/social-helper/public/styles/style.css",
+		"/C/Data/Personal/social-helper/views/sublayouts/header.twig",
+		"/C/Data/Personal/social-helper/views/sublayouts/footer.twig",
+		"/C/Data/Personal/social-helper/config-sample.json",
+		"/C/Data/Personal/social-helper/app.php",
+		"/C/Data/Personal/social-helper/helpers/set-user-session.php",
+		"/C/Data/Personal/social-helper/routes/404.php",
+		"/C/Data/Personal/social-helper/config.json",
+		"/C/Data/Personal/social-helper/public/.htaccess",
+		"/C/Data/Personal/social-helper/models/twitter-login-redirect.php",
+		"/C/Users/charlie.jackson/AppData/Roaming/Sublime Text 3/Packages/User/Gist.sublime-settings",
+		"/c/users/charli~1.jac/appdata/local/temp/index.php",
+		"/C/Users/charlie.jackson/AppData/Roaming/Sublime Text 3/Packages/Gist/Gist.sublime-settings",
 		"/C/Data/Essex Kent Police/Prototype/sublayouts/functions/share-data.php",
 		"/C/Data/Essex Kent Police/Prototype/lib/js/modules/cookie-banner.js",
 		"/C/Data/Essex Kent Police/Prototype/lib/js/modules/share.js",
@@ -271,45 +315,7 @@
 		"/C/Data/Essex Kent Police/Prototype/sublayouts/functions/appeals-widget.php",
 		"/C/Data/Essex Kent Police/Prototype/sublayouts/functions/share.php",
 		"/C/Data/Essex Kent Police/Prototype/lib/js/modules/search.js",
-		"/C/Data/Essex Kent Police/Prototype/lib/package.json",
-		"/C/Data/Essex Kent Police/Prototype/lib/out/hate-crime.svg",
-		"/C/Data/Essex Kent Police/Prototype/lib/out/lost-and-found.svg",
-		"/C/Data/Essex Kent Police/Prototype/lib/out/non-crime-advice.svg",
-		"/C/Data/Essex Kent Police/Prototype/lib/out/online-fraud.svg",
-		"/C/Data/Essex Kent Police/Prototype/lib/out/other-force-agency-requests.svg",
-		"/C/Data/Essex Kent Police/Prototype/lib/out/recruitment-essex.svg",
-		"/C/Data/Essex Kent Police/Prototype/lib/out/report-a-road-traffic-collision.svg",
-		"/C/Data/Essex Kent Police/Prototype/lib/out/report-crime-essex.svg",
-		"/C/Data/Essex Kent Police/Prototype/lib/out/chat-online.svg",
-		"/C/Data/Essex Kent Police/Prototype/lib/out/child-abuse.svg",
-		"/C/Data/Essex Kent Police/Prototype/lib/out/compliments-and-complaints.svg",
-		"/C/Data/Essex Kent Police/Prototype/lib/out/criminal-records-check.svg",
-		"/C/Data/Essex Kent Police/Prototype/lib/out/dogs.svg",
-		"/C/Data/Essex Kent Police/Prototype/lib/out/domestic-abuse.svg",
-		"/C/Data/Essex Kent Police/Prototype/lib/out/firearms-essex.svg",
-		"/C/Data/Essex Kent Police/Prototype/lib/out/freedom-of-information-requests.svg",
-		"/C/Data/Essex Kent Police/Prototype/lib/out/give-us-information.svg",
-		"/C/Data/Essex Kent Police/Prototype/lib/out/report-crime-online.svg",
-		"/C/Data/Essex Kent Police/Prototype/lib/out/report-something-else.svg",
-		"/C/Data/Essex Kent Police/Prototype/lib/out/report-something-essex.svg",
-		"/C/Data/Essex Kent Police/Prototype/lib/out/road-collision-essex.svg",
-		"/C/Data/Essex Kent Police/Prototype/lib/out/safety-camera-offences.svg",
-		"/C/Data/Essex Kent Police/Prototype/lib/out/sarahs-law.svg",
-		"/C/Data/Essex Kent Police/Prototype/lib/out/social-media-problems.svg",
-		"/C/Data/Essex Kent Police/Prototype/lib/out/track-my-crime.svg",
-		"/C/Data/Essex Kent Police/Prototype/lib/out/wanted-essex.svg",
-		"/C/Data/Essex Kent Police/Prototype/lib/css/sass/_page_header.scss",
-		"/C/Data/Essex Kent Police/Prototype/page_types/outcomes-landing.php",
-		"/C/Data/Essex Kent Police/Prototype/page_types/victim-landing.php",
-		"/C/Data/Essex Kent Police/Prototype/page_types/victim-witness-landing.php",
-		"/C/Data/Essex Kent Police/Prototype/sublayouts/functions/search.php",
-		"/C/Data/Essex Kent Police/Prototype/lib/css/sass/_search.scss",
-		"/C/Data/Essex Kent Police/Prototype/lib/media/icons/icons.svg",
-		"/C/Data/Essex Kent Police/Prototype/lib/css/sass/_forms.scss",
-		"/C/Data/Essex Kent Police/Prototype/.sass-lint.yml",
-		"/C/Data/Essex Kent Police/Prototype/sublayouts/functions/listing-filter.php",
-		"/C/Data/Essex Kent Police/Prototype/lib/js/modules/sidebar.js",
-		"/C/Data/Essex Kent Police/Prototype/lib/js/modules/site-navigation.js"
+		"/C/Data/Essex Kent Police/Prototype/lib/package.json"
 	],
 	"find":
 	{
@@ -346,6 +352,15 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"require",
+			"req",
+			"requi",
+			"$query = '\n            INSERT INTO link_tweets (link_id, tweet_id)\n            VALUES (?, ?)\n        ;';\n\n        // prepare and bind\n        $stmt = $this->db->prepare($query);\n        $stmt->bind_param(\"ii\", $link_id, $tweet_id);\n        $stmt->execute();\n\n        if($stmt->insert_id) {\n            return $stmt->insert_id;\n        } else {\n            return false;\n        }",
+			"exit",
+			"$twitter",
+			"$config",
+			"']",
+			"['",
 			"pageTitleMargin",
 			"pagetitle",
 			"pageTitle",
@@ -464,16 +479,7 @@
 			";\n",
 			"right",
 			"sitenavitem",
-			"subnavitem",
-			" hasSubNav",
-			"siteNavSubNavLink\" href",
-			"\"",
-			";\nvar  ",
-			",\n    ",
-			"if(",
-			"last",
-			"\\n",
-			"\\n\\n"
+			"subnavitem"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -481,6 +487,9 @@
 		"regex": false,
 		"replace_history":
 		[
+			"$config->config",
+			"",
+			"->",
 			"contentTitleMargin",
 			"shareWidget",
 			"",
@@ -550,24 +559,24 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 1,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "public/index.php",
+					"file": "models/links.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 36,
+						"buffer_size": 6762,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								36,
-								36
+								5260,
+								5260
 							]
 						],
 						"settings":
@@ -575,11 +584,46 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
 								"bh_square_close",
 								"bh_square_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
@@ -590,51 +634,18 @@
 								"bh_unmatched_open",
 								"bh_unmatched_close",
 								"bh_unmatched_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
 								"bh_tag",
 								"bh_tag_center",
 								"bh_tag_open",
 								"bh_tag_close",
-								"bh_tag_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content"
+								"bh_tag_content"
 							],
-							"syntax": "Packages/PHP/PHP.sublime-syntax"
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 2387.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
@@ -642,19 +653,19 @@
 				},
 				{
 					"buffer": 1,
-					"file": "/C/Users/charlie.jackson/AppData/Roaming/Sublime Text 3/Packages/User/Gist.sublime-settings",
+					"file": "models/twitter.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 59,
+						"buffer_size": 8754,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								59,
-								59
+								2622,
+								2638
 							]
 						],
 						"settings":
@@ -662,11 +673,46 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
 								"bh_square",
 								"bh_square_center",
 								"bh_square_open",
 								"bh_square_close",
 								"bh_square_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
@@ -677,138 +723,18 @@
 								"bh_unmatched_open",
 								"bh_unmatched_close",
 								"bh_unmatched_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
 								"bh_tag",
 								"bh_tag_center",
 								"bh_tag_open",
 								"bh_tag_close",
-								"bh_tag_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content"
+								"bh_tag_content"
 							],
-							"syntax": "Packages/JavaScript/JSON.sublime-syntax"
+							"syntax": "Packages/PHP/PHP.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "/C/Users/charlie.jackson/AppData/Roaming/Sublime Text 3/Packages/Gist/Gist.sublime-settings",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1230,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								116,
-								104
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content"
-							],
-							"syntax": "Packages/JavaScript/JSON.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 462.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -819,7 +745,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 21.0
+		"height": 22.0
 	},
 	"input":
 	{
@@ -856,7 +782,7 @@
 	"project": "social-helper.sublime-project",
 	"replace":
 	{
-		"height": 72.0
+		"height": 40.0
 	},
 	"save_all_on_build": true,
 	"select_file":

@@ -24,3 +24,21 @@
     z-index: 9999;
     display: none;
 }
+
+.link-heading {
+    position: relative;
+}
+
+.link-link {
+    display: block;
+    margin-right: 115px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.link-actions {
+    position: absolute;
+    right: 10px;  
+    top: 10px;
+}
