@@ -290,12 +290,7 @@ class Links {
             INNER JOIN user_tracking_tags
                 ON user_tracking_tags.tag_id = link_tracking_tags.tracking_tag_id
             WHERE 
-                (user_links.tweeted = 0 OR user_links.tweeted IS NULL) AND 
-                (user_links.retweeted = 0 OR user_links.tweeted IS NULL) AND 
-                (user_links.similar = 0 OR user_links.tweeted IS NULL) AND 
-                (user_links.discarded = 0 OR user_links.tweeted IS NULL) AND 
-                (user_links.favourited = 0 OR user_links.tweeted IS NULL) AND
-                (user_links.user_id = ? OR user_links.user_id IS NULL) AND
+                user_links.id IS NULL AND
                 user_tracking_tags.user_id = ?
             ORDER BY links.id DESC
             LIMIT 20
@@ -303,7 +298,7 @@ class Links {
 
         // prepare and bind
         $stmt = $this->db->prepare($query);
-        $stmt->bind_param("ii", $user_id, $user_id);
+        $stmt->bind_param("i", $user_id);
         $stmt->execute();
         $res = $stmt->get_result();
 
