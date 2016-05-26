@@ -8,8 +8,14 @@ class Links {
         $this->config = $config;
     }
 
-    public function get_links() {
+    public function get_links($since = false) {
         $links = array();
+
+        if($since && is_numeric($since)) {
+            $since = 'WHERE tweets.processed > ' . $since;
+        } else {
+            $since = 'WHERE tweets.processed IS NULL';
+        }
 
         $query = '
             SELECT tweet_links.link, tweet_links.tweet_id, tweet_tracking_tags.tracking_tag_id
@@ -18,7 +24,7 @@ class Links {
                 ON tweets.id = tweet_links.tweet_id
             INNER JOIN tweet_tracking_tags
                 ON tweets.id = tweet_tracking_tags.tweet_id
-            WHERE tweets.processed IS NULL
+            ' . $since . '
             ORDER BY tweets.id DESC
         ;';
 
@@ -66,10 +72,6 @@ class Links {
     }
 
     public function save_link($link) {
-        if($link_id = $this->does_link_exist($link)) {
-            return $link_id;
-        }
-
         $query = '
             INSERT INTO links (link)
             VALUES (?)
@@ -82,6 +84,72 @@ class Links {
 
         if($stmt->insert_id) {
             return $stmt->insert_id;
+        } else {
+            return false;
+        }
+    }
+
+    public function save_link_tweet_hashtags($link_id, $hashtags) {
+        foreach($hashtags as $tag) {
+            $query = '
+                INSERT INTO link_tags (link_id, tag, tag_type)
+                VALUES (?, ?, "twitter_hashtag")
+            ;';
+
+            // prepare and bind
+            $stmt = $this->db->prepare($query);
+            $stmt->bind_param("is", $link_id, $tag);
+            $stmt->execute();
+        }
+    }
+
+    public function save_link_tweet_user($link_id, $user_id) {
+        $query = '
+            INSERT INTO link_tags (link_id, tag, tag_type)
+            VALUES (?, ?, "twitter_user_id")
+        ;';
+
+        // prepare and bind
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("is", $link_id, $user_id);
+        $stmt->execute();
+
+        if($stmt->insert_id) {
+            return $stmt->insert_id;
+        } else {
+            return false;
+        }
+    }
+
+    public function parse_link_domain($link) {
+        
+
+        $domain = parse_url($link);
+
+        if(!isset($domain['host'])) {
+            return false;
+        }
+
+        return $domain['host'];
+    }
+
+    public function save_link_domain($link_id, $link) {
+        if($domain = $this->parse_link_domain($link)) {
+            $query = '
+                INSERT INTO link_tags (link_id, tag, tag_type)
+                VALUES (?, ?, "link_domain")
+            ;';
+
+            // prepare and bind
+            $stmt = $this->db->prepare($query);
+            $stmt->bind_param("is", $link_id, $domain);
+            $stmt->execute();
+
+            if($stmt->insert_id) {
+                return $stmt->insert_id;
+            } else {
+                return false;
+            }
         } else {
             return false;
         }
@@ -149,15 +217,28 @@ class Links {
         }
     }
 
-    public function process_links() {
-        $links = $this->get_links();
+    public function process_links($since = false) {
+        $links = $this->get_links($since);
 
-        foreach($links as $link) {
+        require_once('models/twitter.php');
+        $tweet_model = new Twitter($this->db, $this->config);
+
+        foreach($links as $link) {      
             $resolved_url = $this->resolve_url($link['link']);
-            $link_id = $this->save_link($resolved_url);
+            $link_id = $this->does_link_exist($resolved_url);
+
+            if(!$link_id) {
+                $link_id = $this->save_link($resolved_url);   
+            }
+            
             $this->save_link_tweet($link_id, $link['tweet_id']);
             $this->update_tweet_processed($link['tweet_id']);
             $this->add_link_tracking_tag_rel($link_id, $link['tracking_tag_id']);
+
+            $this->save_link_domain($link_id, $resolved_url);
+            $tweet_meta = $tweet_model->get_tweet_meta($link['tweet_id']);
+            $this->save_link_tweet_hashtags($link_id, $tweet_meta['hashtags']);
+            $this->save_link_tweet_user($link_id, $tweet_meta['user_id']);
         }
     }
 

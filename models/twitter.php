@@ -306,4 +306,36 @@ class Twitter {
             }
         }
     }
+
+    public function get_tweet_meta($tweet_id) {
+        $query = '
+            SELECT tweets.*, tweet_tags.tag
+            FROM tweets
+            LEFT JOIN tweet_tags
+                ON tweet_tags.tweet_id = tweets.id
+            WHERE tweets.id = ?
+        ;';
+
+        // prepare and bind
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("i", $tweet_id);
+        $stmt->execute();
+        $res = $stmt->get_result();
+
+        if($res->num_rows) {
+            $tags = [];
+
+            while($tag = $res->fetch_assoc()) {
+                $tags[] = $tag['tag'];
+                $tweet = $tag;
+            }
+
+            unset($tweet['tag']);
+            $tweet['hashtags'] = $tags;
+
+            return $tweet;
+        } else {
+            return false;
+        }
+    }
 }
