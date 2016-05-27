@@ -18,6 +18,17 @@ class ErrorTest extends \PHPUnit_Framework_TestCase
         new Error;
     }
 
+    public function doesJsonValueExist($json, $key)
+    {
+        if (isset($json->$key)) {
+            $value = true;
+        } else {
+            $value = false;
+        }
+
+        return $value;
+    }
+
     public function testErrorCode1BadTwitterRedirect()
     {
         $this->client = new \GuzzleHttp\Client([
@@ -28,5 +39,9 @@ class ErrorTest extends \PHPUnit_Framework_TestCase
         $body = $response->getBody();
         $json = json_decode($body);
         $this->assertTrue($json->error);
+        $this->assertTrue($this->doesJsonValueExist($json, 'code'));
+        $this->assertTrue($this->doesJsonValueExist($json, 'title'));
+        $this->assertTrue($this->doesJsonValueExist($json, 'group'));
+        $this->assertTrue($this->doesJsonValueExist($json, 'message'));
     }
 }

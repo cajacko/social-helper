@@ -1,0 +1,12 @@
+{
+    "0": {
+        "title": "Undefined error",
+        "group": "Undefined error",
+        "message": "Something went wrong but we don't know what? Ah shit."
+    },
+    "1": {
+        "title": "Twitter login url is not valid",
+        "group": "Twitter login url is not valid",
+        "message": "We could not get the correct twitter login url."
+    }
+}

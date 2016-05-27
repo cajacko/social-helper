@@ -8,7 +8,7 @@ if (!$user->isLoggedIn()) {
         header('Location: ' . $redirect);
         exit;
     } else {
-        new \SocialHelper\Error\Error; // Bad redirect url, display error page
+        new \SocialHelper\Error\Error(1); // Bad redirect url, display error page
         exit;
     }
 } else {
