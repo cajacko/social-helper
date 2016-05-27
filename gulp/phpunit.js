@@ -6,7 +6,7 @@ var exec = require('child_process').exec;
 
 module.exports = function(gulp) {
   gulp.task(config.gulpTasks.phpunit, function() {
-    exec('phpunit --bootstrap tests/autoload.php --colors=always ' + config.php.testsDir, function(error, stdout) {
+    exec('vendor/phpunit/phpunit/phpunit --bootstrap tests/autoload.php --colors=always ' + config.php.testsDir, function(error, stdout) {
       console.log(stdout);
     });
   });

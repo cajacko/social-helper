@@ -1,4 +1,6 @@
 {
+    "dev": true,
+    "localhost": "http://social-helper.local.com",
     "gulpTasks": {
         "watch": "watch",
         "phpunit": "phpunit",
@@ -17,5 +19,19 @@
         "composer": {
             "dir": "vendor"
         }
+    },
+    "src": {
+        "dir": "src"
+    },
+    "twitter": {
+        "key": "xxx",
+        "secret": "xxx",
+        "callback": "http://socialhelper.local.com/twitter/callback"
+    },
+    "database": {
+        "host": "xxx",
+        "database": "xxx",
+        "user": "xxx",
+        "password": "xxx"
     }
 }
