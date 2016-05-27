@@ -1,13 +1,21 @@
 {
-    "twitter": {
-        "key": "xxx",
-        "secret": "xxx",
-        "callback": "xxxx"
+    "gulpTasks": {
+        "watch": "watch",
+        "phpunit": "phpunit",
+        "jscs": "jscs",
+        "jshint": "jshint",
+        "preCommit": "preCommit",
+        "phpcs": "phpcs"
     },
-    "database": {
-        "host": "xxx",
-        "database": "xxx",
-        "user": "xxx",
-        "password": "xxx"
+    "php": {
+        "testsDir": "tests"
+    },
+    "libs": {
+        "npm": {
+            "dir": "node_modules"
+        },
+        "composer": {
+            "dir": "vendor"
+        }
     }
 }

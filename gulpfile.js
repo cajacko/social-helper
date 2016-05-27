@@ -1,37 +1,35 @@
-var gulp = require('gulp');
-var sass = require('gulp-sass');
-var rename = require('gulp-rename');
-var minifyCss = require('gulp-minify-css');
-var uglify = require('gulp-uglify');
-var concat = require('gulp-concat');
-var modernizr = require('gulp-modernizr');
-var browserSync = require('browser-sync');
-var autoprefixer = require('gulp-autoprefixer');
-var browserify = require('browserify');
-var source = require('vinyl-source-stream');
-var buffer = require('vinyl-buffer');
-var ini = require('ini');
-var fs = require('fs');
 var config = require('./config.json');
-var sassImportJson = require('gulp-sass-import-json');
-var svgstore = require('gulp-svgstore');
-var svgmin = require('gulp-svgmin');
-var replace = require('gulp-replace');
-var validator = require('html-validator');
-var request = require('request');
-var sitemap = require('sitemapper');
+var gulp = require('gulp');
 
-/********************************************************
-* SETUP BROWSER SYNC                                    *
-********************************************************/
-gulp.task('browsersync', function() {
-  browserSync.init(null, {
-    proxy: 'social-helper.local.com',
-    files: ['./public/**/*.*'],
-  });
-});
+// Run phpunit tests
+require('./gulp/phpunit')(gulp);
 
-/********************************************************
-* DEFAULT TASKS                                         *
-********************************************************/
-gulp.task('default',['browsersync']);
+var jsLintDirs = [
+  './**/*.js',
+  '!./' + config.libs.npm.dir + '/**/*',
+  '!./' + config.libs.composer.dir + '/**/*'
+];
+
+// Run Javascript codesniffer to check code styling
+require('./gulp/jscs')(gulp, jsLintDirs);
+
+// Run Javascript linter to check code integrity
+require('./gulp/jshint')(gulp, jsLintDirs);
+
+var phpLintDirs = [
+  './**/*.php',
+  '!./' + config.libs.npm.dir + '/**/*',
+  '!./' + config.libs.composer.dir + '/**/*'
+];
+
+// Run Javascript codesniffer to check code styling
+require('./gulp/phpcs')(gulp, phpLintDirs);
+
+// A task to run before commiting any code to git
+require('./gulp/pre-commit')(gulp);
+
+// Run the watch tasks
+require('./gulp/watch')(gulp);
+
+// The default gulp task
+require('./gulp/default')(gulp);
