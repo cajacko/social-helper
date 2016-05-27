@@ -56,7 +56,7 @@ class TwitterTest extends \PHPUnit_Framework_TestCase
     public function testGetTwitterLoginUrl()
     {
         $twitter = new Twitter($this->config, $this->db);
-        $url = $twitter->loginUrl();
+        $url = $twitter->getLoginUrl();
         $url = filter_var($url, FILTER_VALIDATE_URL);
 
         if ($url) {

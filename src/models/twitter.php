@@ -10,13 +10,24 @@ class Twitter
     private $callback;
     private $app_connection;
 
+    private function setTwitterAppConnection()
+    {
+        try {
+            $this->app_connection = new \Abraham\TwitterOAuth\TwitterOAuth($this->key, $this->secret);
+        } catch (Exception $e) {
+            $this->app_connection = false;
+        }
+
+        return $this->app_connection;
+    }
+
     public function __construct($config, $db)
     {
         $this->db = $db;
         $this->key = $config->twitter->key;
         $this->secret = $config->twitter->secret;
         $this->callback = $config->twitter->callback;
-        $this->app_connection = new \Abraham\TwitterOAuth\TwitterOAuth($this->key, $this->secret);
+        $this->setTwitterAppConnection();
     }
 
     public function getAppConnection()
@@ -24,20 +35,36 @@ class Twitter
         return $this->app_connection;
     }
 
-    public function loginUrl()
+    public function getLoginUrl()
     {
-        $temporary_credentials = $this->app_connection->oauth(
-            'oauth/request_token',
-            array(
-                'oauth_callback' => $this->callback
-            )
-        );
+        if (!$this->app_connection) {
+            return false;
+        }
 
-        return $this->app_connection->url(
-            'oauth/authorize',
-            array(
-                'oauth_token' => $temporary_credentials['oauth_token']
-            )
-        );
+        try {
+            $temporary_credentials = $this->app_connection->oauth(
+                'oauth/request_token',
+                array(
+                    'oauth_callback' => $this->callback
+                )
+            );
+
+            $url = $this->app_connection->url(
+                'oauth/authorize',
+                array(
+                    'oauth_token' => $temporary_credentials['oauth_token']
+                )
+            );
+        } catch (\Abraham\TwitterOAuth\TwitterOAuthException $e) {
+            return false;
+        }
+
+        $url = filter_var($url, FILTER_VALIDATE_URL);
+
+        if ($url) {
+            return $url;
+        }
+
+        return false;
     }
 }

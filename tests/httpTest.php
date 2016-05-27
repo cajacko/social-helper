@@ -15,14 +15,9 @@ class HomePage extends \PHPUnit_Framework_TestCase
         ]);
     }
 
-    public function testValidHomePageResponse()
+    public function testLoggedOutUserRedirect()
     {
         $response = $this->client->get('/');
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(302, $response->getStatusCode());
     }
-
-    // public function testLoggedOutUserRedirect()
-    // {
-    //     $this->client = new \GuzzleHttp\Client;
-    // }
 }
