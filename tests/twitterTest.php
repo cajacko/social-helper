@@ -39,9 +39,9 @@ class TwitterTest extends \PHPUnit_Framework_TestCase
     {
         $twitter = new Twitter($this->config, $this->db);
         $connection = $twitter->getAppConnection();
-        $statuses = $connection->get('search/tweets', ['q' => 'test', 'count' => 1]);
+        $statuses = $connection->get('search/tweets', ['q' => 'tech', 'count' => 1]);
 
-        if (is_numeric($statuses->statuses[0]->id)) {
+        if (isset($statuses->statuses[0]->id) && is_numeric($statuses->statuses[0]->id)) {
             $app_connection = true;
         } else {
             $app_connection = false;
@@ -66,5 +66,32 @@ class TwitterTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->assertTrue($is_url);
+    }
+
+    public function testTwitterLoginMethod()
+    {
+        $twitter = new Twitter($this->config, $this->db);
+
+        $this->assertTrue(
+            method_exists($twitter, 'twitterLogin'), 
+            'Class does not have method myFunction'
+        );
+    }
+
+    /**
+     * @depends testTwitterLoginMethod
+     */
+    public function testTwitterLoginNoGet()
+    {
+        $twitter = new Twitter($this->config, $this->db);
+        $response = $twitter->twitterLogin();
+
+        if (isset($response['error'])) {
+            $is_error = true;
+        } else {
+            $is_error = false;
+        }
+
+        $this->assertTrue($is_error);
     }
 }

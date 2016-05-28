@@ -7,9 +7,13 @@
         "jscs": "jscs",
         "jshint": "jshint",
         "preCommit": "preCommit",
-        "phpcs": "phpcs"
+        "phpcs": "phpcs",
+        "mocha": "mocha"
     },
     "php": {
+        "testsDir": "tests"
+    },
+    "js": {
         "testsDir": "tests"
     },
     "libs": {
@@ -26,12 +30,25 @@
     "twitter": {
         "key": "xxx",
         "secret": "xxx",
-        "callback": "http://socialhelper.local.com/twitter/callback"
+        "callback": "http://socialhelper.local.com/twitter/callback",
+        "testAccount": {
+            "user": "xxx",
+            "password": "xxx"
+        }
     },
     "database": {
         "host": "xxx",
         "database": "xxx",
         "user": "xxx",
         "password": "xxx"
+    },
+    "testsVars": {
+        "twitterLoginEchoResults": {
+            "query": {
+                "action": "tdd",
+                "twitterLogin": true
+            },
+            "callbackAppendUrl": "tdd"
+        }
     }
 }

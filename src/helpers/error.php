@@ -5,8 +5,9 @@ namespace SocialHelper\Error;
 class Error
 {
     private $errors;
+    private $error;
 
-    public function getError()
+    private function getErrors()
     {
         $errors = file_get_contents('errors.json', true);
         $this->errors = json_decode($errors);
@@ -14,13 +15,22 @@ class Error
 
     public function __construct($error_code = 0)
     {
-        $this->getError();
+        $this->getErrors();
         
+        if (!isset($this->errors->$error_code)) {
+            $error_code = 2;
+        }
+
         $json = $this->errors->$error_code;
         $json =  (array) $json;
         $json['error'] = true;
         $json['code'] = $error_code;
 
-        echo json_encode($json);
+        $this->error = $json;
+    }
+
+    public function getError()
+    {
+        return $this->error;
     }
 }

@@ -4,6 +4,9 @@ var gulp = require('gulp');
 // Run phpunit tests
 require('./gulp/phpunit')(gulp);
 
+// Run phpunit tests
+require('./gulp/mocha')(gulp);
+
 var jsLintDirs = [
   './**/*.js',
   '!./' + config.libs.npm.dir + '/**/*',

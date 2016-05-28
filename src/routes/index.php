@@ -1,16 +1,13 @@
 <?php
 
-$user = new \SocialHelper\User\User;
+$user = new \SocialHelper\User\User($config, $db);
 $twitter = new \SocialHelper\Twitter\Twitter($config, $db);
 
-if (!$user->isLoggedIn()) {
-    if ($redirect = $twitter->getLoginUrl()) {
-        header('Location: ' . $redirect);
-        exit;
-    } else {
-        new \SocialHelper\Error\Error(1); // Bad redirect url, display error page
-        exit;
-    }
+$request = $_GET['url'];
+$request = explode('/', $request);
+
+if(isset($request[0], $request[1]) && 'twitter' == $request[0] && 'callback' == $request[1]) {
+    require_once('src/routes/twitter-callback.php');
 } else {
-    echo 'Logged in';
+    require_once('src/routes/home.php');
 }

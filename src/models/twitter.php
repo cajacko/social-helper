@@ -9,6 +9,7 @@ class Twitter
     private $secret;
     private $callback;
     private $app_connection;
+    private $user_connection;
 
     private function setTwitterAppConnection()
     {
@@ -66,5 +67,55 @@ class Twitter
         }
 
         return false;
+    }
+
+    private function twitterValidateTokens($tokens)
+    {
+        if(!isset($tokens['oauth_token'])) {
+            return false;
+        }
+
+        if(!isset($tokens['oauth_token_secret'])) {
+            return false;
+        }
+
+        if(!isset($tokens['user_id'])) {
+            return false;
+        }
+
+        if(!isset($tokens['screen_name'])) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function twitterLogin()
+    {
+        if (!isset($_GET['oauth_token'], $_GET['oauth_verifier'])) {
+            $error = new \SocialHelper\Error\Error(3);
+            return $error->getError();
+        }
+
+        $this->user_connection = $this->app_connection;
+
+        $params = array(
+            "oauth_verifier" => $_GET['oauth_verifier'], 
+            "oauth_token" => $_GET['oauth_token']
+        );
+
+        try {
+            $tokens = $this->user_connection->oauth("oauth/access_token", $params);
+        } catch (\Abraham\TwitterOAuth\TwitterOAuthException $e) {
+            $error = new \SocialHelper\Error\Error(4);
+            return $error->getError();
+        }
+
+        if (!$this->twitterValidateTokens($tokens)) {
+            $error = new \SocialHelper\Error\Error(6);
+            return $error->getError();
+        }
+
+        return $tokens;
     }
 }

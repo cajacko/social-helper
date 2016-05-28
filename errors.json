@@ -8,5 +8,45 @@
         "title": "Twitter login url is not valid",
         "group": "Twitter login url is not valid",
         "message": "We could not get the correct twitter login url."
+    },
+    "2": {
+        "title": "Invalid error code",
+        "group": "Invalid error code",
+        "message": "An error code was specified but does not corresppond to a valid error."
+    },
+    "3": {
+        "title": "The callback did not recieve valid parameters",
+        "group": "Could not login user",
+        "message": "The twitter callback was called but did not have any valid authentication parameters."
+    },
+    "4": {
+        "title": "There was an error exchanging tokens with Twitter",
+        "group": "Could not login user",
+        "message": "We could not get a valid response from Twitter to authenticate the user."
+    },
+    "5": {
+        "title": "An unknow error occured",
+        "group": "Could not login user",
+        "message": "This shouldn't happen, ah shit."
+    },
+    "6": {
+        "title": "Twitter did not respond with the correct information",
+        "group": "Could not login user",
+        "message": "This shouldn't happen, could be to do with Twitter's API changing?."
+    },
+    "7": {
+        "title": "No Twitter ID was specified for the user",
+        "group": "Could not check if user is registered",
+        "message": "This shouldn't happen, Someone didn't write the code properly."
+    },
+    "8": {
+        "title": "We found multiple users with this Twitter ID",
+        "group": "Could not check if user is registered",
+        "message": "This shouldn't happen, we buggered up the database."
+    },
+    "9": {
+        "title": "No paramaters were passed to the method",
+        "group": "Could not update user details",
+        "message": "This shouldn't happen, we made sloppy code."
     }
 }
