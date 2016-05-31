@@ -16,12 +16,14 @@ if (isset($tokens['error'])) {
 
     $user->login();
 
-    if ($config->dev && isset($request[2]) && 'tdd' == $request[2]) {
+    require_once('src/helpers/test-twitter-callback.php');
+
+    if (is_twitter_callback_test($request)) {
         echo json_encode($_SESSION);
     } else {
         header('Location: /');
         exit;
-    }   
+    }
 } else {
     $error = new \SocialHelper\Error\Error();
     $error = $error->getError(5);

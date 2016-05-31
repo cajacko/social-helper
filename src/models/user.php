@@ -16,6 +16,12 @@ class User
 
     public function isLoggedIn()
     {
+        if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn']) {
+            $this->logged_in = true;
+        } else {
+            $this->logged_in = false;
+        }
+
         return $this->logged_in;
     }
 
@@ -78,5 +84,10 @@ class User
             $error = $error->getError();
             return $error;
         }
+    }
+
+    public function login()
+    {
+        $_SESSION['loggedIn'] = true;
     }
 }

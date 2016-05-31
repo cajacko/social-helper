@@ -178,6 +178,9 @@ class LoggedInTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @depends testUserUpdateDetailsExists
+     */
     public function testUserUpdateDetails()
     {
         $dummy_data = array(
@@ -213,7 +216,18 @@ class LoggedInTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($update_data['user_id'], $new_data['twitterId']);
         $this->assertSame($update_data['oauth_token'], $new_data['token']);
         $this->assertSame($update_data['oauth_token_secret'], $new_data['secret']);
+    }
 
-        // Set up dummy user and update their details with new dummy data and then check.
+    /**
+     * @depends testHasUserClass
+     */
+    public function testUserLoginExists()
+    {
+        $user = new User($this->config, $this->db);
+
+        $this->assertTrue(
+            method_exists($user, 'login'),
+            'Class does not have method login'
+        );
     }
 }

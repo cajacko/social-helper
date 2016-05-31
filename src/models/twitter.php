@@ -5,6 +5,7 @@ namespace SocialHelper\Twitter;
 class Twitter
 {
     private $db;
+    private $config;
     private $key;
     private $secret;
     private $callback;
@@ -22,12 +23,33 @@ class Twitter
         return $this->app_connection;
     }
 
+    private function ifTwitterLoginEchoResults()
+    {
+        foreach ($this->config->testsVars->twitterLoginEchoResults->query as $key => $value) {
+            if (!isset($_GET[$key]) || $value != $_GET[$key]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public function __construct($config, $db)
     {
         $this->db = $db;
+        $this->config = $config;
         $this->key = $config->twitter->key;
         $this->secret = $config->twitter->secret;
-        $this->callback = $config->twitter->callback;
+
+        $callback = $config->twitter->callback;
+
+        if ($this->ifTwitterLoginEchoResults()) {
+            $callback_append = $config->testsVars->twitterLoginEchoResults->callbackAppendUrl;
+            $this->callback = $callback . '/' . $callback_append;
+        } else {
+            $this->callback = $callback;
+        }
+        
         $this->setTwitterAppConnection();
     }
 
@@ -71,19 +93,19 @@ class Twitter
 
     private function twitterValidateTokens($tokens)
     {
-        if(!isset($tokens['oauth_token'])) {
+        if (!isset($tokens['oauth_token'])) {
             return false;
         }
 
-        if(!isset($tokens['oauth_token_secret'])) {
+        if (!isset($tokens['oauth_token_secret'])) {
             return false;
         }
 
-        if(!isset($tokens['user_id'])) {
+        if (!isset($tokens['user_id'])) {
             return false;
         }
 
-        if(!isset($tokens['screen_name'])) {
+        if (!isset($tokens['screen_name'])) {
             return false;
         }
 
@@ -100,7 +122,7 @@ class Twitter
         $this->user_connection = $this->app_connection;
 
         $params = array(
-            "oauth_verifier" => $_GET['oauth_verifier'], 
+            "oauth_verifier" => $_GET['oauth_verifier'],
             "oauth_token" => $_GET['oauth_token']
         );
 

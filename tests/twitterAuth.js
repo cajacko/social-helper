@@ -61,7 +61,7 @@ describe('User visits twitter login', function() {
 
     it('should redirect to logged in home', function() {
       browser.assert.status(200);
-      browser.assert.url({ pathname: '/' });
+      browser.assert.url({pathname: '/'});
     });
   });
 });
@@ -81,6 +81,7 @@ describe('User visits twitter login', function() {
   var browser = new Browser();
 
   before(function(done) {
+    console.log(url);
     browser.visit(url, done);
   });
 
