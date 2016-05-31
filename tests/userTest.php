@@ -118,13 +118,72 @@ class LoggedInTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($is_error);
     }
 
-    public function testUserUpdateDetailsHasCorrectParams()
+    private function insertDummyUserData($data)
+    {
+        $query = '
+            INSERT INTO user (twitterId, token, secret)
+            VALUES (?, ?, ?)
+        ;';
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("sss", $user_id, $token, $secret);
+        $user_id = $data['user_id'];
+        $token = $data['oauth_token'];
+        $secret = $data['oauth_token_secret'];
+
+        $stmt->execute();
+
+        if($stmt->insert_id) {
+            return $stmt->insert_id;
+        } else {
+            return false;
+        }
+
+
+    }
+
+    private function getDummyUserData()
+    {
+
+    }
+
+    private function deleteDummyUser()
     {
 
     }
 
     public function testUserUpdateDetails()
     {
+        $dummy_data = array();
+
+        $user_id = $this->insertDummyUserData($dummy_data);
+
+        $user = new User($this->config, $this->db);
+        
+        $update_data = array(
+            'user_id' => '297647409309',
+            'oauth_token' => '9t7yr3n894u597diughoihe',
+            'oauth_token_secret' => 'eouhfofhieny985yh79ghfojer',
+            'screen_name' => 'dibbleface',
+            'x_auth_expires' => '0',
+        );
+
+        $is_error = $user->updateDetails($update_data);
+
+        if (isset($is_error['error'])) {
+            $is_error = true;
+        } else {
+            $is_error = false;
+        }
+
+        $this->assertFalse($is_error);
+
+        $new_data = $this->getDummyUserData($user_id);
+
+        $this->assertSame($update_data['user_id'], $new_data['userId']);
+        $this->assertSame($update_data['oauth_token'], $new_data['userId']);
+        $this->assertSame($update_data['oauth_token_secret'], $new_data['userId']);
+
         // Set up dummy user and update their details with new dummy data and then check.
     }
 }
