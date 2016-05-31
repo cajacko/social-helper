@@ -39,7 +39,7 @@ class LoggedInTest extends \PHPUnit_Framework_TestCase
         $user = new User($this->config, $this->db);
 
         $this->assertTrue(
-            method_exists($user, 'isRegistered'), 
+            method_exists($user, 'isRegistered'),
             'Class does not have method isRegistered'
         );
     }
@@ -77,7 +77,7 @@ class LoggedInTest extends \PHPUnit_Framework_TestCase
         $stmt->execute();
         $res = $stmt->get_result();
 
-        if(!$res->num_rows) {
+        if (!$res->num_rows) {
             return false;
         }
 
@@ -96,7 +96,7 @@ class LoggedInTest extends \PHPUnit_Framework_TestCase
         $user = new User($this->config, $this->db);
 
         $this->assertTrue(
-            method_exists($user, 'updateDetails'), 
+            method_exists($user, 'updateDetails'),
             'Class does not have method updateDetails'
         );
     }
@@ -121,7 +121,7 @@ class LoggedInTest extends \PHPUnit_Framework_TestCase
     private function insertDummyUserData($data)
     {
         $query = '
-            INSERT INTO user (twitterId, token, secret)
+            INSERT INTO users (twitterId, token, secret)
             VALUES (?, ?, ?)
         ;';
 
@@ -133,35 +133,65 @@ class LoggedInTest extends \PHPUnit_Framework_TestCase
 
         $stmt->execute();
 
-        if($stmt->insert_id) {
+        if ($stmt->insert_id) {
             return $stmt->insert_id;
         } else {
             return false;
         }
-
-
     }
 
-    private function getDummyUserData()
+    private function getDummyUserData($user_id)
     {
+        $query = '
+            SELECT *
+            FROM users
+            WHERE id = ?
+        ;';
 
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $res = $stmt->get_result();
+
+        if ($res->num_rows) {
+            $data = $res->fetch_assoc();
+            return $data;
+        } else {
+            return false;
+        }
     }
 
-    private function deleteDummyUser()
+    private function deleteDummyUser($user_id)
     {
+        $query = '
+            DELETE FROM users
+            WHERE id = ?
+        ;';
 
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("i", $user_id);
+
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function testUserUpdateDetails()
     {
-        $dummy_data = array();
+        $dummy_data = array(
+            'user_id' => '349649847498',
+            'oauth_token' => '38746984798379847984fhj',
+            'oauth_token_secret' => 'e8i67hg587yr87hyf987hfj'
+        );
 
         $user_id = $this->insertDummyUserData($dummy_data);
 
         $user = new User($this->config, $this->db);
         
         $update_data = array(
-            'user_id' => '297647409309',
+            'user_id' => '349649847498',
             'oauth_token' => '9t7yr3n894u597diughoihe',
             'oauth_token_secret' => 'eouhfofhieny985yh79ghfojer',
             'screen_name' => 'dibbleface',
@@ -176,13 +206,13 @@ class LoggedInTest extends \PHPUnit_Framework_TestCase
             $is_error = false;
         }
 
-        $this->assertFalse($is_error);
-
         $new_data = $this->getDummyUserData($user_id);
+        $this->deleteDummyUser($user_id);
 
-        $this->assertSame($update_data['user_id'], $new_data['userId']);
-        $this->assertSame($update_data['oauth_token'], $new_data['userId']);
-        $this->assertSame($update_data['oauth_token_secret'], $new_data['userId']);
+        $this->assertFalse($is_error);
+        $this->assertSame($update_data['user_id'], $new_data['twitterId']);
+        $this->assertSame($update_data['oauth_token'], $new_data['token']);
+        $this->assertSame($update_data['oauth_token_secret'], $new_data['secret']);
 
         // Set up dummy user and update their details with new dummy data and then check.
     }

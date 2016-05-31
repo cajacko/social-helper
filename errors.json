@@ -48,5 +48,10 @@
         "title": "No paramaters were passed to the method",
         "group": "Could not update user details",
         "message": "This shouldn't happen, we made sloppy code."
+    },
+    "10": {
+        "title": "The database query failed",
+        "group": "Could not update user details",
+        "message": "This shouldn't happen, oh my."
     }
 }

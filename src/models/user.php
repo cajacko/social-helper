@@ -58,5 +58,25 @@ class User
             $error = $error->getError();
             return $error;
         }
+
+        $query = '
+            UPDATE users
+            SET token = ?, secret = ?
+            WHERE twitterId = ?
+        ;';
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("sss", $token, $secret, $twitter_id);
+        $token = $tokens['oauth_token'];
+        $secret = $tokens['oauth_token_secret'];
+        $twitter_id = $tokens['user_id'];
+
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            $error = new \SocialHelper\Error\Error(10);
+            $error = $error->getError();
+            return $error;
+        }
     }
 }
