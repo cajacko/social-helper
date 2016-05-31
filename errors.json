@@ -53,5 +53,45 @@
         "title": "The database query failed",
         "group": "Could not update user details",
         "message": "This shouldn't happen, oh my."
+    },
+    "11": {
+        "title": "No paramaters were passed to the method",
+        "group": "Could not register new user",
+        "message": "This shouldn't happen, we made sloppy code."
+    },
+    "12": {
+        "title": "No user ID was given",
+        "group": "Could not register new user",
+        "message": "Twitter must have given us a bad response"
+    },
+    "13": {
+        "title": "No oauth token was given",
+        "group": "Could not register new user",
+        "message": "Twitter must have given us a bad response"
+    },
+    "14": {
+        "title": "No oauth token secret was given",
+        "group": "Could not register new user",
+        "message": "Twitter must have given us a bad response"
+    },
+    "15": {
+        "title": "No user ID was given",
+        "group": "Could not update user details",
+        "message": "Twitter must have given us a bad response"
+    },
+    "16": {
+        "title": "No oauth token was given",
+        "group": "Could not update user details",
+        "message": "Twitter must have given us a bad response"
+    },
+    "17": {
+        "title": "No oauth token secret was given",
+        "group": "Could not update user details",
+        "message": "Twitter must have given us a bad response"
+    },
+    "18": {
+        "title": "The database query failed",
+        "group": "Could not register new user",
+        "message": "This shouldn't happen, oh my."
     }
 }

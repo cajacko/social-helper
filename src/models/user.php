@@ -65,6 +65,24 @@ class User
             return $error;
         }
 
+        if (!isset($tokens['user_id'])) {
+            $error = new \SocialHelper\Error\Error(15);
+            $error = $error->getError();
+            return $error;
+        }
+
+        if (!isset($tokens['oauth_token'])) {
+            $error = new \SocialHelper\Error\Error(16);
+            $error = $error->getError();
+            return $error;
+        }
+
+        if (!isset($tokens['oauth_token_secret'])) {
+            $error = new \SocialHelper\Error\Error(17);
+            $error = $error->getError();
+            return $error;
+        }
+
         $query = '
             UPDATE users
             SET token = ?, secret = ?
@@ -89,5 +107,51 @@ class User
     public function login()
     {
         $_SESSION['loggedIn'] = true;
+    }
+
+    public function register($tokens = null)
+    {
+        if ($tokens === null) {
+            $error = new \SocialHelper\Error\Error(11);
+            $error = $error->getError();
+            return $error;
+        }
+
+        if (!isset($tokens['user_id'])) {
+            $error = new \SocialHelper\Error\Error(12);
+            $error = $error->getError();
+            return $error;
+        }
+
+        if (!isset($tokens['oauth_token'])) {
+            $error = new \SocialHelper\Error\Error(13);
+            $error = $error->getError();
+            return $error;
+        }
+
+        if (!isset($tokens['oauth_token_secret'])) {
+            $error = new \SocialHelper\Error\Error(14);
+            $error = $error->getError();
+            return $error;
+        }
+
+        $query = '
+            INSERT INTO users (twitterId, token, secret)
+            VALUES (?, ?, ?)
+        ;';
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("sss", $twitter_id, $token, $secret);
+        $token = $tokens['oauth_token'];
+        $secret = $tokens['oauth_token_secret'];
+        $twitter_id = $tokens['user_id'];
+
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            $error = new \SocialHelper\Error\Error(18);
+            $error = $error->getError();
+            return $error;
+        }
     }
 }
