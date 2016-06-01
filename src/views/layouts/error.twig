@@ -1,0 +1,27 @@
+{% spaceless %}
+  {% include 'sublayouts/header.twig' %}
+
+  <div class="Error jumbotron">
+    <h1>Oh no! An error occurred</h1>
+    <h2 class="Error-group">{{ vars.error.group }}</h2>
+    <table class="table">
+      <tr>
+        <td>Title</td>
+        <td class="Error-title">{{ vars.error.title }}</td>
+      </tr>
+      <tr>
+        <td>Message</td>
+        <td class="Error-message">{{ vars.error.message }}</td>
+      </tr>
+      <tr>
+        <td>Code</td>
+        <td class="Error-code">{{ vars.error.code }}</td>
+      </tr>
+    </table>
+
+    <p><a class="btn btn-primary btn-lg" href="/" role="button">Go to homepage</a></p>
+  </div>
+
+  {% include 'sublayouts/footer.twig' %}
+{% endspaceless %}
+

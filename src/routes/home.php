@@ -10,5 +10,5 @@ if (!$user->isLoggedIn()) {
         require_once('src/routes/error.php');
     }
 } else {
-    echo 'Logged in';
+    $template_path .= 'home';
 }

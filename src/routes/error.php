@@ -1,4 +1,4 @@
 <?php
 
-header('Content-Type: application/json');
-echo json_encode($error);
+$template_path .= 'error';
+$vars['error'] = $error;

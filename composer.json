@@ -3,6 +3,7 @@
         "phpunit/phpunit": "4.8.*",
         "squizlabs/php_codesniffer": "*",
         "guzzlehttp/guzzle": "~6.0",
-        "abraham/twitteroauth": "^0.6.4"
+        "abraham/twitteroauth": "^0.6.4",
+        "twig/twig": "^1.24"
     }
 }

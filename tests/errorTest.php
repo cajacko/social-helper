@@ -28,20 +28,4 @@ class ErrorTest extends \PHPUnit_Framework_TestCase
 
         return $value;
     }
-
-    public function testErrorCode1BadTwitterRedirect()
-    {
-        $this->client = new \GuzzleHttp\Client([
-          'allow_redirects' => false,
-          'base_uri' => $this->config->localhost
-        ]);
-        $response = $this->client->get('/?action=tdd&error=1');
-        $body = $response->getBody();
-        $json = json_decode($body);
-        $this->assertTrue($json->error);
-        $this->assertTrue($this->doesJsonValueExist($json, 'code'));
-        $this->assertTrue($this->doesJsonValueExist($json, 'title'));
-        $this->assertTrue($this->doesJsonValueExist($json, 'group'));
-        $this->assertTrue($this->doesJsonValueExist($json, 'message'));
-    }
 }

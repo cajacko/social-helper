@@ -20,6 +20,7 @@ if (isset($tokens['error'])) {
 
     if (is_twitter_callback_test($request)) {
         echo json_encode($_SESSION);
+        exit;
     } else {
         header('Location: /');
         exit;
