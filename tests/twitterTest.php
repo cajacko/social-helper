@@ -41,7 +41,7 @@ class TwitterTest extends \PHPUnit_Framework_TestCase
         $connection = $twitter->getAppConnection();
         $statuses = $connection->get('search/tweets', ['q' => 'tech', 'count' => 1]);
 
-        if (isset($statuses->statuses[0]->id) && is_numeric($statuses->statuses[0]->id)) {
+        if (isset($statuses->statuses)) {
             $app_connection = true;
         } else {
             $app_connection = false;
