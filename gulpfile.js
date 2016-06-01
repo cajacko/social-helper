@@ -34,6 +34,9 @@ require('./gulp/pre-commit')(gulp);
 // Combine and minify javascript files
 require('./gulp/scripts')(gulp);
 
+// Enable browsersync to ease dev
+require('./gulp/browsersync')(gulp);
+
 // Run the watch tasks
 require('./gulp/watch')(gulp);
 

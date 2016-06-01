@@ -14,6 +14,9 @@
   },
   "homepage": "https://github.com/cajacko/socialhelper#readme",
   "devDependencies": {
+    "bootstrap": "^3.3.6",
+    "browser-sync": "^2.12.10",
+    "browserify": "^13.0.0",
     "casperjs": "^1.1.1",
     "chai": "^3.5.0",
     "gulp": "^3.9.1",
@@ -26,17 +29,16 @@
     "gulp-mocha-phantomjs": "^0.11.0",
     "gulp-phpcs": "^1.1.1",
     "gulp-phpunit": "^0.14.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.5.1",
     "gulp-util": "^3.0.7",
     "jquery": "^2.2.4",
     "jshint": "^2.9.2",
     "mocha": "^2.5.3",
     "phantomjs": "^2.1.7",
     "sys": "0.0.1",
-    "zombie": "^4.2.1",
-    "browserify": "^13.0.0",
-    "gulp-uglify": "^1.5.1",
-    "gulp-rename": "^1.2.2",
+    "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
-    "vinyl-buffer": "^1.0.0"
+    "zombie": "^4.2.1"
   }
 }

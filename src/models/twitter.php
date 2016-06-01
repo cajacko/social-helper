@@ -8,7 +8,6 @@ class Twitter
     private $config;
     private $key;
     private $secret;
-    private $callback;
     private $app_connection;
     private $user_connection;
 
@@ -34,22 +33,31 @@ class Twitter
         return true;
     }
 
+    private function isBrowserSync()
+    {
+        if (!$this->config->dev) {
+            return false;
+        }
+
+        $browsersync_header = 'HTTP_' . $this->config->browsersync->header;
+
+        if (!isset($_SERVER[$browsersync_header])) {
+            return false;
+        }
+
+        $browsersync_port = $config->browsersync->port;
+
+        if ($_SERVER[$browsersync_header] != $browsersync_port) {
+            return false;
+        }
+    }
+
     public function __construct($config, $db)
     {
         $this->db = $db;
         $this->config = $config;
         $this->key = $config->twitter->key;
         $this->secret = $config->twitter->secret;
-
-        $callback = $config->twitter->callback;
-
-        if ($this->ifTwitterLoginEchoResults()) {
-            $callback_append = $config->testsVars->twitterLoginEchoResults->callbackAppendUrl;
-            $this->callback = $callback . '/' . $callback_append;
-        } else {
-            $this->callback = $callback;
-        }
-        
         $this->setTwitterAppConnection();
     }
 
@@ -64,11 +72,24 @@ class Twitter
             return false;
         }
 
+        if ($this->isBrowserSync()) {
+            $callback = 'http://localhost:' . $this->config->browsersync->port;
+        } else {
+            $callback = $this->config->localhost;
+        }
+
+        $callback .= $this->config->twitter->callback;
+
+        if ($this->ifTwitterLoginEchoResults()) {
+            $callback_append = $this->config->testsVars->twitterLoginEchoResults->callbackAppendUrl;
+            $callback = $callback . '/' . $callback_append;
+        }
+
         try {
             $temporary_credentials = $this->app_connection->oauth(
                 'oauth/request_token',
                 array(
-                    'oauth_callback' => $this->callback
+                    'oauth_callback' => $callback
                 )
             );
 

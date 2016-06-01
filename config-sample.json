@@ -9,8 +9,10 @@
         "preCommit": "preCommit",
         "phpcs": "phpcs",
         "mocha": "mocha",
-        "scripts": "scripts"
+        "scripts": "scripts",
+        "browsersync": "browsersync"
     },
+    "publicDir": "/src/public/",
     "php": {
         "testsDir": "tests"
     },
@@ -20,7 +22,8 @@
         "export": "/src/public/js/",
         "main": "script.js",
         "min": "script.min.js",
-        "watch": "/src/javascripts/"
+        "watch": "/src/javascripts/",
+        "public": "/js/"
     },
     "libs": {
         "npm": {
@@ -56,5 +59,9 @@
             },
             "callbackAppendUrl": "tdd"
         }
+    },
+    "browsersync": {
+        "header": "BROWSERSYNC",
+        "port": 3000
     }
 }

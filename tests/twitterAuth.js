@@ -81,7 +81,6 @@ describe('User visits twitter login', function() {
   var browser = new Browser();
 
   before(function(done) {
-    console.log(url);
     browser.visit(url, done);
   });
 
