@@ -8,13 +8,19 @@
         "jshint": "jshint",
         "preCommit": "preCommit",
         "phpcs": "phpcs",
-        "mocha": "mocha"
+        "mocha": "mocha",
+        "scripts": "scripts"
     },
     "php": {
         "testsDir": "tests"
     },
     "js": {
-        "testsDir": "tests"
+        "testsDir": "tests",
+        "import": "/src/javascripts/import.js",
+        "export": "/src/public/js/",
+        "main": "script.js",
+        "min": "script.min.js",
+        "watch": "/src/javascripts/"
     },
     "libs": {
         "npm": {

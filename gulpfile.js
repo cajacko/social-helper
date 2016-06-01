@@ -31,6 +31,9 @@ require('./gulp/phpcs')(gulp, phpLintDirs);
 // A task to run before commiting any code to git
 require('./gulp/pre-commit')(gulp);
 
+// Combine and minify javascript files
+require('./gulp/scripts')(gulp);
+
 // Run the watch tasks
 require('./gulp/watch')(gulp);
 

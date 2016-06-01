@@ -32,6 +32,11 @@
     "mocha": "^2.5.3",
     "phantomjs": "^2.1.7",
     "sys": "0.0.1",
-    "zombie": "^4.2.1"
+    "zombie": "^4.2.1",
+    "browserify": "^13.0.0",
+    "gulp-uglify": "^1.5.1",
+    "gulp-rename": "^1.2.2",
+    "vinyl-source-stream": "^1.1.0",
+    "vinyl-buffer": "^1.0.0"
   }
 }
