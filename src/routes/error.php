@@ -1,4 +1,4 @@
 <?php
 
-$template_path .= 'error';
+$template_path = 'layouts/error';
 $vars['error'] = $error;

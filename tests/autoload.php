@@ -12,3 +12,4 @@ require_once 'src/models/config.php';
 require_once 'src/models/database.php';
 require_once 'src/models/user.php';
 require_once 'src/models/twitter.php';
+require_once 'src/models/tags.php';

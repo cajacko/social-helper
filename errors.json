@@ -93,5 +93,10 @@
         "title": "The database query failed",
         "group": "Could not register new user",
         "message": "This shouldn't happen, oh my."
+    },
+    "19": {
+        "title": "The user ID was not returned",
+        "group": "Could not check if user is registered",
+        "message": "This shouldn't happen, oh my."
     }
 }

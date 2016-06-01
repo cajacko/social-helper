@@ -1,0 +1,29 @@
+<div class="TrackingTags panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          Tags
+        </a>
+      </h4>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        <form id="TrackingTags-form" action="/action/add-tag" method="POST">
+          <div class="form-group">
+            <label for="exampleInputEmail1">Add new tag</label>
+            <input id="TrackingTags-input" type="text" name="tag" class="form-control" id="exampleInputEmail1" placeholder="#twitterHasTag">
+          </div>
+          <button id="TrackingTags-submit" type="submit" class="btn btn-default">Submit</button>
+        </form>
+        <ul id="TrackingTags-list" class="list-group">
+          {% for tag in vars.trackingTags %}
+            <li id="{% if tag.template %}TrackingTags-tag--template{% else %}TrackingTags-tag--{{ tag.tag }}{% endif %}" class="TrackingTags-tag list-group-item{% if tag.template %} hidden{% endif %}">
+              <a class="TrackingTags-delete badge" href="#" data-action="/action/delete-tag" data-id="{{ tag.id }}">X</a>#<span class="TrackingTags-tagText">{{ tag.tag }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

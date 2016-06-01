@@ -7,6 +7,7 @@ class User
     private $logged_in = false;
     private $db;
     private $config;
+    private $user_id = false;
 
     public function __construct($config, $db)
     {
@@ -14,10 +15,32 @@ class User
         $this->config = $config;
     }
 
+    private function returnIsLoggedIn()
+    {
+        if (!isset($_SESSION['loggedIn'])) {
+            return false;
+        }
+
+        if (!$_SESSION['loggedIn']) {
+            return false;
+        }
+
+        if (!isset($_SESSION['userId'])) {
+            return false;
+        }
+
+        if (!is_numeric($_SESSION['userId'])) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function isLoggedIn()
     {
-        if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn']) {
+        if ($this->returnIsLoggedIn()) {
             $this->logged_in = true;
+            $this->user_id = $_SESSION['userId'];
         } else {
             $this->logged_in = false;
         }
@@ -34,7 +57,7 @@ class User
         }
 
         $query = '
-            SELECT twitterId
+            SELECT id, twitterId
             FROM users
             WHERE twitterId = ?
         ;';
@@ -50,6 +73,16 @@ class User
 
         if (!$res->num_rows > 1) {
             $error = new \SocialHelper\Error\Error(8);
+            $error = $error->getError();
+            return $error;
+        }
+
+        $row = $res->fetch_assoc();
+
+        if (isset($row['id']) && is_numeric($row['id'])) {
+            $this->user_id = $row['id'];
+        } else {
+            $error = new \SocialHelper\Error\Error(19);
             $error = $error->getError();
             return $error;
         }
@@ -107,6 +140,7 @@ class User
     public function login()
     {
         $_SESSION['loggedIn'] = true;
+        $_SESSION['userId'] = $this->user_id;
     }
 
     public function register($tokens = null)
@@ -147,11 +181,17 @@ class User
         $twitter_id = $tokens['user_id'];
 
         if ($stmt->execute()) {
+            $this->user_id = $stmt->insert_id;
             return true;
         } else {
             $error = new \SocialHelper\Error\Error(18);
             $error = $error->getError();
             return $error;
         }
+    }
+
+    public function getUserId()
+    {
+        return $this->user_id;
     }
 }

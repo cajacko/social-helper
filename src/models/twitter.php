@@ -45,7 +45,7 @@ class Twitter
             return false;
         }
 
-        $browsersync_port = $config->browsersync->port;
+        $browsersync_port = $this->config->browsersync->port;
 
         if ($_SERVER[$browsersync_header] != $browsersync_port) {
             return false;

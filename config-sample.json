@@ -39,7 +39,7 @@
     "twitter": {
         "key": "xxx",
         "secret": "xxx",
-        "callback": "http://socialhelper.local.com/twitter/callback",
+        "callback": "twitter-callback",
         "testAccount": {
             "user": "xxx",
             "password": "xxx"

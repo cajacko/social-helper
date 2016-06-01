@@ -15,7 +15,8 @@ class HomePage extends \PHPUnit_Framework_TestCase
 
         $this->client = new \GuzzleHttp\Client([
           'allow_redirects' => false,
-          'base_uri' => $this->config->localhost
+          'base_uri' => $this->config->localhost,
+          'exceptions' => false
         ]);
     }
 
@@ -23,5 +24,11 @@ class HomePage extends \PHPUnit_Framework_TestCase
     {
         $response = $this->client->get('/');
         $this->assertEquals(302, $response->getStatusCode());
+    }
+
+    public function test404()
+    {
+        $response = $this->client->get('/fiufroiurho');
+        $this->assertEquals(404, $response->getStatusCode());
     }
 }
