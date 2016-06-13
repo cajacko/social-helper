@@ -6,46 +6,42 @@
 
 var express = require('express');
 var router = express.Router();
-// var user = require('../models/user');
+var user = require('../models/user');
 // var story = require('../models/story');
 var passport = require('passport');
 // var Strategy = require('passport-twitter').Strategy;
 
 router.get('/login/twitter', passport.authenticate('twitter'));
-
-// router.use('/add-story', require('./add_story')); // Add story page and action
 router.use('/login/twitter/callback', require('./twitter-callback')); // Facebook login redirect
-// router.use('/next-story', require('./next_story')); // Get the next story
-// router.use('/save-entry', require('./save_entry')); // Save an entry
-// router.use('/story/*', require('./story')); // Story page
+router.use('/action/add-tracking-query', require('./add-tracking-query')); // Save an entry
 
 // Display the home page
 router.get('/', function(req, res) {
-    res.send('home');
-    // Get the current user if they exists
-    // user.getUser(req, function(userDetails) {
-    //     // If the user exists show the dashboard, otherwise show the login page
-    //     if (userDetails) {
-    //         // Get all the stories the current user is an author of
-    //         story.getUserStories(userDetails.id, function(err, stories) {
-    //             *
-    //              * If there was an error then notify the user otherwise show the dashboard.
-    //              *
-    //              * If there are stories then show them
-                 
-    //             if (err) {
-    //                 res.send('Error loading the dashboard');
-    //             } else if (stories.length) {
-    //                 res.render('pages/dashboard', {stories: stories});
-    //             } else {
-    //                 res.render('pages/dashboard', {stories: false});
-    //             }
-    //         });
-    //     } else {
-    //         // The user is not logged in, show the login page
-    //         res.render('pages/login');
-    //     }
-    // });
+    if (req.user && req.user.socialHelper && req.user.socialHelper.userID) {
+        var userID = req.user.socialHelper.userID;
+
+        user.getUserAccounts(userID, function(userAccounts) {
+            if (userAccounts) {
+                user.getTrackingQueries(userID, function(userTrackingQueries) {
+                    if (userTrackingQueries) {
+                        res.render('pages/dashboard', {
+                            vars: {
+                                trackingQueries: false,
+                                userAccounts: userAccounts,
+                                userTrackingQueries: userTrackingQueries
+                            }
+                        });
+                    } else {
+                        res.send('error');
+                    }
+                });
+            } else {
+                res.send('error');
+            }
+        });
+    } else {
+        res.redirect('/login/twitter');
+    }
 });
 
 module.exports = router;

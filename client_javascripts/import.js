@@ -1,1 +1,1 @@
-require('./modules/story');
+require('./modules/general');

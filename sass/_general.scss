@@ -1,16 +1,44 @@
-html {   
-    background: $brandLightGrey;
-    font-family: $fontFamily;
-    font-size: $baseFontSize;
-    line-height: 1.5;
+.twitter-tweet {
+    margin-left: auto;
+    margin-right: auto;
 }
 
-a {
-    color: $brandBlue;
-    cursor: pointer;
-    text-decoration: none;
+.linkIcon {
+    font-size: 2em;
+    line-height: 1;
+    margin-top: -4px;
+    
+}
 
-    &:hover {
-        color: darken($brandBlue, 10%);
-    }
+.linkIcon,
+.tweetIcon {
+    display: inline-block;
+    margin-left: 0.5em;
+}
+
+.siteMessage {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    display: none;
+}
+
+.link-heading {
+    position: relative;
+}
+
+.link-link {
+    display: block;
+    margin-right: 115px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.link-actions {
+    position: absolute;
+    right: 10px;  
+    top: 10px;
 }

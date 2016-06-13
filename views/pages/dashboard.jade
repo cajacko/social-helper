@@ -1,12 +1,30 @@
 extends ../sublayouts/layout
 
 block content
-    //- If there are stories show them, otherwise tell the user to add a story
-    if stories
-        ul(class='storyList')
 
-            each val in stories
-                li(class='storyItem') 
-                    a(class='storyLink', href='/story/#{val.id}') #{val.codename}
-    else
-        p Welcome to Improv Stories, <a href="/add-story">start a new story</a> or <a href="/invite">invite friends to join</a>.
+  h1 Social helper
+
+  div(class='panel-group', id='accordion', role='tablist', aria-multiselectable='true')
+    div(class='panel panel-default')
+      div(class='panel-heading', role='tab', id='headingOne')
+        h4(class='panel-title')
+          a(role='button', data-toggle='collapse', data-parent='#accordion', href='#collapseOne', aria-expanded='true', aria-controls='collapseOne') Tracking queries
+      div(id='collapseOne', class='panel-collapse collapse', role='tabpanel', aria-labelledby='headingOne')
+        div(class='panel-body')
+          form(action='/action/add-tracking-query', method='POST')
+            div(class='form-group')
+              label(for='exampleInputEmail1') Add new tracking query
+              div(class='form-group')
+                select(name='accountID', class='form-control')
+                  option(value='false', selected) Select Account
+                  for account in vars.userAccounts
+                    option(value='#{account.accountID}') #{account.accountName} (#{account.type})
+              div(class='form-group')
+                input(type='text', name='query', class='form-control', id='exampleInputEmail1', placeholder='#twitterHashtag filter:links')
+
+              button(type='submit', class='btn btn-default') Submit
+          if vars.userTrackingQueries
+            ul(class='list-group')
+              for query in vars.userTrackingQueries
+                li(class='list-group-item') #{ query.query } (#{ query.type })
+                  a(href='/action/delete-tracking-query?id=#{ query.trackingQueryID }', class='badge') X

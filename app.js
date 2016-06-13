@@ -28,10 +28,10 @@ passport.use(new Strategy({
     callbackURL: 'http://localhost:5000/login/twitter/callback'
 }, function(token, tokenSecret, profile, cb) {
     if (profile.id) {
-        user.updateUser(token, tokenSecret, profile.id);
+        user.updateUser(token, tokenSecret, profile, cb);
+    } else {
+        return cb(null, profile);
     }
-
-    return cb(null, profile);
 }));
 
 /**

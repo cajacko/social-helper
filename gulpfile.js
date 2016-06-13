@@ -35,18 +35,6 @@ gulp.task('sass', function() {
 });
 
 /********************************************************
-* LIBRARY CSS                                           *
-********************************************************/
-gulp.task('libcss', function() {
-    return gulp.src(['./node_modules/normalize.css/normalize.css', './node_modules/font-awesome/css/font-awesome.css'])
-        .pipe(concat('lib.css'))
-        .pipe(gulp.dest(projectCssPath))
-        .pipe(rename('lib.min.css'))
-        .pipe(minifyCss())
-        .pipe(gulp.dest(projectCssPath));
-});
-
-/********************************************************
 * SCRIPTS                                               *
 ********************************************************/
 gulp.task('scripts', function() {
@@ -59,19 +47,6 @@ gulp.task('scripts', function() {
         .pipe(uglify()) // Minify the file
         .pipe(gulp.dest(projectJsPath)); // Output the minified file
 });
-
-/********************************************************
-* FONT AWESOME                                          *
-********************************************************/
-gulp.task('fonts', function() {
-    gulp.src('./node_modules/font-awesome/fonts/*')
-        .pipe(gulp.dest('./public/fonts/'));
-});
-
-/********************************************************
-* INIT TASK                                             *
-********************************************************/
-gulp.task('init',['libcss', 'scripts', 'fonts']);
 
 /********************************************************
 * SETUP BROWSER SYNC                                    *
