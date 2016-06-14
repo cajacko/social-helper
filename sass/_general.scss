@@ -42,3 +42,28 @@
     right: 10px;  
     top: 10px;
 }
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.object {
+    border-bottom: 2px solid #dcdcdc;
+    padding: 2em 0;
+}
+
+.actions {
+    text-align: center;
+}
+
+.action {
+    display: inline-block;
+    font-size: 2.5em;
+}
+
+.actionLink {
+    display: inline-block;
+    padding: 0 0.5em;
+}

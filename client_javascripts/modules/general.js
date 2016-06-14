@@ -9,22 +9,18 @@ function error() {
 }
 
 $(document).ready(function() {
-    $('.linkIcon, .tweetIcon').click(function(event) {
+    $('.actionLink').click(function(event) {
         event.preventDefault();
 
         var element = $(this);
-        var discardElement = $(this).closest('.discardElement');
+        var discardElement = $(this).closest('.object');
 
-        var action = $(element).data('action');
-        var id = $(element).data('id');
-
-        var url = '/action/ajax';
+        var url = $(element).attr('href');
 
         $.ajax({
             url: url,
             type: 'GET',
-            dataType: 'json',
-            data: {action: action, id: id},
+            dataType: 'json'
         })
         .done(function(data) {
             if (!data || data.err) {

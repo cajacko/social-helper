@@ -28,3 +28,54 @@ block content
               for query in vars.userTrackingQueries
                 li(class='list-group-item') #{ query.query } (#{ query.type })
                   a(href='/action/delete-tracking-query?id=#{ query.trackingQueryID }', class='badge') X
+
+
+  if vars.objects
+    ul(class='objects')
+      for object in vars.objects
+        li(class='object')
+          case object.type
+            when 'tweet'
+              a(class='embedly-card', href='https://twitter.com/statuses/#{object.UID}')
+              ul(class='actions')
+                li(class='action')
+                  a(class='actionLink', href="/action/tweet?objectID=#{object.objectID}")
+                    i(class='fa fa-twitter')
+                li(class='action')
+                  a(class='actionLink', href="/action/retweet?objectID=#{object.objectID}")
+                    i(class='fa fa-retweet')
+                li(class='action')
+                  a(class='actionLink', href="/action/like?objectID=#{object.objectID}")
+                    i(class='fa fa-heart')
+                li(class='action')
+                  a(class='actionLink', href="/action/save?objectID=#{object.objectID}")
+                    i(class='fa fa-floppy-o')
+                li(class='action')
+                  a(class='actionLink', href="/action/remove?objectID=#{object.objectID}")
+                    i(class='fa fa-trash')
+            when 'twitterUser'
+              a(class='embedly-card', href='https://twitter.com/intent/user?user_id=#{object.UID}')
+              ul(class='actions')
+                li(class='action')
+                  a(class='actionLink', href="/action/follow?objectID=#{object.objectID}")
+                    i(class='fa fa-user-plus')
+                li(class='action')
+                  a(class='actionLink', href="/action/save?objectID=#{object.objectID}")
+                    i(class='fa fa-floppy-o')
+                li(class='action')
+                  a(class='actionLink', href="/action/remove?objectID=#{object.objectID}")
+                    i(class='fa fa-trash')
+            when 'link'
+              a(class='embedly-card', href='#{object.UID}')
+              ul(class='actions')
+                li(class='action')
+                  a(class='actionLink', href="/action/similar?objectID=#{object.objectID}")
+                    i(class='fa fa-files-o')
+                li(class='action')
+                  a(class='actionLink', href="/action/save?objectID=#{object.objectID}")
+                    i(class='fa fa-floppy-o')
+                li(class='action')
+                  a(class='actionLink', href="/action/remove?objectID=#{object.objectID}")
+                    i(class='fa fa-trash')
+
+

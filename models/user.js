@@ -13,6 +13,35 @@ Save
 var db = require('../models/db'); // Load the database connection
 // var config = require('../config');
 
+exports.getObjects = function(next) {
+    var query = '';
+    query += 'SELECT * FROM userObjects LIMIT 10;';
+
+    db.query(query, function(err, rows) {
+        // If there was a MySQL error the return false
+        if (err) {
+            next(false);
+        } else {
+            next(rows);
+        }
+    });
+};
+
+exports.getTrackingQueries = function(userID, next) {
+    var query = '';
+    query += 'SELECT * FROM userTrackingQueries WHERE userID = ?;';
+    var values = [userID];
+
+    db.query(query, values, function(err, rows) {
+        // If there was a MySQL error the return false
+        if (err) {
+            next(false);
+        } else {
+            next(rows);
+        }
+    });
+};
+
 exports.getTrackingQueries = function(userID, next) {
     var query = '';
     query += 'SELECT * FROM userTrackingQueries WHERE userID = ?;';
