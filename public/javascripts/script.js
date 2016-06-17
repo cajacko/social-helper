@@ -7,6 +7,23 @@ require('./modules/general');
 var $ = global.jQuery = require('jquery');
 var bootstrap = require('bootstrap/dist/js/bootstrap');
 
+twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  fjs.parentNode.insertBefore(js, fjs);
+ 
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+ 
+  return t;
+}(document, "script", "twitter-wjs"));
+
 function error() {
     $('#siteMessage').fadeIn('fast', function() {
         setTimeout(function() {
@@ -111,6 +128,34 @@ $(document).ready(function() {
             submitAction(element);
         });
     });
+
+    twttr.ready(
+      function (twttr) {
+        $('.tweet').each(function() {
+            var tweet = this;
+            var id = $(this).data('id');
+
+            twttr.widgets.createTweet(id, tweet, {
+                conversation: 'none',    // or all
+                cards: 'hidden',  // or visible
+                linkColor: '#cc0000', // default is blue
+                theme: 'light'    // or dark
+            });
+        });
+
+        $('.twitterUser').each(function() {
+            var tweet = this;
+            var id = $(this).data('id');
+
+            twttr.widgets.createTimeline({
+                sourceType: 'profile',
+                userId: id
+            }, tweet,  {
+                tweetLimit: 3
+            });
+        });
+      }
+    );
 });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
