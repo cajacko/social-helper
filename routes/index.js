@@ -13,7 +13,7 @@ var passport = require('passport');
 
 router.get('/login/twitter', passport.authenticate('twitter'));
 router.use('/login/twitter/callback', require('./twitter-callback')); // Facebook login redirect
-router.use('/action/*', require('./action')); // Save an entry
+router.use('/action', require('./action')); // Save an entry
 
 // Display the home page
 router.get('/', function(req, res) {

@@ -54,3 +54,6 @@ ul {
 .actionLink {
   display: inline-block;
   padding: 0 0.5em; }
+
+a {
+  cursor: pointer; }

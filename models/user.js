@@ -64,24 +64,20 @@ exports.addTrackingQuery = function(trackingType, trackingQuery, accountID, next
 
     db.beginTransaction(function(err) {
         if (err) {
-            console.log('1');
             next(false);
         } else {
             // No user was found with that facebook id, so add them
             db.query(query, values, function(err) {
                 // If there was a MySQL error the return false
                 if (err) {
-                    console.log(err);
 
                     db.rollback(function() {
-                        console.log('2');
                         next(false);
                     });
                 } else {
                     db.commit(function(err) {
                         if (err) {
                             db.rollback(function() {
-                                console.log('3');
                                 next(false);
                             });
                         } else {
@@ -220,7 +216,6 @@ exports.getUser = function(req, next) {
      */
     if (req.user) {
 
-        console.log(req.user);
         // // Define the query
         // var query = '';
         // query += 'SELECT * ';
@@ -278,4 +273,119 @@ exports.getUser = function(req, next) {
     } else {
         next(false);
     }
+};
+
+function getUserAccounts(userID, next) {
+    var query = '';
+    query += 'SELECT * FROM userAccounts WHERE userID = ?';
+    var values = [userID];
+
+    db.query(query, values, function(err, rows) {
+        // If there was a MySQL error the return false
+        if (err) {
+            next(false);
+        } else {
+            next(rows);
+        }
+    });
+}
+
+var processes = {};
+
+function addObjectAccountAction(processID, action, objectID, next) {
+    var query = '';
+    query += 'CALL addObjectAccountAction(?, ?, ?)';
+
+    var accountID = processes[processID].accounts[processes[processID].addObjectAccountActionCount];
+    var values = [objectID, accountID.accountID, action];
+
+    // No user was found with that facebook id, so add them
+    db.query(query, values, function(err) {
+        // If there was a MySQL error the return false
+        if (err) {
+            db.rollback(function() {
+                next(false);
+            });
+        } else {
+            processes[processID].addObjectAccountActionCount++;
+            if (processes[processID].addObjectAccountActionCount >= processes[processID].accountsLength) {
+                next(true);
+            } else {
+                addObjectAccountAction(processID, action, objectID, next);
+            }
+        }
+    });
+}
+
+function setupProcess(objectID, userID) {
+    var processID = 'objectID-' + objectID + '-userID-' + userID;
+
+    processes[processID] = {
+        accountsLength: 0,
+        addObjectAccountActionCount: 0,
+        accounts: []
+    };
+
+    return processID;
+}
+
+function actionOnAccounts(processID, action, objectID, next) {
+    db.beginTransaction(function(err) {
+        processes[processID].accountsLength = processes[processID].accounts.length;
+
+        if (err) {
+            db.rollback(function() {
+                next(false);
+            });
+        } else {
+            addObjectAccountAction(processID, action, objectID, function(response) {
+                delete processes[processID];
+
+                if (response) {
+                    db.commit(function(err) {
+                        if (err) {
+                            db.rollback(function() {
+                                next(false);
+                            });
+                        } else {
+                            next(true);
+                        }
+                    });
+                } else {
+                    next(false);
+                }
+            });
+        }
+    });
+}
+
+exports.actionOnAllAccounts = function(action, objectID, userID, next) {
+    processID = setupProcess(objectID, userID);
+
+    getUserAccounts(userID, function(response) {
+        processes[processID].accounts = response;
+
+
+        if (processes[processID].accounts) {
+            actionOnAccounts(processID, action, objectID, next);
+        } else {
+            next(false);
+        }
+    });
+};
+
+exports.actionOnSpecifiedAccounts = function(action, objectID, userID, accountIDs, next) {
+    processID = setupProcess(objectID, userID);
+
+    if (!accountIDs) {
+        next(false);
+        return false;
+    }
+
+    for (var i = 0; i < accountIDs.length; i++) {
+        processes[processID].accounts.push({accountID: accountIDs[i]});
+    }
+
+
+    actionOnAccounts(processID, action, objectID, next);
 };
