@@ -1,0 +1,75 @@
+$LoginRegister--backgroundColour: #f3f3f3;
+$LoginRegister-button--topMargin: 20px;
+$LoginRegister-form--maxWidth: 250px;
+$LoginRegister-form--verticalPadding: 10px;
+$LoginRegister-input--verticalMargin: 10px;
+$LoginRegister-linkGroup--fontSize: 12px;
+$LoginRegister-linkGroup--topMargin: 20px;
+$LoginRegister-linkLabel--verticalMargin: 5px;
+$LoginRegister-title--fontSize: 20px;
+$LoginRegister-title--marginBottom: 10px;
+$LoginRegister--verticalMargin: 20px;
+$LoginRegister-input--padding: 4px 6px;
+
+.LoginRegister {
+  @include screenEdgeHorizontalSpacing('padding');
+  background: $LoginRegister--backgroundColour;
+  margin: $LoginRegister--verticalMargin 0;
+}
+
+.LoginRegister-form {
+  @include clearFix;
+  margin: 0 auto;
+  max-width: $LoginRegister-form--maxWidth;
+  padding: $LoginRegister-form--verticalPadding 0;
+}
+
+.Registration {
+  display: none;
+}
+
+.LoginRegister-title {
+  font-size: $LoginRegister-title--fontSize;
+  margin-bottom: $LoginRegister-title--marginBottom;
+  margin-top: 0;
+  text-align: center;
+}
+
+.LoginRegister-label {
+  display: none;
+}
+
+.LoginRegister-input,
+.LoginRegister-button {
+  box-sizing: border-box;
+  display: block;
+  line-height: 1;
+  margin: $LoginRegister-input--verticalMargin 0;
+  padding: $LoginRegister-input--padding;
+  width: 100%;
+}
+
+.LoginRegister-button {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: $LoginRegister-button--topMargin;
+  max-width: 100px;
+}
+
+.LoginRegister-linkGroup {
+  font-size: $LoginRegister-linkGroup--fontSize;
+  font-style: italic;
+  margin-top: $LoginRegister-linkGroup--topMargin;
+  text-align: center;
+}
+
+.LoginRegister-linkLabel,
+.LoginRegister-link {
+  display: block;
+  line-height: 1;
+  margin: $LoginRegister-linkLabel--verticalMargin 0;
+}
+
+.LoginRegister-link {
+  margin-bottom: 0;
+}

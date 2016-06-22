@@ -11,6 +11,7 @@ var user = require('../models/user');
 var passport = require('passport');
 // var Strategy = require('passport-twitter').Strategy;
 
+router.use('/prototype', require('./prototype/index'));
 router.get('/login/twitter', passport.authenticate('twitter'));
 router.use('/login/twitter/callback', require('./twitter-callback')); // Facebook login redirect
 router.use('/action', require('./action')); // Save an entry

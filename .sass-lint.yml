@@ -6,19 +6,13 @@ rules:
   indentation:
     - 2
     -
-      size: 4
+      size: 2
   class-name-format:
-    - 1
-    -
-      convention: 'camelcase'
+    - 0
   mixin-name-format: 
-    - 1
-    -
-      convention: 'camelcase'
+    - 0
   variable-name-format: 
-    - 1
-    -
-      convention: 'camelcase'
+    - 0
   no-vendor-prefix:
     - 1
     -

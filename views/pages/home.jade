@@ -1,0 +1,39 @@
+extends ../sublayouts/layout
+
+block content
+  h1 #{ vars.title }
+  p #{ vars.mantra }
+
+  section(class='LoginRegister')
+    div(id='Login', class='Login LoginRegister-form')
+      form(class='Login-form', action='/action/login')
+        h2(class='LoginRegister-title') Login
+        div(class='LoginRegister-formGroup')
+          label(class='LoginRegister-label') #{ vars.loginForm.emailLabel }
+          input(class='LoginRegister-input', type='text', placeholder='#{ vars.loginForm.emailPlaceholder }')
+        div(class='LoginRegister-formGroup')
+          label(class='LoginRegister-label') #{ vars.loginForm.passwordLabel }
+          input(class='LoginRegister-input', type='password', placeholder='#{ vars.loginForm.passwordPlaceholder }')
+        div(class='LoginRegister-formGroup')
+          button(class='LoginRegister-button') Login
+      div(class='LoginRegister-linkGroup')
+        p(class='LoginRegister-linkLabel') #{ vars.loginForm.registerText }
+        a(id='ShowRegisterForm', class='LoginRegister-link') #{ vars.loginForm.registerButtonText }
+
+    div(id='Register', class='Registration LoginRegister-form')
+      form(class='Registration-form', action='/action/register')
+        h2(class='LoginRegister-title') Register
+        div(class='LoginRegister-formGroup')
+          label(class='LoginRegister-label') #{ vars.registerForm.emailLabel }
+          input(class='LoginRegister-input', type='text', placeholder='#{ vars.registerForm.emailPlaceholder }')
+        div(class='LoginRegister-formGroup')
+          label(class='LoginRegister-label') #{ vars.registerForm.passwordLabel }
+          input(class='LoginRegister-input', type='password', placeholder='#{ vars.registerForm.passwordPlaceholder }')
+        div(class='LoginRegister-formGroup')
+          label(class='LoginRegister-label') #{ vars.registerForm.passwordConfirmLabel }
+          input(class='LoginRegister-input', type='password', placeholder='#{ vars.registerForm.passwordConfirmPlaceholder }')
+        div(class='LoginRegister-formGroup')
+          button(class='LoginRegister-button') Register
+      div(class='LoginRegister-linkGroup')
+        p(class='LoginRegister-linkLabel') #{ vars.registerForm.loginText }
+        a(id='ShowLoginForm', class='LoginRegister-link') #{ vars.registerForm.loginButtonText }

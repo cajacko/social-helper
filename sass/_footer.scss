@@ -1,0 +1,38 @@
+$Footer-link--verticalPadding: 15px;
+$Footer--backgroundColour: #2563a2;
+$Footer-link--colour: #ffffff;
+$Footer--fontSize: 14px;
+$Footer--height: ($Footer-link--verticalPadding * 2) + $Footer--fontSize;
+
+.Footer {
+  background: $Footer--backgroundColour;
+  bottom: 0;
+  font-size: $Footer--fontSize;
+  left: 0;
+  line-height: 1;
+  position: fixed;
+  right: 0;
+}
+
+.Footer-list {
+  @include clearFix;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.Footer-item {
+  float: left;
+  width: 20%;
+}
+
+.Footer-link {
+  color: $Footer-link--colour;
+  display: block;
+  padding: $Footer-link--verticalPadding 0;
+}
+
+.Footer-text {
+  display: block;
+}

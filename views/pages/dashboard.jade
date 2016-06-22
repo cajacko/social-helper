@@ -1,86 +1,22 @@
 extends ../sublayouts/layout
 
 block content
-
-  h1 Social helper
-
-  div(id='tweet')
-
-  div(class='panel-group', id='accordion', role='tablist', aria-multiselectable='true')
-    div(class='panel panel-default')
-      div(class='panel-heading', role='tab', id='headingOne')
-        h4(class='panel-title')
-          a(role='button', data-toggle='collapse', data-parent='#accordion', href='#collapseOne', aria-expanded='true', aria-controls='collapseOne') Tracking queries
-      div(id='collapseOne', class='panel-collapse collapse', role='tabpanel', aria-labelledby='headingOne')
-        div(class='panel-body')
-          form(action='/action/', method='POST')
-            div(class='form-group')
-              label(for='exampleInputEmail1') Add new tracking query
-              div(class='form-group')
-                select(name='accountID', class='form-control')
-                  option(value='false', selected) Select Account
-                  for account in vars.userAccounts
-                    option(value='#{account.accountID}') #{account.accountName} (#{account.type})
-              div(class='form-group')
-                input(type='text', name='query', class='form-control', id='exampleInputEmail1', placeholder='#twitterHashtag filter:links')
-              input(type='hidden', name='action', value='addTrackingQuery')
-              button(type='submit', class='btn btn-default') Submit
-          if vars.userTrackingQueries
-            ul(class='list-group')
-              for query in vars.userTrackingQueries
-                li(class='list-group-item') #{ query.query } (#{ query.type })
-                  a(href='/action/?action=delete-tracking-query&id=#{ query.trackingQueryID }', class='badge') X
-
-
-  if vars.objects
-    ul(class='objects')
-      for object in vars.objects
-        li(class='object')
-          case object.type
-            when 'tweet'
-              a(class='tweet', data-id='#{object.UID}')
-              ul(class='actions')
-                li(class='action')
-                  a(class='actionLink popoverAction', data-action='tweet', data-objectid='#{object.objectID}')
-                    i(class='fa fa-twitter')
-                li(class='action')
-                  a(class='actionLink popoverAction', data-action='retweet', data-objectid='#{object.objectID}')
-                    i(class='fa fa-retweet')
-                li(class='action')
-                  a(class='actionLink popoverAction', data-action='like', data-objectid='#{object.objectID}')
-                    i(class='fa fa-heart')
-                li(class='action')
-                  a(class='actionLink directAction', href="/action/?action=save&objectID=#{object.objectID}")
-                    i(class='fa fa-floppy-o')
-                li(class='action')
-                  a(class='actionLink directAction', href="/action/?action=remove&objectID=#{object.objectID}")
-                    i(class='fa fa-trash')
-            when 'twitterUser'
-              a(class='twitterUser', data-id='#{object.UID}')
-              ul(class='actions')
-                li(class='action')
-                  a(class='actionLink popoverAction', data-action='follow', data-objectid='#{object.objectID}')
-                    i(class='fa fa-user-plus')
-                li(class='action')
-                  a(class='actionLink directAction', href="/action/?action=save&objectID=#{object.objectID}")
-                    i(class='fa fa-floppy-o')
-                li(class='action')
-                  a(class='actionLink directAction', href="/action/?action=remove&objectID=#{object.objectID}")
-                    i(class='fa fa-trash')
-            when 'link'
-              a(class='embedly-card', href='#{object.UID}')
-              ul(class='actions')
-                li(class='action')
-                  a(class='actionLink popoverAction', data-action='tweet', data-objectid='#{object.objectID}')
-                    i(class='fa fa-twitter')
-                li(class='action')
-                  a(class='actionLink popoverAction', data-action='similar', data-objectid='#{object.objectID}')
-                    i(class='fa fa-files-o')
-                li(class='action')
-                  a(class='actionLink directAction', href="/action/?action=save&objectID=#{object.objectID}")
-                    i(class='fa fa-floppy-o')
-                li(class='action')
-                  a(class='actionLink directAction', href="/action/?action=remove&objectID=#{object.objectID}")
-                    i(class='fa fa-trash')
-
-
+  section(class='objects')
+  footer(class='Footer')
+    nav(class='Footer-nav')
+      ul(class='Footer-list')
+        li(class='Footer-item')
+          a(class='Footer-link')
+            span(class='Footer-text') Home
+        li(class='Footer-item')
+          a(class='Footer-link')
+            span(class='Footer-text') Lists
+        li(class='Footer-item')
+          a(class='Footer-link')
+            span(class='Footer-text') Schedule
+        li(class='Footer-item')
+          a(class='Footer-link')
+            span(class='Footer-text') Filter
+        li(class='Footer-item')
+          a(class='Footer-link')
+            span(class='Footer-text') Settings

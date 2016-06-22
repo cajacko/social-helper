@@ -1,0 +1,23 @@
+@mixin clearFix {
+  &:before,
+  &:after {
+    content: ' ';
+    display: table;
+  }
+
+  &:after {
+    clear: both;
+  }
+}
+
+@mixin screenEdgeHorizontalSpacing($margin) {
+  $mobileSpacing: 10px;
+
+  @if $margin == 'margin' {
+    margin-left: $mobileSpacing;
+    margin-right: $mobileSpacing;
+  } @else if $margin == 'padding' {
+    padding-left: $mobileSpacing;
+    padding-right: $mobileSpacing;
+  }
+}
