@@ -1,9 +1,14 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var $ = require('jquery');
+
 require('./modules/general');
 require('./modules/login-register');
-require('./modules/objects');
 
-},{"./modules/general":2,"./modules/login-register":3,"./modules/objects":4}],2:[function(require,module,exports){
+$(document).ready(function() {
+  require('./modules/objects');
+});
+
+},{"./modules/general":2,"./modules/login-register":3,"./modules/objects":4,"jquery":5}],2:[function(require,module,exports){
 
 },{}],3:[function(require,module,exports){
 var $ = require('jquery');
@@ -19,8 +24,84 @@ $('#ShowLoginForm').click(function() {
 });
 
 },{"jquery":5}],4:[function(require,module,exports){
-arguments[4][2][0].apply(exports,arguments)
-},{"dup":2}],5:[function(require,module,exports){
+var $ = require('jquery');
+
+function init() {
+  var data = {param1: 'value1'};
+
+  $.ajax({
+    url: '/prototype/action/get-objects',
+    type: 'POST',
+    dataType: 'json',
+    data: data,
+  })
+  .done(function() {
+    console.log("success");
+  })
+  .fail(function() {
+    console.log("error");
+  })
+  .always(function() {
+    console.log("complete");
+    $('#loader').fadeOut('slow', function() {
+      console.log('complete');
+    });
+  });
+}
+
+if ($('.objects').length) {
+  init();
+}
+
+function isEmbedlySet(element) {
+  if ($(element).find('.embedly-card-hug').length) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+var objectsHeight = $('#Objects').height();
+
+function showObject(object) {
+  $('#loader').hide();
+  $(object).show();
+
+  var interval = setInterval(function() {
+    var height = $(object).height();
+    height = (objectsHeight - height) / 2;
+    height = Math.floor(height);
+    $(object).css('margin-top', height);
+
+  }, 200);
+
+  var timeout = setTimeout(function() {
+    clearInterval(interval);
+  }, 3000);
+}
+
+$('.embedly-card').each(function() {
+  var parent = $(this).parent();
+  var object = $(this).closest('.Object');
+
+  var timeout = setTimeout(function() {
+    clearInterval(interval);
+    showObject(object);
+  }, 3000);
+
+  var interval = setInterval(function() {
+    var element = $(parent).find('div.embedly-card iframe');
+    var link = $(parent).find('a.embedly-card');
+
+    if (element.length && !link.length) {
+      clearInterval(interval);
+      clearTimeout(timeout);
+      showObject(object);
+    }
+  }, 10);
+});
+
+},{"jquery":5}],5:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.2.4
  * http://jquery.com/

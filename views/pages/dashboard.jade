@@ -1,7 +1,24 @@
 extends ../sublayouts/layout
 
 block content
-  section(class='objects')
+  section(id='Objects', class='Objects')
+    div(id='loader', class='loader') Loading...
+    article(class='Object')
+      div(class='Object-container')
+        a(class='Object-titleLink')
+          h2(class='Object-title') apple.com/ipad
+
+        a(class='embedly-card', href='https://www.apple.com/ipad')
+
+      div(class='Object-actions')
+        div(class='Object-action Object-share')
+          div(class='Object-actionTable')
+            div(class='Object-actionTableRow')
+              a(class='Object-actionTableCell') S
+        div(class='Object-action Object-discard')
+          div(class='Object-actionTable')
+            div(class='Object-actionTableRow')
+              a(class='Object-actionTableCell') D
   footer(class='Footer')
     nav(class='Footer-nav')
       ul(class='Footer-list')

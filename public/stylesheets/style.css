@@ -455,9 +455,86 @@ h6 {
 .Footer-text {
   display: block; }
 
-.objects {
+.Objects {
+  background-color: #f3f3f3;
   bottom: 44px;
   left: 0;
   position: fixed;
   right: 0;
   top: 0; }
+
+.Object {
+  background-color: #ffffff;
+  box-shadow: 0 0 5px #949494;
+  display: none;
+  position: relative;
+  transition: margin-top 0.25s; }
+
+.Object-container {
+  padding: 20px 40px; }
+
+.Object-action {
+  position: absolute;
+  top: calc(50% - 20px);
+  line-height: 1;
+  font-size: 14px; }
+
+.Object-share {
+  left: 0; }
+
+.Object-discard {
+  right: 0; }
+
+.Object-actionTable {
+  width: 40px;
+  display: table; }
+
+.Object-actionTableRow {
+  display: table-row; }
+
+.Object-actionTableCell {
+  vertical-align: middle;
+  height: 40px;
+  display: table-cell;
+  text-align: center;
+  line-height: 1; }
+
+.loader {
+  animation: load1 1s infinite ease-in-out;
+  background: black;
+  height: 4em;
+  width: 1em;
+  animation-delay: -0.16s;
+  color: black;
+  font-size: 11px;
+  margin: 88px auto;
+  position: relative;
+  text-indent: -9999em;
+  transform: translateZ(0); }
+  .loader:before {
+    animation: load1 1s infinite ease-in-out;
+    background: black;
+    height: 4em;
+    width: 1em;
+    animation-delay: -0.32s;
+    left: -1.5em; }
+  .loader:after {
+    animation: load1 1s infinite ease-in-out;
+    background: black;
+    height: 4em;
+    width: 1em;
+    left: 1.5em; }
+  .loader:after, .loader:before {
+    content: '';
+    position: absolute;
+    top: 0; }
+
+@keyframes load1 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 0;
+    height: 4em; }
+  40% {
+    box-shadow: 0 -2em;
+    height: 5em; } }

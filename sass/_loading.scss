@@ -1,0 +1,53 @@
+$loader--colour: black;
+
+
+@mixin loader {
+  animation: load1 1s infinite ease-in-out;
+  background: $loader--colour;
+  height: 4em;
+  width: 1em;
+}
+
+.loader {
+  @include loader;
+  animation-delay: -0.16s;
+  color: $loader--colour;
+  // display: none;
+  font-size: 11px;
+  margin: 88px auto;
+  position: relative;
+  text-indent: -9999em;
+  transform: translateZ(0);
+
+  &:before {
+    @include loader;
+    animation-delay: -0.32s;
+    left: -1.5em;
+  }
+
+  &:after {
+    @include loader;
+    left: 1.5em;
+  }
+
+  &:after,
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+  }
+}
+
+@keyframes load1 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 0;
+    height: 4em;
+  }
+
+  40% {
+    box-shadow: 0 -2em;
+    height: 5em;
+  }
+}

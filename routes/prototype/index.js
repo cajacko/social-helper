@@ -40,4 +40,27 @@ router.get('/dashboard', function(req, res) {
     });
 });
 
+router.post('/action/get-objects', function(req, res) {
+    var json = {
+        success: true,
+        objects: [
+            {
+                type: 'link',
+                link: 'http://apple.com/'
+            },
+            {
+                type: 'link',
+                link: 'http://apple.com/'
+            },
+            {
+                type: 'link',
+                link: 'http://apple.com/'
+            }
+        ]
+    };
+
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify(json, null, 3));
+});
+
 module.exports = router;

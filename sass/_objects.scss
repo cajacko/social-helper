@@ -1,7 +1,63 @@
-.objects {
+$object--backgroundColour: #ffffff;
+$object--backgroundColor: #f3f3f3;
+$object--boxShadowColour: #949494;
+$object-boxShadowSize: 5px;
+$object--boxShadow: 0 0 $object-boxShadowSize $object--boxShadowColour;
+$object-container--verticalPadding: 20px;
+$object-container--horizontalPadding: 40px;
+$object-action--fontSize: 14px;
+$object-actionLink--height: 40px;
+$object-action--top: calc(50% - #{$object-actionLink--height / 2});
+
+.Objects {
+  background-color: $object--backgroundColor;
   bottom: $Footer--height;
   left: 0;
   position: fixed;
   right: 0;
   top: 0;
+}
+
+.Object {
+  background-color: $object--backgroundColour; 
+  box-shadow: $object--boxShadow;
+  display: none;
+  position: relative;
+  transition: margin-top 0.25s;
+}
+
+.Object-container {
+  padding: $object-container--verticalPadding $object-container--horizontalPadding;
+}
+
+.Object-action {
+  position: absolute;
+  top: $object-action--top;
+  line-height: 1;
+  font-size: $object-action--fontSize;
+}
+
+.Object-share {
+  left: 0;
+}
+
+.Object-discard {
+  right: 0;
+}
+
+.Object-actionTable {
+  width: $object-container--horizontalPadding;
+  display: table;
+}
+
+.Object-actionTableRow {
+  display: table-row;
+}
+
+.Object-actionTableCell {
+  vertical-align: middle;
+  height: $object-actionLink--height;
+  display: table-cell;
+  text-align: center;
+  line-height: 1;
 }
