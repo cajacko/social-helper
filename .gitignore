@@ -1,4 +1,1 @@
-config.json
-vendor
-node_modules
-actions/*.txt
+.env
