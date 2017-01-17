@@ -1,2 +1,4 @@
 .env
-web/vendor/*
+api/vendor/*
+web/node_modules/*
+web/.gulp-cache
