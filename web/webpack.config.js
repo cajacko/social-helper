@@ -11,7 +11,7 @@ if (process.env.npm_lifecycle_event == 'build-production') {
 
 const PATHS = {
   app: path.join(__dirname, 'app', 'views'),
-  build: path.join(__dirname, 'app', 'server', 'public', 'scripts')
+  build: path.join(__dirname, 'app', 'public', 'scripts')
 };
 
 var config = {
@@ -55,8 +55,8 @@ var config = {
         loaders: ['babel?cacheDirectory'],
         include: PATHS.app
       },
-      { 
-        test: /\.json$/, 
+      {
+        test: /\.json$/,
         loader: 'json'
       }
     ]

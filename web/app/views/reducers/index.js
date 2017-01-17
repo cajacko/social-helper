@@ -1,13 +1,13 @@
 import {combineReducers} from 'redux'
 import {routerReducer} from 'react-router-redux'
-// import status from '~/reducers/status'
-// import gameState from '~/reducers/gameState'
-// import id from '~/reducers/id'
+import loggedIn from '~/reducers/loggedIn'
+import accounts from '~/reducers/accounts'
+import cron from '~/reducers/cron'
 
 const app = combineReducers({
-  // id,
-  // gameState,
-  // status,
+  loggedIn,
+  accounts,
+  cron,
   routing: routerReducer
 })
 

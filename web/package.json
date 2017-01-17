@@ -8,7 +8,8 @@
     "start": "nodemon app/server/server.js --exec babel-node",
     "build": "babel app/server -d dist",
     "serve": "node dist/server.js",
-    "webpack": "webpack --progress --colors --watch"
+    "webpack": "webpack --progress --colors --watch",
+    "gulp": "gulp"
   },
   "repository": {
     "type": "git",
@@ -44,6 +45,7 @@
     "gulp-babel": "^6.1.2",
     "gulp-file-cache": "0.0.1",
     "gulp-nodemon": "^2.2.1",
+    "gulp-webpack": "^1.5.0",
     "mocha": "^3.2.0",
     "nodemon": "^1.11.0",
     "react": "^15.4.1",

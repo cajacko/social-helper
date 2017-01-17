@@ -1,13 +1,22 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import Home from '~/components/Home/Home'
+import Dashboard from '~/components/Dashboard/Dashboard'
 
 const HomeContainer = React.createClass({
   render: function() {
-    return (
-      <Home />
-    )
+    if (this.props.loggedIn) {
+      return <Dashboard />
+    } else {
+      return <Home />
+    }
   }
 })
 
-export default HomeContainer
+function mapStateToProps(state) {
+  return {
+    loggedIn: state.loggedIn
+  }
+}
+
+export default connect(mapStateToProps)(HomeContainer)

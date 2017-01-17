@@ -19,7 +19,7 @@ export function  init(url, postData, action, id) {
   }
 }
 
-export function  success(url, postData, action, id) {
+export function  success(data, url, postData, action, id) {
   return dispatch => {
     if (!callStatus[id]) {
       return false
@@ -32,6 +32,7 @@ export function  success(url, postData, action, id) {
       payload: {
         url: url,
         postData: postData,
+        data: data,
         fetcher: {
           action: action,
           id: id

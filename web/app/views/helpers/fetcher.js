@@ -11,7 +11,7 @@ export default function(url, postData, action) {
 
     setTimeout(function() {
       dispatch(failure('TIMEOUT', url, postData, action, logId))
-    }, 5000)
+    }, 10000)
 
     var config = {
       method: 'post',
