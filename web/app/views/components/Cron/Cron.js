@@ -2,8 +2,25 @@ import React from 'react'
 import TextInput from '~/components/TextInput/TextInput'
 
 const Cron = React.createClass({
-  onChange: function() {
+  propTypes: {
+    cron: React.PropTypes.string.isRequired,
+    submit: React.PropTypes.func.isRequired
+  },
 
+  getInitialState: function() {
+    return {
+      cron: this.props.cron
+    }
+  },
+
+  onChange: function(event) {
+    this.setState({
+      cron: event.target.value
+    })
+  },
+
+  submit: function() {
+    this.props.submit(this.state.cron)
   },
 
   render: function() {
@@ -12,13 +29,13 @@ const Cron = React.createClass({
         <h2>Cron</h2>
 
         <TextInput
-          placeholder=""
+          placeholder="Cron"
           onChange={this.onChange}
-          value="soihf joifj dpj "
+          value={this.state.cron}
           password={false}
         />
 
-        <button>Submit</button>
+        <button onClick={this.submit}>Submit</button>
       </div>
     )
   }

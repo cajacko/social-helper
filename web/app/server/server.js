@@ -35,7 +35,7 @@ app.get('/', function (req, res) {
 
 console.log('aaaa')
 
-app.post('/data/login', function (req, res) {
+app.post('/data/user/login', function (req, res) {
   res.json({
     cron: '5,10,30,55 7,8,9,11,12,13,16,17,18 * * *',
     accounts: [

@@ -1,6 +1,6 @@
 import React from 'react'
-import Cron from '~/components/Cron/Cron'
-import Accounts from '~/components/Accounts/Accounts'
+import Cron from '~/containers/Cron/Cron'
+import Accounts from '~/containers/Accounts/Accounts'
 
 const Dashboard = React.createClass({
   render: function() {

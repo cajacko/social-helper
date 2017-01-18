@@ -29466,6 +29466,7 @@
 	});
 	var LOGIN = exports.LOGIN = 'LOGIN';
 	var REGISTER = exports.REGISTER = 'REGISTER';
+	var SET_CRON = exports.SET_CRON = 'SET_CRON';
 
 /***/ },
 /* 278 */
@@ -32715,6 +32716,10 @@
 
 	var _actions = __webpack_require__(277);
 
+	var actionTypes = _interopRequireWildcard(_actions);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function login(email, password) {
@@ -32723,7 +32728,7 @@
 	    password: password
 	  };
 
-	  return (0, _fetcher2.default)('login', data, _actions.LOGIN);
+	  return (0, _fetcher2.default)('user/login', data, actionTypes.LOGIN);
 	}
 
 	function register(email, password, passwordConfirm) {
@@ -32733,7 +32738,7 @@
 	    passwordConfirm: passwordConfirm
 	  };
 
-	  return (0, _fetcher2.default)('register', data, _actions.REGISTER);
+	  return (0, _fetcher2.default)('user/create', data, actionTypes.REGISTER);
 	}
 
 /***/ },
@@ -32895,11 +32900,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Cron = __webpack_require__(357);
+	var _Cron = __webpack_require__(362);
 
 	var _Cron2 = _interopRequireDefault(_Cron);
 
-	var _Accounts = __webpack_require__(358);
+	var _Accounts = __webpack_require__(364);
 
 	var _Accounts2 = _interopRequireDefault(_Accounts);
 
@@ -32953,7 +32958,26 @@
 	var Cron = _react2.default.createClass({
 	  displayName: 'Cron',
 
-	  onChange: function onChange() {},
+	  propTypes: {
+	    cron: _react2.default.PropTypes.string.isRequired,
+	    submit: _react2.default.PropTypes.func.isRequired
+	  },
+
+	  getInitialState: function getInitialState() {
+	    return {
+	      cron: this.props.cron
+	    };
+	  },
+
+	  onChange: function onChange(event) {
+	    this.setState({
+	      cron: event.target.value
+	    });
+	  },
+
+	  submit: function submit() {
+	    this.props.submit(this.state.cron);
+	  },
 
 	  render: function render() {
 	    return _react2.default.createElement(
@@ -32965,14 +32989,14 @@
 	        'Cron'
 	      ),
 	      _react2.default.createElement(_TextInput2.default, {
-	        placeholder: '',
+	        placeholder: 'Cron',
 	        onChange: this.onChange,
-	        value: 'soihf joifj dpj ',
+	        value: this.state.cron,
 	        password: false
 	      }),
 	      _react2.default.createElement(
 	        'button',
-	        null,
+	        { onClick: this.submit },
 	        'Submit'
 	      )
 	    );
@@ -32995,14 +33019,25 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Account = __webpack_require__(359);
+	var _Account = __webpack_require__(366);
 
 	var _Account2 = _interopRequireDefault(_Account);
+
+	var _propTypes = __webpack_require__(365);
+
+	var propTypes = _interopRequireWildcard(_propTypes);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var Accounts = _react2.default.createClass({
 	  displayName: 'Accounts',
+
+	  propTypes: {
+	    accounts: propTypes.ACCOUNTS,
+	    add: propTypes.ACCOUNT_ADD
+	  },
 
 	  render: function render() {
 	    return _react2.default.createElement(
@@ -33016,14 +33051,17 @@
 	      _react2.default.createElement(
 	        'div',
 	        null,
-	        _react2.default.createElement(_Account2.default, null),
-	        _react2.default.createElement(_Account2.default, null),
-	        _react2.default.createElement(_Account2.default, null),
-	        _react2.default.createElement(_Account2.default, null)
+	        this.props.accounts.map(function (account) {
+	          return _react2.default.createElement(_Account2.default, {
+	            key: account.username,
+	            queries: account.queries,
+	            username: account.username
+	          });
+	        })
 	      ),
 	      _react2.default.createElement(
 	        'button',
-	        null,
+	        { onClick: this.props.add },
 	        'Add Account'
 	      )
 	    );
@@ -33050,10 +33088,27 @@
 
 	var _Queries2 = _interopRequireDefault(_Queries);
 
+	var _propTypes = __webpack_require__(365);
+
+	var propTypes = _interopRequireWildcard(_propTypes);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var Account = _react2.default.createClass({
 	  displayName: 'Account',
+
+	  propTypes: {
+	    queries: propTypes.QUERIES,
+	    username: propTypes.USERNAME,
+	    updateQuery: propTypes.QUERY_UPDATE,
+	    deleteQuery: propTypes.QUERY_DELETE,
+	    createQuery: propTypes.QUERY_CREATE,
+	    addQuery: propTypes.QUERY_ADD,
+	    delete: propTypes.ACCOUNT_DELETE,
+	    showAddButton: propTypes.QUERY_SHOW_ADD_BUTTON
+	  },
 
 	  render: function render() {
 	    return _react2.default.createElement(
@@ -33062,14 +33117,22 @@
 	      _react2.default.createElement(
 	        'h3',
 	        null,
-	        '@charliejackson'
+	        '@',
+	        this.props.username
 	      ),
 	      _react2.default.createElement(
 	        'button',
-	        null,
+	        { onClick: this.props.delete },
 	        'Remove Account'
 	      ),
-	      _react2.default.createElement(_Queries2.default, null)
+	      _react2.default.createElement(_Queries2.default, {
+	        queries: this.props.queries,
+	        update: this.props.updateQuery,
+	        create: this.props.createQuery,
+	        'delete': this.props.deleteQuery,
+	        add: this.props.addQuery,
+	        showAddButton: this.props.showAddButton
+	      })
 	    );
 	  }
 	});
@@ -33094,12 +33157,41 @@
 
 	var _Query2 = _interopRequireDefault(_Query);
 
+	var _propTypes = __webpack_require__(365);
+
+	var propTypes = _interopRequireWildcard(_propTypes);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var Queries = _react2.default.createClass({
 	  displayName: 'Queries',
 
+	  propTypes: {
+	    queries: propTypes.QUERIES,
+	    update: propTypes.QUERY_UPDATE,
+	    delete: propTypes.QUERY_DELETE,
+	    create: propTypes.QUERY_CREATE,
+	    add: propTypes.QUERY_ADD,
+	    showAddButton: propTypes.QUERY_SHOW_ADD_BUTTON
+	  },
+
 	  render: function render() {
+	    var updateQuery = this.props.update;
+	    var deleteQuery = this.props.delete;
+	    var createQuery = this.props.create;
+
+	    var addButton = false;
+
+	    if (this.props.showAddButton) {
+	      addButton = _react2.default.createElement(
+	        'button',
+	        { onClick: this.props.add },
+	        'Add query'
+	      );
+	    }
+
 	    return _react2.default.createElement(
 	      'div',
 	      null,
@@ -33111,16 +33203,17 @@
 	      _react2.default.createElement(
 	        'ul',
 	        null,
-	        _react2.default.createElement(_Query2.default, null),
-	        _react2.default.createElement(_Query2.default, null),
-	        _react2.default.createElement(_Query2.default, null),
-	        _react2.default.createElement(_Query2.default, null)
+	        this.props.queries.map(function (query) {
+	          return _react2.default.createElement(_Query2.default, {
+	            key: query,
+	            query: query,
+	            update: updateQuery,
+	            'delete': deleteQuery,
+	            create: createQuery
+	          });
+	        })
 	      ),
-	      _react2.default.createElement(
-	        'button',
-	        null,
-	        'Add query'
-	      )
+	      addButton
 	    );
 	  }
 	});
@@ -33145,38 +33238,333 @@
 
 	var _TextInput2 = _interopRequireDefault(_TextInput);
 
+	var _propTypes = __webpack_require__(365);
+
+	var propTypes = _interopRequireWildcard(_propTypes);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var Query = _react2.default.createClass({
 	  displayName: 'Query',
 
-	  onChange: function onChange() {},
+	  propTypes: {
+	    query: propTypes.QUERY,
+	    update: propTypes.QUERY_UPDATE,
+	    delete: propTypes.QUERY_DELETE,
+	    create: propTypes.QUERY_CREATE
+	  },
+
+	  getInitialState: function getInitialState() {
+	    var query = '';
+	    var updateText = 'Create';
+
+	    if (this.props.query) {
+	      query = this.props.query;
+	      updateText = 'Update';
+	    }
+
+	    return {
+	      query: query,
+	      updateText: updateText
+	    };
+	  },
+
+	  onChange: function onChange(event) {
+	    this.setState({
+	      query: event.target.value
+	    });
+	  },
+
+	  submit: function submit() {
+	    if (this.props.query) {
+	      this.props.update(this.state.query);
+	    } else {
+	      this.props.create(this.state.query);
+	    }
+	  },
 
 	  render: function render() {
+	    var deleteQuery = false;
+
+	    if (this.props.query) {
+	      deleteQuery = _react2.default.createElement(
+	        'button',
+	        { onClick: this.props.delete },
+	        'Delete Query'
+	      );
+	    }
+
 	    return _react2.default.createElement(
 	      'li',
 	      null,
 	      _react2.default.createElement(_TextInput2.default, {
-	        placeholder: '',
+	        placeholder: 'Query',
 	        onChange: this.onChange,
-	        value: '#iot',
+	        value: this.state.query,
 	        password: false
 	      }),
 	      _react2.default.createElement(
 	        'button',
-	        null,
-	        'Update'
+	        { onClick: this.submit },
+	        this.state.updateText
 	      ),
-	      _react2.default.createElement(
-	        'button',
-	        null,
-	        'Remove Query'
-	      )
+	      deleteQuery
 	    );
 	  }
 	});
 
 		exports.default = Query;
+
+/***/ },
+/* 362 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(233);
+
+	var _Cron = __webpack_require__(357);
+
+	var _Cron2 = _interopRequireDefault(_Cron);
+
+	var _cron = __webpack_require__(363);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var CronContainer = _react2.default.createClass({
+	  displayName: 'CronContainer',
+
+	  submit: function submit(cron) {
+	    this.props.dispatch((0, _cron.updateCron)(cron));
+	  },
+
+	  render: function render() {
+	    return _react2.default.createElement(_Cron2.default, {
+	      cron: this.props.cron,
+	      submit: this.submit
+	    });
+	  }
+	});
+
+	function mapStateToProps(state) {
+	  return {
+	    cron: state.cron
+	  };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(CronContainer);
+
+/***/ },
+/* 363 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.updateCron = updateCron;
+
+	var _fetcher = __webpack_require__(354);
+
+	var _fetcher2 = _interopRequireDefault(_fetcher);
+
+	var _actions = __webpack_require__(277);
+
+	var actionTypes = _interopRequireWildcard(_actions);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function updateCron(cron) {
+	  var data = {
+	    cron: cron
+	  };
+
+	  return (0, _fetcher2.default)('cron/update', data, actionTypes.SET_CRON);
+	}
+
+/***/ },
+/* 364 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(233);
+
+	var _Accounts = __webpack_require__(358);
+
+	var _Accounts2 = _interopRequireDefault(_Accounts);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var AccountsContainer = _react2.default.createClass({
+	  displayName: 'AccountsContainer',
+
+	  add: function add() {
+	    console.warn('add');
+	  },
+
+	  render: function render() {
+	    return _react2.default.createElement(_Accounts2.default, {
+	      accounts: this.props.accounts,
+	      add: this.add
+	    });
+	  }
+	});
+
+	function mapStateToProps(state) {
+	  return {
+	    accounts: state.accounts
+	  };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(AccountsContainer);
+
+/***/ },
+/* 365 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.QUERY_SHOW_ADD_BUTTON = exports.QUERY_ADD = exports.QUERY_CREATE = exports.QUERY_DELETE = exports.QUERY_UPDATE = exports.QUERY = exports.QUERIES = exports.ACCOUNT_ADD = exports.ACCOUNT_DELETE = exports.ACCOUNTS = exports.USERNAME = undefined;
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var USERNAME = exports.USERNAME = _react2.default.PropTypes.string.isRequired;
+
+	var ACCOUNTS = exports.ACCOUNTS = _react2.default.PropTypes.array.isRequired;
+	var ACCOUNT_DELETE = exports.ACCOUNT_DELETE = _react2.default.PropTypes.func.isRequired;
+	var ACCOUNT_ADD = exports.ACCOUNT_ADD = _react2.default.PropTypes.func.isRequired;
+
+	var QUERIES = exports.QUERIES = _react2.default.PropTypes.array.isRequired;
+	var QUERY = exports.QUERY = _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.string, _react2.default.PropTypes.bool]).isRequired;
+	var QUERY_UPDATE = exports.QUERY_UPDATE = _react2.default.PropTypes.func.isRequired;
+	var QUERY_DELETE = exports.QUERY_DELETE = _react2.default.PropTypes.func.isRequired;
+	var QUERY_CREATE = exports.QUERY_CREATE = _react2.default.PropTypes.func.isRequired;
+	var QUERY_ADD = exports.QUERY_ADD = _react2.default.PropTypes.func.isRequired;
+	var QUERY_SHOW_ADD_BUTTON = exports.QUERY_SHOW_ADD_BUTTON = _react2.default.PropTypes.bool.isRequired;
+
+/***/ },
+/* 366 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(233);
+
+	var _Account = __webpack_require__(359);
+
+	var _Account2 = _interopRequireDefault(_Account);
+
+	var _propTypes = __webpack_require__(365);
+
+	var propTypes = _interopRequireWildcard(_propTypes);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var AccountContainer = _react2.default.createClass({
+	  displayName: 'AccountContainer',
+
+	  propTypes: {
+	    queries: propTypes.QUERIES,
+	    username: propTypes.USERNAME
+	  },
+
+	  getInitialState: function getInitialState() {
+	    var queries = Object.assign([], this.props.queries);
+
+	    if (!queries.length) {
+	      queries.push(false);
+	    }
+
+	    return {
+	      queries: queries
+	    };
+	  },
+
+	  updateQuery: function updateQuery(query) {
+	    console.warn('updateQuery');
+	  },
+
+	  deleteQuery: function deleteQuery(query) {
+	    console.warn('deleteQuery');
+	  },
+
+	  createQuery: function createQuery(query) {
+	    console.warn('createQuery');
+	  },
+
+	  addQuery: function addQuery() {
+	    var queries = Object.assign([], this.state.queries);
+	    queries.push(false);
+
+	    this.setState({
+	      queries: queries
+	    });
+	  },
+
+	  delete: function _delete() {
+	    console.warn('delete');
+	  },
+
+	  render: function render() {
+	    var showAddButton = true;
+
+	    if (this.state.queries.includes(false)) {
+	      showAddButton = false;
+	    }
+
+	    return _react2.default.createElement(_Account2.default, {
+	      queries: this.state.queries,
+	      username: this.props.username,
+	      updateQuery: this.updateQuery,
+	      deleteQuery: this.deleteQuery,
+	      createQuery: this.createQuery,
+	      addQuery: this.addQuery,
+	      'delete': this.delete,
+	      showAddButton: showAddButton
+	    });
+	  }
+	});
+
+		exports.default = (0, _reactRedux.connect)()(AccountContainer);
 
 /***/ }
 /******/ ]);

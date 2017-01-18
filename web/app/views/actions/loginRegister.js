@@ -1,5 +1,5 @@
 import fetcher from '~/helpers/fetcher'
-import {LOGIN, REGISTER} from '~/constants/actions'
+import * as actionTypes from '~/constants/actions'
 
 export function login(email, password) {
   const data = {
@@ -7,7 +7,7 @@ export function login(email, password) {
     password: password
   }
 
-  return fetcher('login', data, LOGIN)
+  return fetcher('user/login', data, actionTypes.LOGIN)
 }
 
 export function register(email, password, passwordConfirm) {
@@ -17,5 +17,5 @@ export function register(email, password, passwordConfirm) {
     passwordConfirm: passwordConfirm
   }
 
-  return fetcher('register', data, REGISTER)
+  return fetcher('user/create', data, actionTypes.REGISTER)
 }

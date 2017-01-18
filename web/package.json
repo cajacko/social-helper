@@ -9,7 +9,8 @@
     "build": "babel app/server -d dist",
     "serve": "node dist/server.js",
     "webpack": "webpack --progress --colors --watch",
-    "gulp": "gulp"
+    "gulp": "gulp",
+    "dev": "multi \"npm run gulp watch\" \"npm run webpack\""
   },
   "repository": {
     "type": "git",
