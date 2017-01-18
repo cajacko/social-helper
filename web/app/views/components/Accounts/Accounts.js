@@ -4,8 +4,7 @@ import * as propTypes from '~/constants/propTypes'
 
 const Accounts = React.createClass({
   propTypes: {
-    accounts: propTypes.ACCOUNTS,
-    add: propTypes.ACCOUNT_ADD
+    accounts: propTypes.ACCOUNTS
   },
 
   render: function() {
@@ -28,7 +27,7 @@ const Accounts = React.createClass({
           }
         </div>
 
-        <button onClick={this.props.add}>Add Account</button>
+        <a href="/auth/twitter/login">Add Account</a>
       </div>
     )
   }

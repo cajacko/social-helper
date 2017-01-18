@@ -33152,14 +33152,9 @@
 	var AccountsContainer = _react2.default.createClass({
 	  displayName: 'AccountsContainer',
 
-	  add: function add() {
-	    console.warn('add');
-	  },
-
 	  render: function render() {
 	    return _react2.default.createElement(_Accounts2.default, {
-	      accounts: this.props.accounts,
-	      add: this.add
+	      accounts: this.props.accounts
 	    });
 	  }
 	});
@@ -33202,8 +33197,7 @@
 	  displayName: 'Accounts',
 
 	  propTypes: {
-	    accounts: propTypes.ACCOUNTS,
-	    add: propTypes.ACCOUNT_ADD
+	    accounts: propTypes.ACCOUNTS
 	  },
 
 	  render: function render() {
@@ -33228,8 +33222,8 @@
 	        })
 	      ),
 	      _react2.default.createElement(
-	        'button',
-	        { onClick: this.props.add },
+	        'a',
+	        { href: '/auth/twitter/login' },
 	        'Add Account'
 	      )
 	    );
@@ -33608,7 +33602,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.INPUT_VALUE = exports.INPUT_ON_CHANGE = exports.INPUT_PLACEHOLDER = exports.INPUT_HAS_PASSWORD = exports.CRON_UPDATE = exports.CRON = exports.LOGIN = exports.USER_CREATE = exports.LOGOUT = exports.QUERY_SHOW_ADD_BUTTON = exports.QUERY_ADD = exports.QUERY_CREATE = exports.QUERY_DELETE = exports.QUERY_UPDATE = exports.QUERY_ID = exports.QUERY = exports.QUERIES = exports.ACCOUNT_ID = exports.ACCOUNT_ADD = exports.ACCOUNT_DELETE = exports.ACCOUNTS = exports.USERNAME = undefined;
+	exports.INPUT_VALUE = exports.INPUT_ON_CHANGE = exports.INPUT_PLACEHOLDER = exports.INPUT_HAS_PASSWORD = exports.CRON_UPDATE = exports.CRON = exports.LOGIN = exports.USER_CREATE = exports.LOGOUT = exports.QUERY_SHOW_ADD_BUTTON = exports.QUERY_ADD = exports.QUERY_CREATE = exports.QUERY_DELETE = exports.QUERY_UPDATE = exports.QUERY_ID = exports.QUERY = exports.QUERIES = exports.ACCOUNT_ID = exports.ACCOUNT_DELETE = exports.ACCOUNTS = exports.USERNAME = undefined;
 
 	var _react = __webpack_require__(1);
 
@@ -33620,7 +33614,6 @@
 
 	var ACCOUNTS = exports.ACCOUNTS = _react2.default.PropTypes.array.isRequired;
 	var ACCOUNT_DELETE = exports.ACCOUNT_DELETE = _react2.default.PropTypes.func.isRequired;
-	var ACCOUNT_ADD = exports.ACCOUNT_ADD = _react2.default.PropTypes.func.isRequired;
 	var ACCOUNT_ID = exports.ACCOUNT_ID = _react2.default.PropTypes.string.isRequired;
 
 	var QUERIES = exports.QUERIES = _react2.default.PropTypes.array.isRequired;

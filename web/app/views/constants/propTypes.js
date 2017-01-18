@@ -4,7 +4,6 @@ export const USERNAME = React.PropTypes.string.isRequired
 
 export const ACCOUNTS = React.PropTypes.array.isRequired
 export const ACCOUNT_DELETE = React.PropTypes.func.isRequired
-export const ACCOUNT_ADD = React.PropTypes.func.isRequired
 export const ACCOUNT_ID = React.PropTypes.string.isRequired
 
 export const QUERIES = React.PropTypes.array.isRequired
