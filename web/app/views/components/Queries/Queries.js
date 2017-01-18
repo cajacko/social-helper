@@ -32,8 +32,9 @@ const Queries = React.createClass({
             this.props.queries.map(function(query) {
               return (
                 <Query
-                  key={query}
-                  query={query}
+                  key={query.id}
+                  id={query.id}
+                  query={query.query}
                   update={updateQuery}
                   delete={deleteQuery}
                   create={createQuery}

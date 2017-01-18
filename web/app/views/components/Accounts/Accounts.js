@@ -21,6 +21,7 @@ const Accounts = React.createClass({
                   key={account.username}
                   queries={account.queries}
                   username={account.username}
+                  id={account.id}
                 />
               )
             })

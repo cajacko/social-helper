@@ -37,28 +37,62 @@ app.get('/', function (req, res) {
   });
 });
 
-// /data/user/login
-// /data/user/create
-// /data/user/logout
-// /data/user/read
-// /data/account/create
-// /data/account/delete
-// /data/query/create
-// /data/query/update
-// /data/query/delete
-// /data/cron/update
-
-console.log('aaaa');
+var defaultResponse = {
+  cron: '5,10,30,55 7,8,9,11,12,13,16,17,18 * * *',
+  accounts: [{
+    id: '3986309467',
+    username: 'charliejackson',
+    queries: [{
+      id: '234564',
+      query: '#iot'
+    }, {
+      id: '48790957-u',
+      query: '#smarthome'
+    }]
+  }],
+  loggedIn: true
+};
 
 app.post('/data/user/login', function (req, res) {
+  res.json(defaultResponse);
+});
+
+app.post('/data/user/create', function (req, res) {
+  res.json(defaultResponse);
+});
+
+app.post('/data/user/read', function (req, res) {
+  res.json(defaultResponse);
+});
+
+app.post('/data/user/logout', function (req, res) {
   res.json({
-    cron: '5,10,30,55 7,8,9,11,12,13,16,17,18 * * *',
-    accounts: [{
-      username: 'charliejackson',
-      queries: ['#iot', '#smarthome']
-    }],
-    loggedIn: true
+    loggedIn: false
   });
+});
+
+app.post('/data/query/create', function (req, res) {
+  res.json(defaultResponse);
+});
+
+app.post('/data/query/update', function (req, res) {
+  res.json(defaultResponse);
+});
+
+app.post('/data/query/delete', function (req, res) {
+  res.json(defaultResponse);
+});
+
+app.post('/data/account/delete', function (req, res) {
+  res.json(defaultResponse);
+});
+
+app.post('/data/account/create', function (req, res) {
+  res.json(defaultResponse);
+});
+
+app.post('/data/cron/update', function (req, res) {
+  res.json(defaultResponse);
 });
 
 server.listen(1337, function () {

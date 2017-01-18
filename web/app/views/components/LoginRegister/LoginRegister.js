@@ -1,6 +1,7 @@
 import React from 'react'
 import TextInput from '~/components/TextInput/TextInput'
 import validator from 'validator'
+import * as propTypes from '~/constants/propTypes'
 
 const INPUT_TYPE = {
   EMAIL: 'EMAIL',
@@ -10,8 +11,8 @@ const INPUT_TYPE = {
 
 const LoginRegister = React.createClass({
   propTypes: {
-    login: React.PropTypes.bool.isRequired,
-    onSubmit: React.PropTypes.func.isRequired
+    login: propTypes.LOGIN,
+    onSubmit: propTypes.USER_CREATE
   },
 
   getInitialState: function() {

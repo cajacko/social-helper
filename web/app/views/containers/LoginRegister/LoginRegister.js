@@ -1,18 +1,19 @@
 import React from 'react'
 import LoginRegister from '~/components/LoginRegister/LoginRegister'
-import {login, register} from '~/actions/loginRegister'
+import {login, create} from '~/actions/user'
 import {connect} from 'react-redux'
+import * as propTypes from '~/constants/propTypes'
 
 const LoginRegisterContainer = React.createClass({
   propTypes: {
-    login: React.PropTypes.bool.isRequired
+    login: propTypes.LOGIN
   },
 
   onSubmit: function(isLogin, email, password, passwordConfirm) {
     if (isLogin) {
       this.props.dispatch(login(email, password))
     } else {
-      this.props.dispatch(register(email, password, passwordConfirm))
+      this.props.dispatch(create(email, password, passwordConfirm))
     }
   },
 

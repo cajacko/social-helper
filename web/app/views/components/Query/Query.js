@@ -5,6 +5,7 @@ import * as propTypes from '~/constants/propTypes'
 const Query = React.createClass({
   propTypes: {
     query: propTypes.QUERY,
+    id: propTypes.QUERY_ID,
     update: propTypes.QUERY_UPDATE,
     delete: propTypes.QUERY_DELETE,
     create: propTypes.QUERY_CREATE
@@ -14,7 +15,7 @@ const Query = React.createClass({
     let query = ''
     let updateText = 'Create'
 
-    if (this.props.query) {
+    if (this.props.id) {
       query = this.props.query
       updateText = 'Update'
     }
@@ -32,18 +33,22 @@ const Query = React.createClass({
   },
 
   submit: function() {
-    if (this.props.query) {
-      this.props.update(this.state.query)
+    if (this.props.id) {
+      this.props.update(this.props.id, this.state.query)
     } else {
       this.props.create(this.state.query)
     }
   },
 
+  delete: function() {
+    this.props.delete(this.props.id)
+  },
+
   render: function() {
     let deleteQuery = false
 
-    if (this.props.query) {
-      deleteQuery = <button onClick={this.props.delete}>Delete Query</button>
+    if (this.props.id) {
+      deleteQuery = <button onClick={this.delete}>Delete Query</button>
     }
 
     return (

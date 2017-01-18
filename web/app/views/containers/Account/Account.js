@@ -2,18 +2,24 @@ import React from 'react'
 import {connect} from 'react-redux'
 import Account from '~/components/Account/Account'
 import * as propTypes from '~/constants/propTypes'
+import {updateQuery, deleteQuery, createQuery} from '~/actions/query'
+import {deleteAccount} from '~/actions/account'
 
 const AccountContainer = React.createClass({
   propTypes: {
     queries: propTypes.QUERIES,
     username: propTypes.USERNAME,
+    id: propTypes.ACCOUNT_ID
   },
 
   getInitialState: function() {
     let queries = Object.assign([], this.props.queries)
 
     if (!queries.length) {
-      queries.push(false)
+      queries.push({
+        query: '',
+        id: false
+      })
     }
 
     return {
@@ -21,21 +27,24 @@ const AccountContainer = React.createClass({
     }
   },
 
-  updateQuery: function(query) {
-    console.warn('updateQuery')
+  updateQuery: function(id, query) {
+    this.props.dispatch(updateQuery(id, query))
   },
 
-  deleteQuery: function(query) {
-    console.warn('deleteQuery')
+  deleteQuery: function(id) {
+    this.props.dispatch(deleteQuery(id))
   },
 
   createQuery: function(query) {
-    console.warn('createQuery')
+    this.props.dispatch(createQuery(query))
   },
 
   addQuery: function() {
     let queries = Object.assign([], this.state.queries)
-    queries.push(false)
+    queries.push({
+      query: '',
+      id: false
+    })
 
     this.setState({
       queries: queries
@@ -43,15 +52,17 @@ const AccountContainer = React.createClass({
   },
 
   delete: function() {
-    console.warn('delete')
+    this.props.dispatch(deleteAccount(this.props.id))
   },
 
   render: function() {
     let showAddButton = true
 
-    if (this.state.queries.includes(false)) {
-      showAddButton = false
-    }
+    this.state.queries.forEach(function(query) {
+      if (!query.id) {
+        showAddButton = false
+      }
+    })
 
     return (
       <Account

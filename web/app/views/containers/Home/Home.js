@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import Home from '~/components/Home/Home'
-import Dashboard from '~/components/Dashboard/Dashboard'
+import Dashboard from '~/containers/Dashboard/Dashboard'
 
 const HomeContainer = React.createClass({
   render: function() {

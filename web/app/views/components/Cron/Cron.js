@@ -1,10 +1,11 @@
 import React from 'react'
 import TextInput from '~/components/TextInput/TextInput'
+import * as propTypes from '~/constants/propTypes'
 
 const Cron = React.createClass({
   propTypes: {
-    cron: React.PropTypes.string.isRequired,
-    submit: React.PropTypes.func.isRequired
+    cron: propTypes.CRON,
+    submit: propTypes.CRON_UPDATE
   },
 
   getInitialState: function() {

@@ -1,10 +1,10 @@
 import fetcher from '~/helpers/fetcher'
 import * as actionTypes from '~/constants/actions'
 
-export function updateCron(cron) {
+export function deleteAccount(id) {
   const data = {
-    cron: cron
+    id: id
   }
 
-  return fetcher('cron/update', data, actionTypes.CRON_UPDATE)
+  return fetcher('account/delete', data, actionTypes.ACCOUNT_DELETE)
 }

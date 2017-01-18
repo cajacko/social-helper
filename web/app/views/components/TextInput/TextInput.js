@@ -1,11 +1,12 @@
 import React from 'react'
+import * as propTypes from '~/constants/propTypes'
 
 const TextInput = React.createClass({
   propTypes: {
-    password: React.PropTypes.bool.isRequired,
-    placeholder: React.PropTypes.string.isRequired,
-    onChange: React.PropTypes.func.isRequired,
-    value: React.PropTypes.string.isRequired
+    password: propTypes.INPUT_HAS_PASSWORD,
+    placeholder: propTypes.INPUT_PLACEHOLDER,
+    onChange: propTypes.INPUT_ON_CHANGE,
+    value: propTypes.INPUT_VALUE
   },
 
   render: function() {
