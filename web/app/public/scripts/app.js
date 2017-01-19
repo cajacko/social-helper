@@ -64,7 +64,7 @@
 
 	var _reactRouterRedux = __webpack_require__(271);
 
-	var _App = __webpack_require__(371);
+	var _App = __webpack_require__(367);
 
 	var _App2 = _interopRequireDefault(_App);
 
@@ -22127,7 +22127,7 @@
 	        children = _props.children;
 
 
-	    !history.getCurrentLocation ?  true ? (0, _invariant2.default)(false, 'You have provided a history object created with history v4.x or v2.x ' + 'and earlier. This version of React Router is only compatible with v3 ' + 'history objects. Please change to history v3.x.') : (0, _invariant2.default)(false) : void 0;
+	    !history.getCurrentLocation ?  true ? (0, _invariant2.default)(false, 'You have provided a history object created with history v2.x or ' + 'earlier. This version of React Router is only compatible with v3 ' + 'history objects. Please upgrade to history v3.x.') : (0, _invariant2.default)(false) : void 0;
 
 	    return (0, _createTransitionManager3.default)(history, (0, _RouteUtils.createRoutes)(routes || children));
 	  },
@@ -28139,8 +28139,8 @@
 	exports.__esModule = true;
 	function createThunkMiddleware(extraArgument) {
 	  return function (_ref) {
-	    var dispatch = _ref.dispatch,
-	        getState = _ref.getState;
+	    var dispatch = _ref.dispatch;
+	    var getState = _ref.getState;
 	    return function (next) {
 	      return function (action) {
 	        if (typeof action === 'function') {
@@ -29669,7 +29669,7 @@
 
 	var _Home2 = _interopRequireDefault(_Home);
 
-	var _Dashboard = __webpack_require__(370);
+	var _Dashboard = __webpack_require__(369);
 
 	var _Dashboard2 = _interopRequireDefault(_Dashboard);
 
@@ -29748,11 +29748,11 @@
 
 	var _LoginRegister2 = _interopRequireDefault(_LoginRegister);
 
-	var _user = __webpack_require__(369);
+	var _user = __webpack_require__(368);
 
 	var _reactRedux = __webpack_require__(233);
 
-	var _propTypes = __webpack_require__(366);
+	var _propTypes = __webpack_require__(365);
 
 	var propTypes = _interopRequireWildcard(_propTypes);
 
@@ -29807,7 +29807,7 @@
 
 	var _validator2 = _interopRequireDefault(_validator);
 
-	var _propTypes = __webpack_require__(366);
+	var _propTypes = __webpack_require__(365);
 
 	var propTypes = _interopRequireWildcard(_propTypes);
 
@@ -29934,7 +29934,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _propTypes = __webpack_require__(366);
+	var _propTypes = __webpack_require__(365);
 
 	var propTypes = _interopRequireWildcard(_propTypes);
 
@@ -32814,8 +32814,11 @@
 	      }
 
 	      return response.json().then(function (data) {
+	        if (data && data.error) {
+	          return dispatch((0, _fetcher.failure)(data, url, postData, action, logId));
+	        }
+
 	        dispatch((0, _fetcher.success)(data, url, postData, action, logId));
-	        return data;
 	      }).catch(function (e) {
 	        dispatch((0, _fetcher.failure)(e, url, postData, action, logId));
 	      });
@@ -32928,15 +32931,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Cron = __webpack_require__(357);
+	var _Cron = __webpack_require__(362);
 
 	var _Cron2 = _interopRequireDefault(_Cron);
 
-	var _Accounts = __webpack_require__(360);
+	var _Accounts = __webpack_require__(364);
 
 	var _Accounts2 = _interopRequireDefault(_Accounts);
 
-	var _propTypes = __webpack_require__(366);
+	var _propTypes = __webpack_require__(365);
 
 	var propTypes = _interopRequireWildcard(_propTypes);
 
@@ -32987,58 +32990,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactRedux = __webpack_require__(233);
-
-	var _Cron = __webpack_require__(358);
-
-	var _Cron2 = _interopRequireDefault(_Cron);
-
-	var _cron = __webpack_require__(359);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var CronContainer = _react2.default.createClass({
-	  displayName: 'CronContainer',
-
-	  submit: function submit(cron) {
-	    this.props.dispatch((0, _cron.updateCron)(cron));
-	  },
-
-	  render: function render() {
-	    return _react2.default.createElement(_Cron2.default, {
-	      cron: this.props.cron,
-	      submit: this.submit
-	    });
-	  }
-	});
-
-	function mapStateToProps(state) {
-	  return {
-	    cron: state.cron
-	  };
-	}
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps)(CronContainer);
-
-/***/ },
-/* 358 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
 	var _TextInput = __webpack_require__(287);
 
 	var _TextInput2 = _interopRequireDefault(_TextInput);
 
-	var _propTypes = __webpack_require__(366);
+	var _propTypes = __webpack_require__(365);
 
 	var propTypes = _interopRequireWildcard(_propTypes);
 
@@ -33097,38 +33053,7 @@
 		exports.default = Cron;
 
 /***/ },
-/* 359 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.updateCron = updateCron;
-
-	var _fetcher = __webpack_require__(354);
-
-	var _fetcher2 = _interopRequireDefault(_fetcher);
-
-	var _actions = __webpack_require__(277);
-
-	var actionTypes = _interopRequireWildcard(_actions);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function updateCron(cron) {
-	  var data = {
-	    cron: cron
-	  };
-
-	  return (0, _fetcher2.default)('cron/update', data, actionTypes.CRON_UPDATE);
-	}
-
-/***/ },
-/* 360 */
+/* 358 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33141,51 +33066,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactRedux = __webpack_require__(233);
-
-	var _Accounts = __webpack_require__(361);
-
-	var _Accounts2 = _interopRequireDefault(_Accounts);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var AccountsContainer = _react2.default.createClass({
-	  displayName: 'AccountsContainer',
-
-	  render: function render() {
-	    return _react2.default.createElement(_Accounts2.default, {
-	      accounts: this.props.accounts
-	    });
-	  }
-	});
-
-	function mapStateToProps(state) {
-	  return {
-	    accounts: state.accounts
-	  };
-	}
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps)(AccountsContainer);
-
-/***/ },
-/* 361 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _Account = __webpack_require__(362);
+	var _Account = __webpack_require__(366);
 
 	var _Account2 = _interopRequireDefault(_Account);
 
-	var _propTypes = __webpack_require__(366);
+	var _propTypes = __webpack_require__(365);
 
 	var propTypes = _interopRequireWildcard(_propTypes);
 
@@ -33233,7 +33118,7 @@
 		exports.default = Accounts;
 
 /***/ },
-/* 362 */
+/* 359 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33246,119 +33131,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactRedux = __webpack_require__(233);
-
-	var _Account = __webpack_require__(363);
-
-	var _Account2 = _interopRequireDefault(_Account);
-
-	var _propTypes = __webpack_require__(366);
-
-	var propTypes = _interopRequireWildcard(_propTypes);
-
-	var _query = __webpack_require__(367);
-
-	var _account = __webpack_require__(368);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var AccountContainer = _react2.default.createClass({
-	  displayName: 'AccountContainer',
-
-	  propTypes: {
-	    queries: propTypes.QUERIES,
-	    username: propTypes.USERNAME,
-	    id: propTypes.ACCOUNT_ID
-	  },
-
-	  getInitialState: function getInitialState() {
-	    var queries = Object.assign([], this.props.queries);
-
-	    if (!queries.length) {
-	      queries.push({
-	        query: '',
-	        id: false
-	      });
-	    }
-
-	    return {
-	      queries: queries
-	    };
-	  },
-
-	  updateQuery: function updateQuery(id, query) {
-	    this.props.dispatch((0, _query.updateQuery)(id, query));
-	  },
-
-	  deleteQuery: function deleteQuery(id) {
-	    this.props.dispatch((0, _query.deleteQuery)(id));
-	  },
-
-	  createQuery: function createQuery(query) {
-	    this.props.dispatch((0, _query.createQuery)(query));
-	  },
-
-	  addQuery: function addQuery() {
-	    var queries = Object.assign([], this.state.queries);
-	    queries.push({
-	      query: '',
-	      id: false
-	    });
-
-	    this.setState({
-	      queries: queries
-	    });
-	  },
-
-	  delete: function _delete() {
-	    this.props.dispatch((0, _account.deleteAccount)(this.props.id));
-	  },
-
-	  render: function render() {
-	    var showAddButton = true;
-
-	    this.state.queries.forEach(function (query) {
-	      if (!query.id) {
-	        showAddButton = false;
-	      }
-	    });
-
-	    return _react2.default.createElement(_Account2.default, {
-	      queries: this.state.queries,
-	      username: this.props.username,
-	      updateQuery: this.updateQuery,
-	      deleteQuery: this.deleteQuery,
-	      createQuery: this.createQuery,
-	      addQuery: this.addQuery,
-	      'delete': this.delete,
-	      showAddButton: showAddButton
-	    });
-	  }
-	});
-
-		exports.default = (0, _reactRedux.connect)()(AccountContainer);
-
-/***/ },
-/* 363 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _Queries = __webpack_require__(364);
+	var _Queries = __webpack_require__(360);
 
 	var _Queries2 = _interopRequireDefault(_Queries);
 
-	var _propTypes = __webpack_require__(366);
+	var _propTypes = __webpack_require__(365);
 
 	var propTypes = _interopRequireWildcard(_propTypes);
 
@@ -33410,7 +33187,7 @@
 		exports.default = Account;
 
 /***/ },
-/* 364 */
+/* 360 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33423,11 +33200,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Query = __webpack_require__(365);
+	var _Query = __webpack_require__(361);
 
 	var _Query2 = _interopRequireDefault(_Query);
 
-	var _propTypes = __webpack_require__(366);
+	var _propTypes = __webpack_require__(365);
 
 	var propTypes = _interopRequireWildcard(_propTypes);
 
@@ -33492,7 +33269,7 @@
 		exports.default = Queries;
 
 /***/ },
-/* 365 */
+/* 361 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33509,7 +33286,7 @@
 
 	var _TextInput2 = _interopRequireDefault(_TextInput);
 
-	var _propTypes = __webpack_require__(366);
+	var _propTypes = __webpack_require__(365);
 
 	var propTypes = _interopRequireWildcard(_propTypes);
 
@@ -33594,7 +33371,125 @@
 		exports.default = Query;
 
 /***/ },
-/* 366 */
+/* 362 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(233);
+
+	var _Cron = __webpack_require__(357);
+
+	var _Cron2 = _interopRequireDefault(_Cron);
+
+	var _cron = __webpack_require__(363);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var CronContainer = _react2.default.createClass({
+	  displayName: 'CronContainer',
+
+	  submit: function submit(cron) {
+	    this.props.dispatch((0, _cron.updateCron)(cron));
+	  },
+
+	  render: function render() {
+	    return _react2.default.createElement(_Cron2.default, {
+	      cron: this.props.cron,
+	      submit: this.submit
+	    });
+	  }
+	});
+
+	function mapStateToProps(state) {
+	  return {
+	    cron: state.cron
+	  };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(CronContainer);
+
+/***/ },
+/* 363 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.updateCron = updateCron;
+
+	var _fetcher = __webpack_require__(354);
+
+	var _fetcher2 = _interopRequireDefault(_fetcher);
+
+	var _actions = __webpack_require__(277);
+
+	var actionTypes = _interopRequireWildcard(_actions);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function updateCron(cron) {
+	  var data = {
+	    cron: cron
+	  };
+
+	  return (0, _fetcher2.default)('cron/update', data, actionTypes.CRON_UPDATE);
+	}
+
+/***/ },
+/* 364 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(233);
+
+	var _Accounts = __webpack_require__(358);
+
+	var _Accounts2 = _interopRequireDefault(_Accounts);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var AccountsContainer = _react2.default.createClass({
+	  displayName: 'AccountsContainer',
+
+	  render: function render() {
+	    return _react2.default.createElement(_Accounts2.default, {
+	      accounts: this.props.accounts
+	    });
+	  }
+	});
+
+	function mapStateToProps(state) {
+	  return {
+	    accounts: state.accounts
+	  };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(AccountsContainer);
+
+/***/ },
+/* 365 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33638,6 +33533,114 @@
 	var INPUT_VALUE = exports.INPUT_VALUE = _react2.default.PropTypes.string.isRequired;
 
 /***/ },
+/* 366 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(233);
+
+	var _Account = __webpack_require__(359);
+
+	var _Account2 = _interopRequireDefault(_Account);
+
+	var _propTypes = __webpack_require__(365);
+
+	var propTypes = _interopRequireWildcard(_propTypes);
+
+	var _query = __webpack_require__(370);
+
+	var _account = __webpack_require__(371);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var AccountContainer = _react2.default.createClass({
+	  displayName: 'AccountContainer',
+
+	  propTypes: {
+	    queries: propTypes.QUERIES,
+	    username: propTypes.USERNAME,
+	    id: propTypes.ACCOUNT_ID
+	  },
+
+	  getInitialState: function getInitialState() {
+	    var queries = Object.assign([], this.props.queries);
+
+	    if (!queries.length) {
+	      queries.push({
+	        query: '',
+	        id: false
+	      });
+	    }
+
+	    return {
+	      queries: queries
+	    };
+	  },
+
+	  updateQuery: function updateQuery(id, query) {
+	    this.props.dispatch((0, _query.updateQuery)(id, query));
+	  },
+
+	  deleteQuery: function deleteQuery(id) {
+	    this.props.dispatch((0, _query.deleteQuery)(id));
+	  },
+
+	  createQuery: function createQuery(query) {
+	    this.props.dispatch((0, _query.createQuery)(query));
+	  },
+
+	  addQuery: function addQuery() {
+	    var queries = Object.assign([], this.state.queries);
+	    queries.push({
+	      query: '',
+	      id: false
+	    });
+
+	    this.setState({
+	      queries: queries
+	    });
+	  },
+
+	  delete: function _delete() {
+	    this.props.dispatch((0, _account.deleteAccount)(this.props.id));
+	  },
+
+	  render: function render() {
+	    var showAddButton = true;
+
+	    this.state.queries.forEach(function (query) {
+	      if (!query.id) {
+	        showAddButton = false;
+	      }
+	    });
+
+	    return _react2.default.createElement(_Account2.default, {
+	      queries: this.state.queries,
+	      username: this.props.username,
+	      updateQuery: this.updateQuery,
+	      deleteQuery: this.deleteQuery,
+	      createQuery: this.createQuery,
+	      addQuery: this.addQuery,
+	      'delete': this.delete,
+	      showAddButton: showAddButton
+	    });
+	  }
+	});
+
+		exports.default = (0, _reactRedux.connect)()(AccountContainer);
+
+/***/ },
 /* 367 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -33646,80 +33649,41 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.updateQuery = updateQuery;
-	exports.deleteQuery = deleteQuery;
-	exports.createQuery = createQuery;
 
-	var _fetcher = __webpack_require__(354);
+	var _react = __webpack_require__(1);
 
-	var _fetcher2 = _interopRequireDefault(_fetcher);
+	var _react2 = _interopRequireDefault(_react);
 
-	var _actions = __webpack_require__(277);
+	var _reactRedux = __webpack_require__(233);
 
-	var actionTypes = _interopRequireWildcard(_actions);
+	var _App = __webpack_require__(282);
 
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	var _App2 = _interopRequireDefault(_App);
+
+	var _user = __webpack_require__(368);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function updateQuery(id, query) {
-	  var data = {
-	    id: id,
-	    query: query
-	  };
+	var AppContainer = _react2.default.createClass({
+	  displayName: 'AppContainer',
 
-	  return (0, _fetcher2.default)('query/update', data, actionTypes.QUERY_UPDATE);
-	}
+	  componentDidMount: function componentDidMount() {
+	    this.props.dispatch((0, _user.userRead)());
+	  },
 
-	function deleteQuery(id) {
-	  var data = {
-	    id: id
-	  };
+	  render: function render() {
+	    return _react2.default.createElement(
+	      _App2.default,
+	      null,
+	      this.props.children
+	    );
+	  }
+	});
 
-	  return (0, _fetcher2.default)('query/delete', data, actionTypes.QUERY_DELETE);
-	}
-
-	function createQuery(query) {
-	  var data = {
-	    query: query
-	  };
-
-	  return (0, _fetcher2.default)('query/create', data, actionTypes.QUERY_CREATE);
-	}
+		exports.default = (0, _reactRedux.connect)()(AppContainer);
 
 /***/ },
 /* 368 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.deleteAccount = deleteAccount;
-
-	var _fetcher = __webpack_require__(354);
-
-	var _fetcher2 = _interopRequireDefault(_fetcher);
-
-	var _actions = __webpack_require__(277);
-
-	var actionTypes = _interopRequireWildcard(_actions);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function deleteAccount(id) {
-	  var data = {
-	    id: id
-	  };
-
-	  return (0, _fetcher2.default)('account/delete', data, actionTypes.ACCOUNT_DELETE);
-	}
-
-/***/ },
-/* 369 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33772,7 +33736,7 @@
 	}
 
 /***/ },
-/* 370 */
+/* 369 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33791,7 +33755,7 @@
 
 	var _Dashboard2 = _interopRequireDefault(_Dashboard);
 
-	var _user = __webpack_require__(369);
+	var _user = __webpack_require__(368);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -33812,6 +33776,56 @@
 		exports.default = (0, _reactRedux.connect)()(DashboardContainer);
 
 /***/ },
+/* 370 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.updateQuery = updateQuery;
+	exports.deleteQuery = deleteQuery;
+	exports.createQuery = createQuery;
+
+	var _fetcher = __webpack_require__(354);
+
+	var _fetcher2 = _interopRequireDefault(_fetcher);
+
+	var _actions = __webpack_require__(277);
+
+	var actionTypes = _interopRequireWildcard(_actions);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function updateQuery(id, query) {
+	  var data = {
+	    id: id,
+	    query: query
+	  };
+
+	  return (0, _fetcher2.default)('query/update', data, actionTypes.QUERY_UPDATE);
+	}
+
+	function deleteQuery(id) {
+	  var data = {
+	    id: id
+	  };
+
+	  return (0, _fetcher2.default)('query/delete', data, actionTypes.QUERY_DELETE);
+	}
+
+	function createQuery(query) {
+	  var data = {
+	    query: query
+	  };
+
+	  return (0, _fetcher2.default)('query/create', data, actionTypes.QUERY_CREATE);
+	}
+
+/***/ },
 /* 371 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -33820,38 +33834,27 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.deleteAccount = deleteAccount;
 
-	var _react = __webpack_require__(1);
+	var _fetcher = __webpack_require__(354);
 
-	var _react2 = _interopRequireDefault(_react);
+	var _fetcher2 = _interopRequireDefault(_fetcher);
 
-	var _reactRedux = __webpack_require__(233);
+	var _actions = __webpack_require__(277);
 
-	var _App = __webpack_require__(282);
+	var actionTypes = _interopRequireWildcard(_actions);
 
-	var _App2 = _interopRequireDefault(_App);
-
-	var _user = __webpack_require__(369);
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var AppContainer = _react2.default.createClass({
-	  displayName: 'AppContainer',
+	function deleteAccount(id) {
+	  var data = {
+	    id: id
+	  };
 
-	  componentDidMount: function componentDidMount() {
-	    this.props.dispatch((0, _user.userRead)());
-	  },
-
-	  render: function render() {
-	    return _react2.default.createElement(
-	      _App2.default,
-	      null,
-	      this.props.children
-	    );
-	  }
-	});
-
-		exports.default = (0, _reactRedux.connect)()(AppContainer);
+	  return (0, _fetcher2.default)('account/delete', data, actionTypes.ACCOUNT_DELETE);
+	}
 
 /***/ }
 /******/ ]);

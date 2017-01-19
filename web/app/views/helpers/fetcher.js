@@ -38,8 +38,11 @@ export default function(url, postData, action) {
         }
 
         return response.json().then(data => {
+          if (data && data.error) {
+            return dispatch(failure(data, url, postData, action, logId))
+          }
+
           dispatch(success(data, url, postData, action, logId))
-          return data
         }).catch(function(e) {
           dispatch(failure(e, url, postData, action, logId))
         })

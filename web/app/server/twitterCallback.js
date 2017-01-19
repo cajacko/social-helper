@@ -1,0 +1,49 @@
+import {twitter} from './twitter'
+import errorResponse from './errorResponse'
+import {postToAPI} from './postToAPI'
+
+export default function(req, res) {
+  const sess = req.session
+
+  twitter.getAccessToken(
+    sess.requestToken,
+    sess.requestTokenSecret,
+    req.query.oauth_verifier,
+    function(error, accessToken, accessTokenSecret, results) {
+      if (error) {
+        res.json(errorResponse(3, 'Error getting Twitter access token', error))
+      } else {
+        twitter.verifyCredentials(
+          accessToken,
+          accessTokenSecret,
+          function(error, data, response) {
+            if (error) {
+              res.json(errorResponse(4, 'Error getting verifying Twitter credentials', error))
+            } else {
+              const postData = {
+                username: data["screen_name"],
+                accessToken: accessToken,
+                accessTokenSecret: accessTokenSecret
+              }
+
+              console.log(postData)
+
+              postToAPI('account/create', postData, function(response) {
+                console.log(response)
+                res.redirect('/error')
+              }, function(body) {
+                console.log(body)
+
+                if (body.error) {
+                  return res.redirect('/error')
+                }
+                
+                res.redirect('/')
+              })
+            }
+          }
+        )
+      }
+    }
+  )
+}

@@ -1,0 +1,4 @@
+RewriteEngine on
+RewriteRule ^((?!endpoints\.php).+)$ /endpoints.php [L]
+
+ErrorDocument 404 /endpoints.php
