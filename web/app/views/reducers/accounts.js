@@ -14,7 +14,11 @@ export default function(state = defaultState, action) {
     case getFetcherAction(actionTypes.QUERY_CREATE, SUCCESS):
     case getFetcherAction(actionTypes.QUERY_DELETE, SUCCESS):
     case getFetcherAction(actionTypes.ACCOUNT_DELETE, SUCCESS):
-      return action.payload.data.accounts
+      if (action.payload.data.accounts) {
+        return action.payload.data.accounts
+      }
+
+      return state
 
     case getFetcherAction(actionTypes.USER_LOGOUT, SUCCESS):
       if (!action.payload.data.loggedIn) {

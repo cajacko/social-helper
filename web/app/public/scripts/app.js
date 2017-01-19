@@ -29536,7 +29536,11 @@
 	    case (0, _getFetcherAction2.default)(actionTypes.QUERY_CREATE, _fetcher.SUCCESS):
 	    case (0, _getFetcherAction2.default)(actionTypes.QUERY_DELETE, _fetcher.SUCCESS):
 	    case (0, _getFetcherAction2.default)(actionTypes.ACCOUNT_DELETE, _fetcher.SUCCESS):
-	      return action.payload.data.accounts;
+	      if (action.payload.data.accounts) {
+	        return action.payload.data.accounts;
+	      }
+
+	      return state;
 
 	    case (0, _getFetcherAction2.default)(actionTypes.USER_LOGOUT, _fetcher.SUCCESS):
 	      if (!action.payload.data.loggedIn) {
@@ -29589,7 +29593,11 @@
 	    case (0, _getFetcherAction2.default)(actionTypes.QUERY_CREATE, _fetcher.SUCCESS):
 	    case (0, _getFetcherAction2.default)(actionTypes.QUERY_DELETE, _fetcher.SUCCESS):
 	    case (0, _getFetcherAction2.default)(actionTypes.ACCOUNT_DELETE, _fetcher.SUCCESS):
-	      return action.payload.data.cron;
+	      if (action.payload.data.cron) {
+	        return action.payload.data.cron;
+	      }
+
+	      return state;
 
 	    case (0, _getFetcherAction2.default)(actionTypes.USER_LOGOUT, _fetcher.SUCCESS):
 	      if (!action.payload.data.loggedIn) {
@@ -32795,7 +32803,8 @@
 	      headers: {
 	        'Accept': 'application/json',
 	        'Content-Type': 'application/json'
-	      }
+	      },
+	      credentials: 'same-origin'
 	    };
 
 	    if (postData) {
@@ -33015,6 +33024,17 @@
 	      cron: this.props.cron
 	    };
 	  },
+
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    if (this.props.cron == nextProps.cron) {
+	      return false;
+	    }
+
+	    this.setState({
+	      cron: nextProps.cron
+	    });
+	  },
+
 
 	  onChange: function onChange(event) {
 	    this.setState({
@@ -33319,6 +33339,18 @@
 	      updateText: updateText
 	    };
 	  },
+
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    if (this.props.query == nextProps.query && this.props.id == nextProps.id) {
+	      return false;
+	    }
+
+	    this.setState({
+	      query: nextProps.query,
+	      id: nextProps.id
+	    });
+	  },
+
 
 	  onChange: function onChange(event) {
 	    this.setState({

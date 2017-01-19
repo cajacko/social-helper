@@ -2,7 +2,7 @@ import {twitter} from './twitter'
 import errorResponse from './errorResponse'
 
 export default function(req, res) {
-  const sess = req.session
+  let sess = req.session
 
   twitter.getRequestToken(function(error, requestToken, requestTokenSecret, results){
     if (error) {

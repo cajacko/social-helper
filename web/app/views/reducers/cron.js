@@ -14,7 +14,11 @@ export default function(state = defaultState, action) {
     case getFetcherAction(actionTypes.QUERY_CREATE, SUCCESS):
     case getFetcherAction(actionTypes.QUERY_DELETE, SUCCESS):
     case getFetcherAction(actionTypes.ACCOUNT_DELETE, SUCCESS):
-      return action.payload.data.cron
+      if (action.payload.data.cron) {
+        return action.payload.data.cron
+      }
+
+      return state
 
     case getFetcherAction(actionTypes.USER_LOGOUT, SUCCESS):
       if (!action.payload.data.loggedIn) {

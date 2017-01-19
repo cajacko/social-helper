@@ -14,6 +14,16 @@ const Cron = React.createClass({
     }
   },
 
+  componentWillReceiveProps(nextProps) {    
+    if (this.props.cron == nextProps.cron) {
+      return false
+    }
+
+    this.setState({
+      cron: nextProps.cron
+    })
+  },
+
   onChange: function(event) {
     this.setState({
       cron: event.target.value

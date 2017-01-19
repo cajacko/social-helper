@@ -7,14 +7,21 @@ import {postFromFrontEnd} from './postToAPI'
 import serveHTML from './serveHTML'
 import twitterLogin from './twitterLogin'
 import twitterCallback from './twitterCallback'
+import sessionFileStore from 'session-file-store'
 
 // Initialise
 let app = express()
-let server = http.Server(app);
+let server = http.Server(app)
+let FileStore = sessionFileStore(session)
 
 // Middleware
 app.use(express.static(__dirname + '/../public'))
-app.use(session({secret: process.env.SESSION_SECRET}))
+
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  store: new FileStore()
+}))
+
 app.use(bodyParser.json())
 
 // Routes

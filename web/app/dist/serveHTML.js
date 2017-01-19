@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports.default = function (req, res) {
-  _fs2.default.readFile(__dirname + '/../public/index.html', function (err, data) {
+  _fs2.default.readFile(__dirname + '/../server/index.html', function (err, data) {
     if (err) {
       res.writeHead(500);
       return res.end('Error loading index.html');

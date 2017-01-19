@@ -23,7 +23,7 @@ exports.default = function (req, res) {
 
           console.log(postData);
 
-          (0, _postToAPI.postToAPI)('account/create', postData, function (response) {
+          (0, _postToAPI.postToAPI)('account/create', postData, req, function (response) {
             console.log(response);
             res.redirect('/error');
           }, function (body) {

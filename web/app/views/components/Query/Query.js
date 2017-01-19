@@ -26,6 +26,17 @@ const Query = React.createClass({
     }
   },
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.query == nextProps.query && this.props.id == nextProps.id) {
+      return false
+    }
+
+    this.setState({
+      query: nextProps.query,
+      id: nextProps.id
+    })
+  },
+
   onChange: function(event) {
     this.setState({
       query: event.target.value

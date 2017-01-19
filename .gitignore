@@ -2,3 +2,4 @@
 api/vendor/*
 web/node_modules/*
 web/.gulp-cache
+web/sessions/*

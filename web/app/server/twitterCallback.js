@@ -28,7 +28,7 @@ export default function(req, res) {
 
               console.log(postData)
 
-              postToAPI('account/create', postData, function(response) {
+              postToAPI('account/create', postData, req, function(response) {
                 console.log(response)
                 res.redirect('/error')
               }, function(body) {
@@ -37,7 +37,7 @@ export default function(req, res) {
                 if (body.error) {
                   return res.redirect('/error')
                 }
-                
+
                 res.redirect('/')
               })
             }

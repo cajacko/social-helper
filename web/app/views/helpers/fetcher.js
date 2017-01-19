@@ -18,7 +18,8 @@ export default function(url, postData, action) {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
-      }
+      },
+      credentials: 'same-origin'
     }
 
     if (postData) {

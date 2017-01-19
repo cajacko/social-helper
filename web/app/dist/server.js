@@ -34,15 +34,25 @@ var _twitterCallback = require('./twitterCallback');
 
 var _twitterCallback2 = _interopRequireDefault(_twitterCallback);
 
+var _sessionFileStore = require('session-file-store');
+
+var _sessionFileStore2 = _interopRequireDefault(_sessionFileStore);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Initialise
 var app = (0, _express2.default)();
 var server = _http2.default.Server(app);
+var FileStore = (0, _sessionFileStore2.default)(_expressSession2.default);
 
 // Middleware
 app.use(_express2.default.static(__dirname + '/../public'));
-app.use((0, _expressSession2.default)({ secret: process.env.SESSION_SECRET }));
+
+app.use((0, _expressSession2.default)({
+  secret: process.env.SESSION_SECRET,
+  store: new FileStore()
+}));
+
 app.use(_bodyParser2.default.json());
 
 // Routes
