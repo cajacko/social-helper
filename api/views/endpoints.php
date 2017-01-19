@@ -16,6 +16,38 @@ if (count($path_parts) != 3) {
 $controller = $path_parts[1];
 $endpoint = $path_parts[2];
 
+$auth = new Auth($api_token, $user_token);
+
+if (!$auth->app_authenticated) {
+  error_response(500, 10, 'The application is not authenticated');
+}
+
+// Unauthenticated endpoints
+
+switch($controller) {
+  case 'user':
+    include_once('../controllers/user.php');
+    $user = new User;
+
+    switch($endpoint) {
+      case 'login':
+        $user->login();
+        break;
+
+      case 'create':
+        $user->create();
+        break;
+    }
+
+    break;
+}
+
+if (!$auth->user_authenticated) {
+  error_response(500, 9, 'User is not authenticated');
+}
+
+// Authenticated endpoints
+
 switch($controller) {
   case 'user':
     include_once('../controllers/user.php');
@@ -26,16 +58,8 @@ switch($controller) {
         $user->read();
         break;
 
-      case 'login':
-        $user->login();
-        break;
-
       case 'logout':
         $user->logout();
-        break;
-
-      case 'create':
-        $user->create();
         break;
 
       default:
