@@ -29,6 +29,7 @@ function error_response($code = 0, $data = false) {
   }
 
   $error['data'] = $data;
+  $error['error'] = true;
   $status = $error['status'];
   unset($error['status']);
 

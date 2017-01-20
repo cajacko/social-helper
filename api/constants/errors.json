@@ -54,5 +54,61 @@
   "14": {
     "status": 401,
     "message": "No user authentication was supplied"
+  },
+  "15": {
+    "status": 200,
+    "message": "Passwords do not match"
+  },
+  "16": {
+    "status": 200,
+    "message": "Email is invalid"
+  },
+  "17": {
+    "status": 200,
+    "message": "User already exists, please login"
+  },
+  "18": {
+    "status": 200,
+    "message": "Could not create user"
+  },
+  "19": {
+    "status": 200,
+    "message": "Email parameter was not given"
+  },
+  "20": {
+    "status": 200,
+    "message": "Password parameter was not given"
+  },
+  "21": {
+    "status": 200,
+    "message": "Email parameter was not given"
+  },
+  "22": {
+    "status": 200,
+    "message": "Password parameter was not given"
+  },
+  "23": {
+    "status": 200,
+    "message": "Password confirmation parameter was not given"
+  },
+  "24": {
+    "status": 200,
+    "message": "Could not get user by email"
+  },
+  "26": {
+    "status": 200,
+    "message": "Passwords do not match"
+  },
+  "27": {
+    "status": 200,
+    "message": "Could not generate new login token"
+  },
+  "28": {
+    "status": 200,
+    "message": "Could not get cron"
+  },
+  "29": {
+    "status": 200,
+    "message": "Could not get accounts for this user"
   }
 }

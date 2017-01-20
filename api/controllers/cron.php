@@ -1,8 +1,8 @@
 <?php
 
-include_once('../helpers/success-response.php');
+require_once('../helpers/success-response.php');
 
-class Cron {
+class Cron_Controller {
   function update() {
     $data = array(
       'cron' => 'hello',

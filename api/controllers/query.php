@@ -1,8 +1,8 @@
 <?php
 
-include_once('../helpers/success-response.php');
+require_once('../helpers/success-response.php');
 
-class Query {
+class Query_Controller {
   function update() {
     success_response();
   }

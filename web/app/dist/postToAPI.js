@@ -3,6 +3,9 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 exports.postFromFrontEnd = postFromFrontEnd;
 exports.postToAPI = postToAPI;
 
@@ -29,12 +32,14 @@ function postFromFrontEnd(req, res) {
   }, function (body) {
     var data = body;
 
-    if (endpoint == 'user/login') {
-      data = (0, _filterLoginResponse2.default)(body, req);
-    }
+    switch (endpoint) {
+      case 'user/login':
+      case 'user/create':
+        data = (0, _filterLoginResponse2.default)(body, req);
+        break;
 
-    if (endpoint == 'user/logout') {
-      req.session.destroy();
+      case 'user/logout':
+        req.session.destroy();
     }
 
     res.json(data);
@@ -75,6 +80,10 @@ function postToAPI(endpoint, data, req, errorCallback, successCallback) {
 
     if (response.statusCode != 200) {
       return errorCallback((0, _errorResponse2.default)(7, 'API did not return 200 status code', response));
+    }
+
+    if ((typeof yourVariable === 'undefined' ? 'undefined' : _typeof(yourVariable)) !== 'object') {
+      return errorCallback((0, _errorResponse2.default)(20, 'Response is not a valid json object', response));
     }
 
     successCallback(body);

@@ -1,7 +1,7 @@
 <?php
 
-include_once('../helpers/common.php');
-include_once('../helpers/error-response.php');
+require_once('../helpers/common.php');
+require_once('../helpers/error-response.php');
 
 $path = $_SERVER["REQUEST_URI"];
 $path_parts = explode('/', $path);
@@ -17,9 +17,9 @@ if (count($path_parts) != 3) {
 $controller = $path_parts[1];
 $endpoint = $path_parts[2];
 
-include_once('../controllers/app.php');
+require_once('../controllers/app.php');
 
-$app = new App();
+$app = new App_Controller();
 
 $post_data = file_get_contents('php://input');
 $post_data = json_decode($post_data, true);
@@ -38,18 +38,38 @@ if (!$app->authenticate($post_data['appAuth'])) {
 
 // Unauthenticated endpoints
 
-include_once('../controllers/user.php');
-$user = new User;
+require_once('../controllers/user.php');
+$user = new User_Controller;
 
 switch($controller) {
   case 'user':
     switch($endpoint) {
       case 'login':
-        $user->login();
+        if (!isset($post_data['email'])) {
+          error_response(19);
+        }
+
+        if (!isset($post_data['password'])) {
+          error_response(20);
+        }
+
+        $user->login($post_data['email'], $post_data['password']);
         break;
 
       case 'create':
-        $user->create();
+        if (!isset($post_data['email'])) {
+          error_response(21);
+        }
+
+        if (!isset($post_data['password'])) {
+          error_response(22);
+        }
+
+        if (!isset($post_data['passwordConfirm'])) {
+          error_response(23);
+        }
+
+        $user->create($post_data['email'], $post_data['password'], $post_data['passwordConfirm']);
         break;
     }
 
@@ -84,8 +104,8 @@ switch($controller) {
     break;
 
   case 'account':
-    include_once('../controllers/account.php');
-    $account = new Account;
+    require_once('../controllers/account.php');
+    $account = new Account_Controller;
 
     switch($endpoint) {
       case 'delete':
@@ -103,8 +123,8 @@ switch($controller) {
     break;
 
   case 'cron':
-    include_once('../controllers/cron.php');
-    $cron = new Cron;
+    require_once('../controllers/cron.php');
+    $cron = new Cron_Controller;
 
     switch($endpoint) {
       case 'update':
@@ -118,8 +138,8 @@ switch($controller) {
     break;
 
   case 'query':
-    include_once('../controllers/query.php');
-    $query = new Query;
+    require_once('../controllers/query.php');
+    $query = new Query_Controller;
 
     switch($endpoint) {
       case 'update':

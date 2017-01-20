@@ -11,12 +11,14 @@ export function postFromFrontEnd(req, res) {
   }, function(body) {
     let data = body
 
-    if (endpoint == 'user/login') {
-      data = filterLoginResponse(body, req)
-    }
+    switch(endpoint) {
+      case 'user/login':
+      case 'user/create':
+        data = filterLoginResponse(body, req)
+        break;
 
-    if (endpoint == 'user/logout') {
-      req.session.destroy()
+      case 'user/logout':
+        req.session.destroy()
     }
 
     res.json(data)
@@ -59,6 +61,10 @@ export function postToAPI(endpoint, data, req, errorCallback, successCallback) {
 
       if (response.statusCode != 200) {
         return errorCallback(errorResponse(7, 'API did not return 200 status code', response))
+      }
+
+      if (typeof yourVariable !== 'object') {
+        return errorCallback(errorResponse(20, 'Response is not a valid json object', response))
       }
 
       successCallback(body)

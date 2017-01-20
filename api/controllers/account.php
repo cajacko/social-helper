@@ -1,8 +1,8 @@
 <?php
 
-include_once('../helpers/success-response.php');
+require_once('../helpers/success-response.php');
 
-class Account {
+class Account_Controller {
   function delete() {
     success_response();
   }
