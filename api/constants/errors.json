@@ -1,0 +1,58 @@
+{
+  "1": {
+    "status": 404,
+    "message": "No endpoint specified"
+  },
+  "2": {
+    "status": 404,
+    "message": "Bad endpoint supplied"
+  },
+  "3": {
+    "status": 500,
+    "message": "Finished execution but nothing has been sent"
+  },
+  "4": {
+    "status": 404,
+    "message": "This user endpoint does not exist"
+  },
+  "5": {
+    "status": 404,
+    "message": "This controller does not exist"
+  },
+  "6": {
+    "status": 404,
+    "message": "This account endpoint does not exist"
+  },
+  "7": {
+    "status": 404,
+    "message": "This cron endpoint does not exist"
+  },
+  "8": {
+    "status": 404,
+    "message": "This query endpoint does not exist"
+  },
+  "9": {
+    "status": 401,
+    "message": "User is not authenticated"
+  },
+  "10": {
+    "status": 401,
+    "message": "The application is not authenticated"
+  },
+  "11": {
+    "status": 401,
+    "message": "No application authentication was supplied"
+  },
+  "12": {
+    "status": 500,
+    "message": "Undefined error"
+  },
+  "13": {
+    "status": 500,
+    "message": "Badly formatted post data"
+  },
+  "14": {
+    "status": 401,
+    "message": "No user authentication was supplied"
+  }
+}

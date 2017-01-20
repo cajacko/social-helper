@@ -46,14 +46,29 @@ function postToAPI(endpoint, data, req, errorCallback, successCallback) {
     data.auth = req.session.auth;
   }
 
+  if (process.env.APP_AUTH) {
+    data.appAuth = process.env.APP_AUTH;
+  }
+
   var options = {
     url: process.env.API_DOMAIN + endpoint,
-    json: data
+    body: data,
+    method: 'post',
+    json: true
   };
 
+  console.log("\n");
+  console.log('POST');
   console.log(options);
+  console.log(data);
+  console.log("\n");
 
   _request2.default.post(options, function (error, response, body) {
+    console.log("\n");
+    console.log('POST RECIEVE');
+    console.log(body);
+    console.log("\n");
+
     if (error) {
       return errorCallback((0, _errorResponse2.default)(6, 'API returned an error', error));
     }

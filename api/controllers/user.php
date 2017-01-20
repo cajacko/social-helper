@@ -3,8 +3,16 @@
 include_once('../helpers/success-response.php');
 
 class User {
+  function authenticate($auth = false) {
+    if ($auth == 'doyr498h9ehfo84yh875h9843hj') {
+      return true;
+    }
+
+    return false;
+  }
+
   function read() {
-    success_response(array('loggedIn' => false));
+    success_response();
   }
 
   function login() {

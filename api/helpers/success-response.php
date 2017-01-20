@@ -31,6 +31,6 @@ function success_response($data = false) {
     );
   }
 
-  echo json_encode($data);
+  echo json_encode($data, JSON_PRETTY_PRINT);
   exit;
 }

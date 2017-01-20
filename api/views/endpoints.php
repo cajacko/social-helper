@@ -1,34 +1,48 @@
 <?php
 
+include_once('../helpers/common.php');
 include_once('../helpers/error-response.php');
 
 $path = $_SERVER["REQUEST_URI"];
 $path_parts = explode('/', $path);
 
 if (!$path_parts) {
-  error_response(404, 1, 'No endpoint specified');
+  error_response(1);
 }
 
 if (count($path_parts) != 3) {
-  error_response(404, 2, 'Bad endpoint supplied');
+  error_response(2);
 }
 
 $controller = $path_parts[1];
 $endpoint = $path_parts[2];
 
-$auth = new Auth($api_token, $user_token);
+include_once('../controllers/app.php');
 
-if (!$auth->app_authenticated) {
-  error_response(500, 10, 'The application is not authenticated');
+$app = new App();
+
+$post_data = file_get_contents('php://input');
+$post_data = json_decode($post_data, true);
+
+if (!$post_data) {
+  error_response(13);
+}
+
+if (!isset($post_data['appAuth'])) {
+  error_response(11);
+}
+
+if (!$app->authenticate($post_data['appAuth'])) {
+  error_response(10);
 }
 
 // Unauthenticated endpoints
 
+include_once('../controllers/user.php');
+$user = new User;
+
 switch($controller) {
   case 'user':
-    include_once('../controllers/user.php');
-    $user = new User;
-
     switch($endpoint) {
       case 'login':
         $user->login();
@@ -42,17 +56,18 @@ switch($controller) {
     break;
 }
 
-if (!$auth->user_authenticated) {
-  error_response(500, 9, 'User is not authenticated');
+if (!isset($post_data['auth'])) {
+  error_response(14);
+}
+
+if (!$user->authenticate($post_data['auth'])) {
+  error_response(9);
 }
 
 // Authenticated endpoints
 
 switch($controller) {
   case 'user':
-    include_once('../controllers/user.php');
-    $user = new User;
-
     switch($endpoint) {
       case 'read':
         $user->read();
@@ -63,7 +78,7 @@ switch($controller) {
         break;
 
       default:
-        error_response(404, 4, 'No endpoint');
+        error_response(4);
     }
 
     break;
@@ -82,7 +97,7 @@ switch($controller) {
         break;
 
       default:
-        error_response(404, 6, 'No endpoint');
+        error_response(6);
     }
 
     break;
@@ -97,7 +112,7 @@ switch($controller) {
         break;
 
       default:
-        error_response(404, 7, 'No endpoint');
+        error_response(7);
     }
 
     break;
@@ -120,13 +135,13 @@ switch($controller) {
         break;
 
       default:
-        error_response(404, 8, 'No endpoint');
+        error_response(8);
     }
 
     break;
 
   default:
-    error_response(404, 5, 'No controller');
+    error_response(5);
 }
 
-error_response(500, 3, 'No response has been sent');
+error_response(3);

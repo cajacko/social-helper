@@ -28,16 +28,31 @@ export function postToAPI(endpoint, data, req, errorCallback, successCallback) {
     data.auth = req.session.auth
   }
 
-  const options = {
-    url: process.env.API_DOMAIN + endpoint,
-    json: data
+  if (process.env.APP_AUTH) {
+    data.appAuth = process.env.APP_AUTH
   }
 
+  const options = {
+    url: process.env.API_DOMAIN + endpoint,
+    body: data,
+    method: 'post',
+    json: true
+  }
+
+  console.log("\n")
+  console.log('POST')
   console.log(options)
+  console.log(data)
+  console.log("\n")
 
   request.post(
     options,
     function (error, response, body) {
+      console.log("\n")
+      console.log('POST RECIEVE')
+      console.log(body)
+      console.log("\n")
+
       if (error) {
         return errorCallback(errorResponse(6, 'API returned an error', error))
       }
