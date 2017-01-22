@@ -9,11 +9,11 @@ exports.default = function (req, res) {
 
   _twitter.twitter.getAccessToken(sess.requestToken, sess.requestTokenSecret, req.query.oauth_verifier, function (error, accessToken, accessTokenSecret, results) {
     if (error) {
-      res.json((0, _errorResponse2.default)(3, 'Error getting Twitter access token', error));
+      res.json((0, _errorResponse2.default)(3, error));
     } else {
       _twitter.twitter.verifyCredentials(accessToken, accessTokenSecret, function (error, data, response) {
         if (error) {
-          res.json((0, _errorResponse2.default)(4, 'Error getting verifying Twitter credentials', error));
+          res.json((0, _errorResponse2.default)(4, error));
         } else {
           var postData = {
             username: data["screen_name"],

@@ -1,0 +1,20 @@
+FROM php:7.0-apache
+
+MAINTAINER Charlie Jackson <contact@charliejackson.com>
+
+RUN docker-php-source extract
+#RUN docker-php-ext-install mysqli
+RUN docker-php-source delete
+RUN a2enmod rewrite
+
+RUN mkdir -p /var/www/html/api
+WORKDIR /var/www/html/api
+
+#COPY api/composer.json /var/www/html/api
+#RUN composer install
+
+COPY api /var/www/html/api
+COPY .env /var/www/html/
+ADD api/apache-config.conf /etc/apache2/sites-enabled/000-default.conf
+
+RUN chown -R www-data:www-data /var/www/html

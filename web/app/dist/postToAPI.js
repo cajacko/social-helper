@@ -75,15 +75,15 @@ function postToAPI(endpoint, data, req, errorCallback, successCallback) {
     console.log("\n");
 
     if (error) {
-      return errorCallback((0, _errorResponse2.default)(6, 'API returned an error', error));
+      return errorCallback((0, _errorResponse2.default)(6, error));
     }
 
     if (response.statusCode != 200) {
-      return errorCallback((0, _errorResponse2.default)(7, 'API did not return 200 status code', response));
+      return errorCallback((0, _errorResponse2.default)(7, response));
     }
 
-    if ((typeof yourVariable === 'undefined' ? 'undefined' : _typeof(yourVariable)) !== 'object') {
-      return errorCallback((0, _errorResponse2.default)(20, 'Response is not a valid json object', response));
+    if ((typeof body === 'undefined' ? 'undefined' : _typeof(body)) !== 'object') {
+      return errorCallback((0, _errorResponse2.default)(20, response));
     }
 
     successCallback(body);

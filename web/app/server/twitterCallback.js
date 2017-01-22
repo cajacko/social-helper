@@ -11,14 +11,14 @@ export default function(req, res) {
     req.query.oauth_verifier,
     function(error, accessToken, accessTokenSecret, results) {
       if (error) {
-        res.json(errorResponse(3, 'Error getting Twitter access token', error))
+        res.json(errorResponse(3, error))
       } else {
         twitter.verifyCredentials(
           accessToken,
           accessTokenSecret,
           function(error, data, response) {
             if (error) {
-              res.json(errorResponse(4, 'Error getting verifying Twitter credentials', error))
+              res.json(errorResponse(4, error))
             } else {
               const postData = {
                 username: data["screen_name"],

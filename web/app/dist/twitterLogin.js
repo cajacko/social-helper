@@ -9,7 +9,7 @@ exports.default = function (req, res) {
 
   _twitter.twitter.getRequestToken(function (error, requestToken, requestTokenSecret, results) {
     if (error) {
-      res.json((0, _errorResponse2.default)(2, 'Error getting Twitter request token', error));
+      res.json((0, _errorResponse2.default)(2, error));
     } else {
       sess.requestToken = requestToken;
       sess.requestTokenSecret = requestTokenSecret;

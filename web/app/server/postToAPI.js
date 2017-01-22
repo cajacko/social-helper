@@ -56,15 +56,15 @@ export function postToAPI(endpoint, data, req, errorCallback, successCallback) {
       console.log("\n")
 
       if (error) {
-        return errorCallback(errorResponse(6, 'API returned an error', error))
+        return errorCallback(errorResponse(6, error))
       }
 
       if (response.statusCode != 200) {
-        return errorCallback(errorResponse(7, 'API did not return 200 status code', response))
+        return errorCallback(errorResponse(7, response))
       }
 
-      if (typeof yourVariable !== 'object') {
-        return errorCallback(errorResponse(20, 'Response is not a valid json object', response))
+      if (typeof body !== 'object') {
+        return errorCallback(errorResponse(20, response))
       }
 
       successCallback(body)
