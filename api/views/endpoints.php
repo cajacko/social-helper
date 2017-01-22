@@ -1,33 +1,22 @@
 <?php
 
-// $manager = new \MongoDB\Driver\Manager('mongodb://socialhelper:498y98ry98nuj09u54@social-helper-db:27017');
+require_once('../helpers/common.php');
 
-try {
+$servername = 'social-helper-db:3306';
+$username = MYSQL_USER;
+$password = MYSQL_PASSWORD;
 
-    $mng = new \MongoDB\Driver\Manager('mongodb://username:password@host:port/database');
+// Create connection
+$conn = new mysqli($servername, $username, $password);
 
-    $stats = new MongoDB\Driver\Command(["dbstats" => 1]);
-    $res = $mng->executeCommand("database", $stats);
-
-    $stats = current($res->toArray());
-
-    print_r($stats);
-
-} catch (MongoDB\Driver\Exception\Exception $e) {
-
-    $filename = basename(__FILE__);
-
-    echo "The $filename script has experienced an error.\n";
-    echo "It failed with the following exception:\n";
-
-    echo "Exception:", $e->getMessage(), "\n";
-    echo "In file:", $e->getFile(), "\n";
-    echo "On line:", $e->getLine(), "\n";
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
+echo "Connected successfully";
 
 exit;
 
-require_once('../helpers/common.php');
 require_once('../helpers/error-response.php');
 
 $path = $_SERVER["REQUEST_URI"];
