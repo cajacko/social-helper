@@ -3,7 +3,7 @@
 require_once('../helpers/success-response.php');
 require_once('../helpers/error-response.php');
 require_once('account.php');
-require_once('cron.php');
+require_once('cron-controller.php');
 require_once('token.php');
 require_once('../models/user.php');
 
@@ -50,7 +50,7 @@ class User_Controller {
     }
 
     $accounts = new Account_Controller;
-    $accounts_array = $cron->get_accounts($user_id);
+    $accounts_array = $accounts->get_accounts($user_id);
 
     if (!$accounts_array) {
       return error_response(29);
@@ -62,32 +62,6 @@ class User_Controller {
       'accounts' => $accounts_array,
       'loggedIn' => true
     );
-
-    // $data = array(
-    //   'cron' => '5,10,30,55 7,8,9,11,12,13,16,17,18 * * *',
-    //   'accounts' => array(
-    //     array(
-    //       'id' => '3986309467',
-    //       'username' => 'charliejackson',
-    //       'queries' => array(
-    //         array(
-    //           'id' => '303876459',
-    //           'query' => '#iot'
-    //         ),
-    //         array(
-    //           'id' => '45687876',
-    //           'query' => '#smarthome'
-    //         ),
-    //         array(
-    //           'id' => '456635434',
-    //           'query' => '#improv'
-    //         )
-    //       )
-    //     )
-    //   ),
-    //   'loggedIn' => true,
-    //   'auth' => 'doyr498h9ehfo84yh875h9843hj'
-    // );
 
     success_response($data);
   }
