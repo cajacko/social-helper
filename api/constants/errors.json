@@ -134,5 +134,9 @@
   "35": {
     "status": 200,
     "message": "Saving new user failed"
+  },
+  "36": {
+    "status": 200,
+    "message": "Getting only row returned more than 1"
   }
 }

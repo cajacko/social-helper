@@ -60,6 +60,20 @@ class Db {
 
     return true;
   }
+
+  public static function get_only_row($query = false, $params) {
+    $res = self::query($query, $params)->get_result();
+
+    if (!$res->num_rows) {
+      return false;
+    }
+
+    if ($res->num_rows > 1) {
+      return error_response(36);
+    }
+
+    return $res->fetch_assoc();
+  }
 }
 
 Db::open_connection();
