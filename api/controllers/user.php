@@ -8,18 +8,47 @@ require_once('token.php');
 require_once('../models/user.php');
 
 class User_Controller {
+  private $user_id = false;
 
   function authenticate($auth = false) {
-    // $user = User_Modal->get
-    if ($auth == 'doyr498h9ehfo84yh875h9843hj') {
-      return true;
-    }
+    $token = new Token_Controller;
+    $this->user_id = $token->validate_token($auth);
+    return $this->user_id;
+  }
 
-    return false;
+  function get_user_id() {
+    return $this->user_id;
   }
 
   function read() {
-    success_response();
+    if (!$this->user_id) {
+      return false;
+    }
+
+    $data = $this->get_user_data($this->user_id);
+    success_response($data);
+  }
+
+  function get_user_data($user_id) {
+    $cron = new Cron_Controller;
+    $cron_string = $cron->get_cron($user_id);
+
+    if (!$cron_string) {
+      return error_response(28);
+    }
+
+    $accounts = new Account_Controller;
+    $accounts_array = $accounts->get_accounts($user_id);
+
+    if ($accounts_array === false) {
+      return error_response(29);
+    }
+
+    return array(
+      'accounts' => $accounts_array,
+      'cron' => $cron_string,
+      'loggedIn' => true
+    );
   }
 
   function login($email, $password) {
@@ -42,26 +71,8 @@ class User_Controller {
       return error_response(27);
     }
 
-    $cron = new Cron_Controller;
-    $cron_string = $cron->get_cron($user_id);
-
-    if (!$cron_string) {
-      return error_response(28);
-    }
-
-    $accounts = new Account_Controller;
-    $accounts_array = $accounts->get_accounts($user_id);
-
-    if (!$accounts_array) {
-      return error_response(29);
-    }
-
-    $data = array(
-      'auth' => $auth,
-      'cron' => $cron_string,
-      'accounts' => $accounts_array,
-      'loggedIn' => true
-    );
+    $data = $this->get_user_data($user_id);
+    $data['auth'] = $auth;
 
     success_response($data);
   }
@@ -79,7 +90,9 @@ class User_Controller {
       return error_response(17);
     }
 
-    if (!User_Model::set_user($email, $password)) {
+    $default_cron = '5,35 9,12,16 * * *';
+
+    if (!User_Model::set_user($email, $password, $default_cron)) {
       return error_response(18);
     }
 

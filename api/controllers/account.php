@@ -1,6 +1,7 @@
 <?php
 
 require_once('../helpers/success-response.php');
+require_once('../models/account.php');
 
 class Account_Controller {
   function delete() {
@@ -12,25 +13,6 @@ class Account_Controller {
   }
 
   function get_accounts($user_id) {
-    return array(
-      array(
-        'id' => '3986309467',
-        'username' => 'charliejackson',
-        'queries' => array(
-          array(
-            'id' => '303876459',
-            'query' => '#iot'
-          ),
-          array(
-            'id' => '45687876',
-            'query' => '#smarthome'
-          ),
-          array(
-            'id' => '456635434',
-            'query' => '#improv'
-          )
-        )
-      )
-    );
+    return Account_Model::get_user_accounts($user_id);
   }
 }

@@ -74,6 +74,17 @@ class Db {
 
     return $res->fetch_assoc();
   }
+
+  public static function get_rows($query = false, $params) {
+    $res = self::query($query, $params)->get_result();
+    $rows = array();
+
+    while($row = $res->fetch_assoc()) {
+      $rows[] = $row;
+    }
+
+    return $rows;
+  }
 }
 
 Db::open_connection();

@@ -1,39 +1,34 @@
 <?php
 
-require_once('../helpers/success-response.php');
+require_once('../helpers/error-response.php');
+require_once('../models/cron.php');
 
 class Cron_Controller {
-
   function get_cron($user_id) {
-    return '5,10,30,55 7,8,9,11,12,13,16,17,18 * * *';
+    $cron = Cron_Model::get_user_cron($user_id);
+
+    if (!$cron) {
+      return false;
+    }
+
+    if (!$cron['cron']) {
+      return false;
+    }
+
+    return $cron['cron'];
   }
 
-  function update() {
-    $data = array(
-      'cron' => 'hello',
-      'accounts' => array(
-        array(
-          'id' => '3986309467',
-          'username' => 'charliejackson',
-          'queries' => array(
-            array(
-              'id' => '303876459',
-              'query' => '#iot'
-            ),
-            array(
-              'id' => '45687876',
-              'query' => '#smarthome'
-            ),
-            array(
-              'id' => '456635434',
-              'query' => '#improv'
-            )
-          )
-        )
-      ),
-      'loggedIn' => true
-    );
+  function update($user, $cron) {
+    $user_id = $user->get_user_id();
 
-    success_response($data);
+    if (!$user_id) {
+      return error_response(38);
+    }
+
+    if (!Cron_Model::set_user_cron($user_id, $cron)) {
+      return error_response(39);
+    }
+
+    $user->read();
   }
 }

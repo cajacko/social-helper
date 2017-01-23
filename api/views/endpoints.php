@@ -123,12 +123,16 @@ switch($controller) {
     break;
 
   case 'cron':
-    require_once('../controllers/cron.php');
+    require_once('../controllers/cron-controller.php');
     $cron = new Cron_Controller;
 
     switch($endpoint) {
       case 'update':
-        $cron->update();
+        if (!isset($post_data['cron'])) {
+          error_response(37);
+        }
+
+        $cron->update($user, $post_data['cron']);
         break;
 
       default:

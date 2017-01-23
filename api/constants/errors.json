@@ -138,5 +138,17 @@
   "36": {
     "status": 200,
     "message": "Getting only row returned more than 1"
+  },
+  "37": {
+    "status": 200,
+    "message": "No cron POST data given"
+  },
+  "38": {
+    "status": 200,
+    "message": "Cron controller could not get user id"
+  },
+  "39": {
+    "status": 200,
+    "message": "Could not set new cron"
   }
 }
