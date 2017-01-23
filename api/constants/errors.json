@@ -110,5 +110,29 @@
   "29": {
     "status": 200,
     "message": "Could not get accounts for this user"
+  },
+  "30": {
+    "status": 200,
+    "message": "Could not connect to the database"
+  },
+  "31": {
+    "status": 200,
+    "message": "No query supplied but query method called"
+  },
+  "32": {
+    "status": 200,
+    "message": "MySQL prepare statement failed"
+  },
+  "33": {
+    "status": 200,
+    "message": "MySQL bind_param failed"
+  },
+  "34": {
+    "status": 200,
+    "message": "MySQL execute failed"
+  },
+  "35": {
+    "status": 200,
+    "message": "Saving new user failed"
   }
 }

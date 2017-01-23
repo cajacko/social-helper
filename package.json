@@ -4,11 +4,12 @@
   "description": "Social Helper is a tool that automates your social media profiles",
   "main": "index.js",
   "scripts": {
-    "start": "docker-compose up -d --force-recreate --build",
-    "stop": "docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)",
-    "backup": "docker exec db sh -c 'exec mysqldump --all-databases -uroot -p\"$MYSQL_ROOT_PASSWORD\"' > `echo $PWD`/data-dump.sql",
+    "setup": "npm run docker-build && npm run docker-run",
+    "start": "docker start $(docker ps -a -q)",
+    "remove": "npm run stop && docker rm $(docker ps -a -q)",
+    "stop": "docker stop $(docker ps -a -q)",
+    "flush": "npm run remove && npm run setup",
     "remove-volume": "docker volume rm charliejacksonwebsite_db_data",
-    "test": "echo \"Error: no test specified\" && exit 1",
     "docker-web-build": "docker build --no-cache -t social-helper-web -f Dockerfile.web .",
     "docker-web-run": "docker run --link social-helper-api:social-helper-api -p 3000:3000 -d --name social-helper-web -v $(pwd)/web:/usr/src/app/web social-helper-web",
     "docker-web-log": "docker logs --follow social-helper-web",
@@ -19,7 +20,8 @@
     "docker-api-bash": "docker exec -it --user root social-helper-api /bin/bash",
     "docker-run": "npm run docker-db-run && npm run docker-api-run && npm run docker-web-run",
     "docker-build": "npm run docker-api-build && npm run docker-web-build",
-    "docker-db-run": "docker run -d --name social-helper-db -p 3306:3306 --env-file ./.env mysql:5.7",
+    "docker-db-run": "docker run -d -v $(pwd)/schema.sql:/docker-entrypoint-initdb.d/schema.sql --name social-helper-db -p 3306:3306 --env-file ./.env mysql:5.7",
+    "docker-db-run-persist": "docker run -d -v social-helper-db:/var/lib/mysql -v schema.sql:/docker-entrypoint-initdb.d/data-dump.sql --name social-helper-db -p 3306:3306 --env-file ./.env mysql:5.7",
     "docker-db-backup": "docker exec social-helper-db sh -c 'exec mysqldump -d -uroot -p\"$MYSQL_ROOT_PASSWORD\" --databases $MYSQL_DATABASE' > `echo $PWD`/schema.sql"
   },
   "repository": {

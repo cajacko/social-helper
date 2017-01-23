@@ -1,22 +1,6 @@
 <?php
 
 require_once('../helpers/common.php');
-
-$servername = 'social-helper-db:3306';
-$username = MYSQL_USER;
-$password = MYSQL_PASSWORD;
-
-// Create connection
-$conn = new mysqli($servername, $username, $password);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-echo "Connected successfully";
-
-exit;
-
 require_once('../helpers/error-response.php');
 
 $path = $_SERVER["REQUEST_URI"];

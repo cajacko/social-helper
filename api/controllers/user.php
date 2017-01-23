@@ -75,13 +75,13 @@ class User_Controller {
       return error_response(16);
     }
 
-    // if (User_Model->get_user_by_email($email)) {
-    //   return error_response(17);
-    // }
-    //
-    // if (!User_Model->set_user($email, $password)) {
-    //   return error_response(18);
-    // }
+    if (User_Model::get_user_by_email($email)) {
+      return error_response(17);
+    }
+
+    if (!User_Model::set_user($email, $password)) {
+      return error_response(18);
+    }
 
     return $this->login($email, $password);
   }
