@@ -109,7 +109,11 @@ switch($controller) {
 
     switch($endpoint) {
       case 'delete':
-        $account->delete();
+        if (!isset($post_data['id'])) {
+          error_response(40);
+        }
+
+        $account->delete($user, $post_data['id']);
         break;
 
       case 'create':
@@ -165,15 +169,58 @@ switch($controller) {
 
     switch($endpoint) {
       case 'update':
-        $query->update();
+        if (!isset($post_data['accountId'])) {
+          error_response();
+        }
+
+        if (!isset($post_data['queryId'])) {
+          error_response();
+        }
+
+        if (!isset($post_data['query'])) {
+          error_response();
+        }
+
+        $query->update(
+          $user,
+          $post_data['accountId'],
+          $post_data['queryId'],
+          $post_data['query']
+        );
+
         break;
 
       case 'delete':
-        $query->delete();
+        if (!isset($post_data['accountId'])) {
+          error_response();
+        }
+
+        if (!isset($post_data['queryId'])) {
+          error_response();
+        }
+
+        $query->delete(
+          $user,
+          $post_data['accountId'],
+          $post_data['queryId']
+        );
+
         break;
 
       case 'create':
-        $query->create();
+        if (!isset($post_data['accountId'])) {
+          error_response();
+        }
+
+        if (!isset($post_data['query'])) {
+          error_response();
+        }
+
+        $query->create(
+          $user,
+          $post_data['accountId'],
+          $post_data['query']
+        );
         break;
 
       default:

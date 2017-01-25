@@ -29,6 +29,6 @@ class Cron_Controller {
       return error_response(39);
     }
 
-    $user->read();
+    return $user->read();
   }
 }

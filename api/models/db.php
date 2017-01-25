@@ -85,6 +85,14 @@ class Db {
 
     return $rows;
   }
+
+  public static function insert_return_id($query = false, $params) {
+    if(!self::query($query, $params)->get_result()) {
+      return error_response(46);
+    }
+
+    return self::$connection->lastInsertId();
+  }
 }
 
 Db::open_connection();

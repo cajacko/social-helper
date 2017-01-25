@@ -170,5 +170,17 @@
   "44": {
     "status": 200,
     "message": "Could not update user account"
+  },
+  "45": {
+    "status": 200,
+    "message": "Could not delete account"
+  },
+  "46": {
+    "status": 200,
+    "message": "Could not insert row and get id"
+  },
+  "47": {
+    "status": 200,
+    "message": "Could not create account"
   }
 }
