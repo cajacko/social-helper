@@ -150,5 +150,25 @@
   "39": {
     "status": 200,
     "message": "Could not set new cron"
+  },
+  "40": {
+    "status": 200,
+    "message": "No username given"
+  },
+  "41": {
+    "status": 200,
+    "message": "No access token given"
+  },
+  "42": {
+    "status": 200,
+    "message": "No secret given"
+  },
+  "43": {
+    "status": 200,
+    "message": "Could not create user account"
+  },
+  "44": {
+    "status": 200,
+    "message": "Could not update user account"
   }
 }

@@ -113,7 +113,25 @@ switch($controller) {
         break;
 
       case 'create':
-        $account->create();
+        if (!isset($post_data['username'])) {
+          error_response(40);
+        }
+
+        if (!isset($post_data['accessToken'])) {
+          error_response(41);
+        }
+
+        if (!isset($post_data['accessTokenSecret'])) {
+          error_response(42);
+        }
+
+        $account->create(
+          $user,
+          $post_data['accessToken'],
+          $post_data['accessTokenSecret'],
+          $post_data['username']
+        );
+
         break;
 
       default:
