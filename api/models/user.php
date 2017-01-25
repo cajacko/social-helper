@@ -55,7 +55,7 @@ class User_Model {
       array('s', $email)
     );
 
-    return Db::row_exists($query, $params);
+    return Db::get_only_row($query, $params);
   }
 
   public static function set_user($email, $password, $cron) {

@@ -182,5 +182,33 @@
   "47": {
     "status": 200,
     "message": "Could not create account"
+  },
+  "48": {
+    "status": 200,
+    "message": "Could not generate auth token"
+  },
+  "49": {
+    "status": 200,
+    "message": "No user exists with that email"
+  },
+  "50": {
+    "status": 200,
+    "message": "The passwords do not match"
+  },
+  "51": {
+    "status": 200,
+    "message": "No user exists with that token"
+  },
+  "52": {
+    "status": 200,
+    "message": "Could not get user accounts"
+  },
+  "53": {
+    "status": 200,
+    "message": "User id is not defined"
+  },
+  "54": {
+    "status": 200,
+    "message": "Could not get accounts"
   }
 }

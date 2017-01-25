@@ -2,104 +2,133 @@
 
 require_once('../helpers/success-response.php');
 require_once('../helpers/error-response.php');
-require_once('account.php');
-require_once('cron-controller.php');
-require_once('token.php');
 require_once('../models/user.php');
+require_once('../controllers/user-tokens.php');
+require_once('../controllers/user-accounts.php');
 
 class User_Controller {
-  private $user_id = false;
+  private $id = false;
+  private $email = false;
+  private $password = false;
+  private $accounts = false;
+  private $cron = '5,35 9,12,16 * * *';
+  private $token = false;
 
-  function authenticate($auth = false) {
-    $token = new Token_Controller;
-    $this->user_id = $token->validate_token($auth);
-    return $this->user_id;
+  private function initialise($user) {
+    $this->id = $user['id'];
+    $this->email = $user['email'];
+    $this->password = $user['password'];
+    $this->cron = $user['cron'];
+    return true;
   }
 
-  function get_user_id() {
-    return $this->user_id;
-  }
+  private function generate_new_token() {
+    $user_token = new User_Tokens_Controller;
+    $user_id = $this->id;
 
-  function read() {
-    if (!$this->user_id) {
-      return false;
-    }
-
-    $data = $this->get_user_data($this->user_id);
-    success_response($data);
-  }
-
-  function get_user_data($user_id) {
-    $cron = new Cron_Controller;
-    $cron_string = $cron->get_cron($user_id);
-
-    if (!$cron_string) {
-      return error_response(28);
-    }
-
-    $accounts = new Account_Controller;
-    $accounts_array = $accounts->get_accounts($user_id);
-
-    if ($accounts_array === false) {
-      return error_response(29);
-    }
-
-    return array(
-      'accounts' => $accounts_array,
-      'cron' => $cron_string,
-      'loggedIn' => true
-    );
-  }
-
-  function login($email, $password) {
-    $user_id = User_Model::get_user_id_by_email($email);
-
-    if (!$user_id) {
-      return error_response(24);
-    }
-
-    $db_password = User_Model::get_password_by_user_id($user_id);
-
-    if ($db_password !== $password) {
-      return error_response(26);
-    }
-
-    $token = new Token_Controller;
-    $auth = $token->generate_new_token($user_id);
+    $auth = $user_token->generate_new_token($user_id);
 
     if (!$auth) {
-      return error_response(27);
+      return error_response(48);
     }
 
-    $data = $this->get_user_data($user_id);
-    $data['auth'] = $auth;
-
-    success_response($data);
+    $this->token = $auth;
+    return $this->token;
   }
 
-  function create($email, $password, $password_confirm) {
+  public function login($email, $password) {
+    $user = User_Model::get_user_by_email($email);
+
+    // If the user does not exist then error
+    if (!$user) {
+      return error_response(49);
+    }
+
+    // If the passwords do not match then error
+    if ($user['password'] !== $password) {
+      return error_response(50);
+    }
+
+    $this->initialise($user);
+    $auth = $this->generate_new_token();
+    $this->read($auth);
+  }
+
+  public function create($email, $password, $password_confirm) {
+    // If the passwords do not match then error
     if ($password !== $password_confirm) {
       return error_response(15);
     }
 
+    // If the email is not valid then error
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
       return error_response(16);
     }
 
+    // If the user already exists then error
     if (User_Model::get_user_by_email($email)) {
       return error_response(17);
     }
 
-    $default_cron = '5,35 9,12,16 * * *';
-
-    if (!User_Model::set_user($email, $password, $default_cron)) {
+    // Set the user and error if it fails
+    if (!User_Model::set_user($email, $password, $this->cron)) {
       return error_response(18);
     }
 
     return $this->login($email, $password);
   }
 
-  function logout() {
-    success_response(array('loggedIn' => false));
+  public function authenticate($auth) {
+    $this->token = $auth;
+    $user_token = new User_Tokens_Controller;
+    $user = $user_token->get_user_by_token($this->token);
+
+    if (!$user) {
+      return error_response(51);
+    }
+
+    return $this->initialise($user);
+  }
+
+  private function get_accounts() {
+    $user_accounts = new User_Accounts_Controller;
+    $accounts = $user_accounts->get_accounts_by_user_id($this->id);
+
+    if ($accounts === false) {
+      return error_response(52);
+    }
+
+    $this->accounts = $accounts;
+    return $this->accounts;
+  }
+
+  public function read($auth = false) {
+    if (!$this->id) {
+      return error_response(53);
+    }
+
+    if ($this->get_accounts() === false) {
+      return error_response(54);
+    }
+
+    $data = array(
+      'accounts' => $this->accounts,
+      'cron' => $this->cron,
+      'loggedIn' => true
+    );
+
+    if ($auth) {
+      $data['auth'] = $auth;
+    }
+
+    return success_response($data);
+  }
+
+  public function logout() {
+    $user_token = new User_Tokens_Controller;
+    $user_token->delete_user_token($this->token, $this->id);
+
+    $data = array('loggedIn' => false);
+    return success_response($data);
   }
 }
