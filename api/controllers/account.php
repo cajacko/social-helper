@@ -1,5 +1,9 @@
 <?php
 
+require_once('../models/account.php');
+require_once('../controllers/user-accounts.php');
+require_once('../helpers/error-response.php');
+
 class Account_Controller {
   private $id = false;
   private $token = false;
@@ -9,11 +13,72 @@ class Account_Controller {
   private $queries = array();
   private $tweets = array();
 
+  public function get_account_id() {
+    return $this->id;
+  }
+
   public function delete() {
 
   }
 
-  public function create() {
+  private function initialise_account($account) {
+    $this->id = $account['id'];
+    $this->token = $account['token'];
+    $this->secret = $account['secret'];
+    $this->username = $account['username'];
+  }
 
+  public function create($user, $token, $secret, $username) {
+    $account = Account_Model::get_account_by_username($username);
+
+    if ($account) {
+      $this->initialise_account($account);
+    }
+
+    $user_accounts = new User_Accounts_Controller;
+
+    // If the account exists then update it
+    if ($this->id) {
+      $account = Account_Model::update_account(
+        $this->id,
+        $token,
+        $secret,
+        $username
+      );
+
+      if (!$account) {
+        return error_response();
+      }
+
+      $this->initialise_account($account);
+
+      if ($user_accounts->user_account_exists($user, $this)) {
+        return $user->read();
+      }
+
+      if (!$user_accounts->create_user_account($user, $this)) {
+        return error_response();
+      }
+
+      return $user->read();
+    }
+
+    $account = Account_Model::create_account(
+      $token,
+      $secret,
+      $username
+    );
+
+    if (!$account) {
+      return error_response();
+    }
+
+    $this->initialise_account($account);
+
+    if (!$user_accounts->create_user_account($user, $this)) {
+      return error_response();
+    }
+
+    return $user->read();
   }
 }

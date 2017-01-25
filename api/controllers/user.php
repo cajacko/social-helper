@@ -14,6 +14,10 @@ class User_Controller {
   private $cron = '5,35 9,12,16 * * *';
   private $token = false;
 
+  public function get_user_id() {
+    return $this->id;
+  }
+
   private function initialise($user) {
     $this->id = $user['id'];
     $this->email = $user['email'];

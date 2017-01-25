@@ -210,5 +210,9 @@
   "54": {
     "status": 200,
     "message": "Could not get accounts"
+  },
+  "54": {
+    "status": 200,
+    "message": "Could not insert row and return the row"
   }
 }

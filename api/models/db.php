@@ -28,7 +28,11 @@ class Db {
     $stmt = self::$connection->prepare($query);
 
     if (!$stmt) {
-      return error_response(32);
+      return error_response(32, array(
+        self::$connection->error,
+        $query,
+        $params
+      ));
     }
 
     if (count($params)) {
@@ -92,6 +96,27 @@ class Db {
     }
 
     return self::$connection->lastInsertId();
+  }
+
+  public static function insert_return_row($query = false, $params, $table) {
+    if(!self::query($query, $params)->get_result()) {
+      return error_response(55);
+    }
+
+    $insert_id = self::$connection->lastInsertId();
+
+    $query = '
+      SELECT *
+      FROM ?
+      WHERE id = ?
+    ';
+
+    $params = array(
+      array('s', $table),
+      array('i', $insert_id)
+    );
+
+    return self::get_only_row($query, $params);
   }
 }
 
