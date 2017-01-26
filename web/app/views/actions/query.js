@@ -18,9 +18,10 @@ export function deleteQuery(id) {
   return fetcher('query/delete', data, actionTypes.QUERY_DELETE)
 }
 
-export function createQuery(query) {
+export function createQuery(query, accountId) {
   const data = {
-    query: query
+    query: query,
+    accountId: accountId
   }
 
   return fetcher('query/create', data, actionTypes.QUERY_CREATE)

@@ -2,6 +2,7 @@
 
 require_once('../models/account.php');
 require_once('../controllers/user-accounts.php');
+require_once('../controllers/account-queries.php');
 require_once('../helpers/error-response.php');
 
 class Account_Controller {
@@ -10,7 +11,7 @@ class Account_Controller {
   private $secret = false;
   private $username = false;
   private $twitter_id = false;
-  private $queries = array();
+  private $queries = false;
   private $tweets = array();
 
   public function get_account_id() {
@@ -23,6 +24,28 @@ class Account_Controller {
 
   public function delete() {
 
+  }
+
+  public function get_account_queries() {
+    $this->queries = new Account_Queries_Controller;
+    $this->queries->get_account_queries($this->id);
+    return $this->queries;
+  }
+
+  public function get_account_queries_array() {
+    $this->get_account_queries();
+    $queries = $this->queries->get_queries($this->id);
+
+    $array = array();
+
+    foreach ($queries as $query) {
+      $array_item = array();
+      $array_item['query'] = $query->get_query();
+      $array_item['id'] = $query->get_query_id();
+      $array[] = $array_item;
+    }
+
+    return $array;
   }
 
   public function initialise_account($account) {

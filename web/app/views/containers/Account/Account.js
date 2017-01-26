@@ -27,6 +27,14 @@ const AccountContainer = React.createClass({
     }
   },
 
+  componentWillReceiveProps: function(nextProps) {
+    if (this.props.queries !== nextProps.queries) {
+      this.setState({
+        queries: nextProps.queries
+      })
+    }
+  },
+
   updateQuery: function(id, query) {
     this.props.dispatch(updateQuery(id, query))
   },
@@ -36,7 +44,7 @@ const AccountContainer = React.createClass({
   },
 
   createQuery: function(query) {
-    this.props.dispatch(createQuery(query))
+    this.props.dispatch(createQuery(query, this.props.id))
   },
 
   addQuery: function() {

@@ -4,12 +4,12 @@ export const USERNAME = React.PropTypes.string.isRequired
 
 export const ACCOUNTS = React.PropTypes.array.isRequired
 export const ACCOUNT_DELETE = React.PropTypes.func.isRequired
-export const ACCOUNT_ID = React.PropTypes.string.isRequired
+export const ACCOUNT_ID = React.PropTypes.number.isRequired
 
 export const QUERIES = React.PropTypes.array.isRequired
 export const QUERY = React.PropTypes.string.isRequired
 export const QUERY_ID = React.PropTypes.oneOfType([
-  React.PropTypes.string,
+  React.PropTypes.number,
   React.PropTypes.bool
 ]).isRequired
 export const QUERY_UPDATE = React.PropTypes.func.isRequired

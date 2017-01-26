@@ -49,7 +49,11 @@ class Db {
     }
 
     if (!$stmt->execute()) {
-      return error_response(34);
+      return error_response(34, array(
+        'query' => $query,
+        'params' => $params,
+        'stmt' => $stmt
+      ));
     }
 
     return $stmt;
@@ -99,20 +103,25 @@ class Db {
   }
 
   public static function insert_return_row($query = false, $params, $table) {
-    if(!self::query($query, $params)->get_result()) {
+    $stmt = self::query($query, $params);
+
+    if(!$stmt) {
       return error_response(55);
     }
 
-    $insert_id = self::$connection->lastInsertId();
+    $insert_id = $stmt->insert_id;
+
+    if(!$insert_id) {
+      return error_response(68);
+    }
 
     $query = '
       SELECT *
-      FROM ?
+      FROM ' . $table . '
       WHERE id = ?
     ';
 
     $params = array(
-      array('s', $table),
       array('i', $insert_id)
     );
 

@@ -26,6 +26,10 @@ function error_response($code = 0, $data = false) {
 
   if (!$error) {
     $error = get_error(12);
+    $data = array(
+      'code' => $code,
+      'data' => $data
+    );
   }
 
   $error['data'] = $data;

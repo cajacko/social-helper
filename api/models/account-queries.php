@@ -31,4 +31,20 @@ class Account_Queries_Model {
 
     return Db::query($query, $params);
   }
+
+  public function get_account_queries($account_id) {
+    $query = '
+      SELECT *
+      FROM account_queries
+      INNER JOIN queries
+      ON account_queries.query_id = queries.id
+      WHERE account_queries.account_id = ?
+    ';
+
+    $params = array(
+      array('i', $account_id)
+    );
+
+    return Db::get_rows($query, $params);
+  }
 }

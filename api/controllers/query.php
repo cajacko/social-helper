@@ -17,7 +17,15 @@ class Query_Controller {
 
   }
 
-  private function initilise($query) {
+  public function get_query() {
+    return $this->query;
+  }
+
+  public function get_query_id() {
+    return $this->id;
+  }
+
+  public function initilise($query) {
     $this->query = $query['query'];
     $this->id = $query['id'];
   }
@@ -29,14 +37,14 @@ class Query_Controller {
       $this->initilise($query);
     }
 
-    $account_queries = new Account_Queries;
+    $account_queries = new Account_Queries_Controller;
 
     if ($this->id) {
       if ($account_queries->account_query_exists($user, $this)) {
         return error_response(56);
       }
 
-      if (!$account_queries->create_account_query($user, $this)) {
+      if (!$account_queries->create_account_query($account_id, $this)) {
         return error_response(57);
       }
 

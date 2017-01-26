@@ -31,7 +31,7 @@ class User_Accounts_Controller {
       $account_array = array();
       $account_array['id'] = $account->get_account_id();
       $account_array['username'] = $account->get_account_username();
-      $account_array['queries'] = array();
+      $account_array['queries'] = $account->get_account_queries_array();
       $accounts[] = $account_array;
     }
 

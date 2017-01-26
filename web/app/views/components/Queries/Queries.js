@@ -17,6 +17,8 @@ const Queries = React.createClass({
     const deleteQuery = this.props.delete
     const createQuery = this.props.create
 
+    console.log('render', this.props.queries)
+
     let addButton = false
 
     if (this.props.showAddButton) {

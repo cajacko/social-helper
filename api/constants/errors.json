@@ -211,6 +211,10 @@
     "status": 200,
     "message": "Could not get accounts"
   },
+  "55": {
+    "status": 200,
+    "message": "Could not insert row"
+  },
   "56": {
     "status": 200,
     "message": "The query already exists for this account"
@@ -258,5 +262,9 @@
   "67": {
     "status": 200,
     "message": "Query is not set"
+  },
+  "68": {
+    "status": 200,
+    "message": "Could not get insert id"
   }
 }
