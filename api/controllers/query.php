@@ -2,6 +2,7 @@
 
 require_once('../models/query.php');
 require_once('../controllers/account-queries.php');
+require_once('../controllers/tweets.php');
 require_once('../helpers/error-response.php');
 
 class Query_Controller {
@@ -64,5 +65,11 @@ class Query_Controller {
     }
 
     $user->read();
+  }
+
+  public function save_new_tweets() {
+    $this->tweets = new Tweets_Controller;
+    $this->tweets->get_tweets($this);
+    $this->tweets->save_tweets();
   }
 }

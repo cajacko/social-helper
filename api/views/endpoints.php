@@ -1,5 +1,7 @@
 <?php
 
+define('CRON', false);
+
 require_once('../helpers/common.php');
 require_once('../helpers/error-response.php');
 

@@ -20,7 +20,7 @@ class Db {
     }
   }
 
-  public static function query($query = false, $params = array()) {
+  public static function query($query = false, $params = false) {
     if (!$query) {
       return error_response(31);
     }
@@ -35,7 +35,7 @@ class Db {
       ));
     }
 
-    if (count($params)) {
+    if ($params && count($params)) {
       $types = '';
       $bind_params = array();
 
@@ -59,7 +59,7 @@ class Db {
     return $stmt;
   }
 
-  public static function row_exists($query = false, $params) {
+  public static function row_exists($query = false, $params = false) {
     $res = self::query($query, $params)->get_result();
 
     if (!$res->num_rows) {
@@ -69,7 +69,7 @@ class Db {
     return true;
   }
 
-  public static function get_only_row($query = false, $params) {
+  public static function get_only_row($query = false, $params = false) {
     $res = self::query($query, $params)->get_result();
 
     if (!$res->num_rows) {
@@ -83,7 +83,7 @@ class Db {
     return $res->fetch_assoc();
   }
 
-  public static function get_rows($query = false, $params) {
+  public static function get_rows($query = false, $params = false) {
     $res = self::query($query, $params)->get_result();
     $rows = array();
 
@@ -94,7 +94,7 @@ class Db {
     return $rows;
   }
 
-  public static function insert_return_id($query = false, $params) {
+  public static function insert_return_id($query = false, $params = false) {
     if(!self::query($query, $params)->get_result()) {
       return error_response(46);
     }
@@ -102,7 +102,7 @@ class Db {
     return self::$connection->lastInsertId();
   }
 
-  public static function insert_return_row($query = false, $params, $table) {
+  public static function insert_return_row($query = false, $params = false, $table) {
     $stmt = self::query($query, $params);
 
     if(!$stmt) {

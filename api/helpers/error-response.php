@@ -37,6 +37,11 @@ function error_response($code = 0, $data = false) {
   $status = $error['status'];
   unset($error['status']);
 
+  if (CRON) {
+    print_r($error);
+    throw new Exception('Uh oh ' . $error['code']);
+  }
+
   header('Content-Type: application/json');
   http_response_code($status);
   echo json_encode($error, JSON_PRETTY_PRINT);

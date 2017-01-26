@@ -35,7 +35,7 @@ CREATE TABLE `account_queries` (
   `account_id` int(11) DEFAULT NULL,
   `query_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -47,11 +47,12 @@ DROP TABLE IF EXISTS `accounts`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `accounts` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(256) DEFAULT NULL,
-  `token` varchar(256) DEFAULT NULL,
-  `secret` varchar(256) DEFAULT NULL,
+  `username` varchar(256) NOT NULL DEFAULT '',
+  `token` varchar(256) NOT NULL DEFAULT '',
+  `secret` varchar(256) NOT NULL DEFAULT '',
+  `twitter_id` varchar(256) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,7 +69,7 @@ CREATE TABLE `auth_tokens` (
   `expires` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `token` (`token`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -80,9 +81,30 @@ DROP TABLE IF EXISTS `queries`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `queries` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `query` varchar(256) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `query` varchar(256) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `query` (`query`)
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `tweets`
+--
+
+DROP TABLE IF EXISTS `tweets`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tweets` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `tweet_id` varchar(256) NOT NULL DEFAULT '',
+  `created` datetime NOT NULL,
+  `retweets` int(11) NOT NULL,
+  `favourites` int(11) NOT NULL,
+  `user_id` varchar(256) NOT NULL DEFAULT '',
+  `tweet` text NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `tweet_id` (`tweet_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -114,7 +136,7 @@ CREATE TABLE `users` (
   `cron` varchar(256) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -126,4 +148,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-01-22  5:24:44
+-- Dump completed on 2017-01-26 17:52:01
