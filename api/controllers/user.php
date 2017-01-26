@@ -96,7 +96,8 @@ class User_Controller {
 
   private function get_accounts() {
     $user_accounts = new User_Accounts_Controller;
-    $accounts = $user_accounts->get_accounts_by_user_id($this->id);
+    $user_accounts->get_accounts_by_user_id($this->id);
+    $accounts = $user_accounts->get_accounts_array();
 
     if ($accounts === false) {
       return error_response(52);

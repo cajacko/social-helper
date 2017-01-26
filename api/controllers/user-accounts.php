@@ -1,6 +1,7 @@
 <?php
 
 require_once('../models/user-accounts.php');
+require_once('../controllers/account.php');
 
 class User_Accounts_Controller {
   private $id = false;
@@ -12,10 +13,29 @@ class User_Accounts_Controller {
     $accounts = User_Accounts_Model::get_accounts_by_user_id($user_id);
 
     if ($accounts) {
-      $this->accounts = $accounts;
+      foreach($accounts as $account_data) {
+        $account = new Account_Controller;
+        $account->initialise_account($account_data);
+
+        $this->accounts[] = $account;
+      }
     }
 
     return $this->accounts;
+  }
+
+  public function get_accounts_array() {
+    $accounts = array();
+
+    foreach($this->accounts as $account) {
+      $account_array = array();
+      $account_array['id'] = $account->get_account_id();
+      $account_array['username'] = $account->get_account_username();
+      $account_array['queries'] = array();
+      $accounts[] = $account_array;
+    }
+
+    return $accounts;
   }
 
   public function user_account_exists($user, $account) {

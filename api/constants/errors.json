@@ -211,8 +211,52 @@
     "status": 200,
     "message": "Could not get accounts"
   },
-  "54": {
+  "56": {
     "status": 200,
-    "message": "Could not insert row and return the row"
+    "message": "The query already exists for this account"
+  },
+  "57": {
+    "status": 200,
+    "message": "Could not add the query to the account"
+  },
+  "58": {
+    "status": 200,
+    "message": "Could not create the query"
+  },
+  "59": {
+    "status": 200,
+    "message": "Could not add the query to the account"
+  },
+  "60": {
+    "status": 200,
+    "message": "User account already exists"
+  },
+  "61": {
+    "status": 200,
+    "message": "Could not create user account"
+  },
+  "62": {
+    "status": 200,
+    "message": "Could not create account"
+  },
+  "63": {
+    "status": 200,
+    "message": "Could not create user account"
+  },
+  "64": {
+    "status": 200,
+    "message": "Could not update account"
+  },
+  "65": {
+    "status": 200,
+    "message": "Account id is not set"
+  },
+  "66": {
+    "status": 200,
+    "message": "Query id is not set"
+  },
+  "67": {
+    "status": 200,
+    "message": "Query is not set"
   }
 }

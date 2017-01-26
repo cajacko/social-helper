@@ -17,11 +17,15 @@ class Account_Controller {
     return $this->id;
   }
 
+  public function get_account_username() {
+    return $this->username;
+  }
+
   public function delete() {
 
   }
 
-  private function initialise_account($account) {
+  public function initialise_account($account) {
     $this->id = $account['id'];
     $this->token = $account['token'];
     $this->secret = $account['secret'];
@@ -47,17 +51,17 @@ class Account_Controller {
       );
 
       if (!$account) {
-        return error_response();
+        return error_response(64);
       }
 
       $this->initialise_account($account);
 
       if ($user_accounts->user_account_exists($user, $this)) {
-        return $user->read();
+        return $user->read(60);
       }
 
       if (!$user_accounts->create_user_account($user, $this)) {
-        return error_response();
+        return error_response(61);
       }
 
       return $user->read();
@@ -70,13 +74,13 @@ class Account_Controller {
     );
 
     if (!$account) {
-      return error_response();
+      return error_response(62);
     }
 
     $this->initialise_account($account);
 
     if (!$user_accounts->create_user_account($user, $this)) {
-      return error_response();
+      return error_response(63);
     }
 
     return $user->read();

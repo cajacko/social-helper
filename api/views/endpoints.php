@@ -170,15 +170,15 @@ switch($controller) {
     switch($endpoint) {
       case 'update':
         if (!isset($post_data['accountId'])) {
-          error_response();
+          error_response(65);
         }
 
         if (!isset($post_data['queryId'])) {
-          error_response();
+          error_response(66);
         }
 
         if (!isset($post_data['query'])) {
-          error_response();
+          error_response(67);
         }
 
         $query->update(
@@ -192,11 +192,11 @@ switch($controller) {
 
       case 'delete':
         if (!isset($post_data['accountId'])) {
-          error_response();
+          error_response(65);
         }
 
         if (!isset($post_data['queryId'])) {
-          error_response();
+          error_response(66);
         }
 
         $query->delete(
@@ -209,11 +209,11 @@ switch($controller) {
 
       case 'create':
         if (!isset($post_data['accountId'])) {
-          error_response();
+          error_response(65);
         }
 
         if (!isset($post_data['query'])) {
-          error_response();
+          error_response(67);
         }
 
         $query->create(

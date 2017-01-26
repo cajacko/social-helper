@@ -1,7 +1,6 @@
 <?php
 
 require_once('db.php');
-require_once('../helpers/error-response.php');
 
 class Cron_Model {
   public static function get_user_cron($user_id) {
