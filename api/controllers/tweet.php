@@ -16,11 +16,25 @@ class Tweet_Controller {
   private $id = false;
 
   function __construct() {
-    $this->query = new Tweet_Query;
+    $this->query = new Tweet_Query_Controller;
+  }
+
+  public function get_tweet_id() {
+    return $this->tweet_id;
   }
 
   public function get_id() {
     return $this->id;
+  }
+
+  public function initialise_from_db($tweet_data) {
+    $this->json = $tweet_data['tweet'];
+    $this->tweet_id = $tweet_data['tweet_id'];
+    $this->created = $tweet_data['created'];
+    $this->retweets = $tweet_data['retweets'];
+    $this->favourites = $tweet_data['favourites'];
+    $this->user_id = $tweet_data['user_id'];
+    $this->id = $tweet_data['id'];
   }
 
   public function initialise($tweet_data, $query) {

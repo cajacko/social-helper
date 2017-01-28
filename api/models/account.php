@@ -32,6 +32,20 @@ class Account_Model {
     return Db::get_only_row($query, $params);
   }
 
+  public static function get_account_by_id($account_id) {
+    $query = '
+      SELECT *
+      FROM accounts
+      WHERE id = ?
+    ';
+
+    $params = array(
+      array('i', $account_id)
+    );
+
+    return Db::get_only_row($query, $params);
+  }
+
   public static function update_account($id, $token, $secret, $username) {
     $query = '
       UPDATE accounts

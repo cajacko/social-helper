@@ -26,6 +26,10 @@ class Query_Controller {
     return $this->id;
   }
 
+  public function set_id($query_id) {
+    $this->id = $query_id;
+  }
+
   public function initilise($query) {
     $this->query = $query['query'];
     $this->id = $query['id'];

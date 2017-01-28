@@ -7,6 +7,7 @@ use Abraham\TwitterOAuth\TwitterOAuth;
 
 class Twitter_Model {
   private $app = false;
+  private $user = false;
 
   public function initialise_app() {
     $app = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET);
@@ -29,5 +30,32 @@ class Twitter_Model {
     }
 
     return $tweets->statuses;
+  }
+
+  public function retweet($tweet_id) {
+    $endpoint = 'statuses/retweet';
+
+    $params = array(
+      'id' => $tweet_id
+    );
+
+    $response = $this->user->post($endpoint, $params);
+
+    print_r($response);
+
+    if ($response->errors) {
+      return false;
+    }
+
+    if (!$response->id_str) {
+      return error_response(398659084);
+    }
+
+    return true;
+  }
+
+  public function initialise_user($token, $secret) {
+    $user = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $token, $secret);
+    $this->user = $user;
   }
 }

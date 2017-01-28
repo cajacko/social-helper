@@ -2,7 +2,7 @@
 
 define('CRON', true);
 
-// Delete old tweets
+// Delete old tweets, unless they have been tweeted by social helper
 // Delete any join tables that don't have parents
 // Delete any queries not attached to accounts
 // Delete any accounts not attached to users

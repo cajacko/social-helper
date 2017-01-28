@@ -3,6 +3,7 @@
 require_once('../models/account.php');
 require_once('../controllers/user-accounts.php');
 require_once('../controllers/account-queries.php');
+require_once('../controllers/account-tweets.php');
 require_once('../helpers/error-response.php');
 
 class Account_Controller {
@@ -19,9 +20,60 @@ class Account_Controller {
     return $this->cron;
   }
 
-  public function tweet_if_ready() {
+  public function get_token() {
+    return $this->token;
+  }
+
+  public function get_secret() {
+    return $this->secret;
+  }
+
+  private function is_time_to_tweet($account_tweets) {
+    return true;
+
     // TODO
-    return error_response(4865098);
+    // $account_tweet->get_last_tweet();
+    // $tweet_date = $account_tweet->get_date();
+    // $latest_cron_date = $this->get_latest_cron_date();
+    //
+    // if ($tweet_date >= $latest_cron_date) {
+    //   return false;
+    // }
+    //
+    // return true;
+  }
+
+  public function get_account_by_id($account_id) {
+    $account = Account_Model::get_account_by_id($account_id);
+
+    if ($account) {
+      return $this->initialise_account($account);
+    }
+
+    return error_response(938659);
+  }
+
+  public function tweet_if_ready() {
+    $account_tweets = new Account_Tweets_Controller;
+    $account_tweets->set_account_id($this->id);
+
+    if (!$this->is_time_to_tweet($account_tweets)) {
+      return false;
+    }
+
+    $query_order = $account_tweets->get_query_order();
+
+    if (!$query_order) {
+      return false;
+    }
+
+    foreach ($query_order as $account_query) {
+      if ($account_query->tweet_next()) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   public function get_account_id() {
