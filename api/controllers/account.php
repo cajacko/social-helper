@@ -55,8 +55,8 @@ class Account_Controller {
     $this->username = $account['username'];
   }
 
-  public function create($user, $token, $secret, $username) {
-    $account = Account_Model::get_account_by_username($username);
+  public function create($user, $token, $secret, $username, $twitter_id) {
+    $account = Account_Model::get_account_by_twitter_id($twitter_id);
 
     if ($account) {
       $this->initialise_account($account);
@@ -93,7 +93,8 @@ class Account_Controller {
     $account = Account_Model::create_account(
       $token,
       $secret,
-      $username
+      $username,
+      $twitter_id
     );
 
     if (!$account) {

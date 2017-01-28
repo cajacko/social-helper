@@ -123,6 +123,10 @@ switch($controller) {
           error_response(40);
         }
 
+        if (!isset($post_data['twitter_id'])) {
+          error_response(9857);
+        }
+
         if (!isset($post_data['accessToken'])) {
           error_response(41);
         }
@@ -135,7 +139,8 @@ switch($controller) {
           $user,
           $post_data['accessToken'],
           $post_data['accessTokenSecret'],
-          $post_data['username']
+          $post_data['username'],
+          $post_data['twitter_id']
         );
 
         break;

@@ -17,6 +17,7 @@ exports.default = function (req, res) {
         } else {
           var postData = {
             username: data["screen_name"],
+            twitter_id: data["id_str"],
             accessToken: accessToken,
             accessTokenSecret: accessTokenSecret
           };

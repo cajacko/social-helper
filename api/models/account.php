@@ -18,15 +18,15 @@ class Account_Model {
     return Db::get_rows($query, $params);
   }
 
-  public static function get_account_by_username($account_username) {
+  public static function get_account_by_twitter_id($twitter_id) {
     $query = '
       SELECT *
       FROM accounts
-      WHERE username = ?
+      WHERE twitter_id = ?
     ';
 
     $params = array(
-      array('s', $account_username)
+      array('s', $twitter_id)
     );
 
     return Db::get_only_row($query, $params);
@@ -63,16 +63,17 @@ class Account_Model {
     return Db::get_only_row($query, $params);
   }
 
-  public static function create_account($token, $secret, $username) {
+  public static function create_account($token, $secret, $username, $twitter_id) {
     $query = '
-      INSERT INTO accounts (token, username, secret)
-      VALUES (?, ?, ?)
+      INSERT INTO accounts (token, username, secret, twitter_id)
+      VALUES (?, ?, ?, ?)
     ';
 
     $params = array(
       array('s', $token),
       array('s', $username),
-      array('s', $secret)
+      array('s', $secret),
+      array('s', $twitter_id)
     );
 
     return Db::insert_return_row($query, $params, 'accounts');
