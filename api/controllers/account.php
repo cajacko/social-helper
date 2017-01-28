@@ -22,8 +22,14 @@ class Account_Controller {
     return $this->username;
   }
 
-  public function delete() {
+  public function delete($user, $account_id) {
+    $reponse = Account_Model::delete($account_id);
 
+    if ($response) {
+      return $user->read();
+    }
+
+    return error_response(49865, $reponse);
   }
 
   public function get_account_queries() {

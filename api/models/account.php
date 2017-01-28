@@ -96,9 +96,8 @@ class Account_Model {
   public static function delete($account_id) {
     // TODO: ON DELETE CASCADE EVEERYWHERE
     $query = '
-      DELETE *
-      FROM accounts
-      WHERE accounts.id = ?
+      DELETE FROM accounts
+      WHERE id = ?
     ';
 
     $params = array(

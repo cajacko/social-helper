@@ -44,7 +44,7 @@ class Tweet_Controller {
       return true;
     }
 
-    return error_response(89475);
+    return false;
   }
 
   public function update() {
