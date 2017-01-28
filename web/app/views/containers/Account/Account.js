@@ -3,13 +3,14 @@ import {connect} from 'react-redux'
 import Account from '~/components/Account/Account'
 import * as propTypes from '~/constants/propTypes'
 import {updateQuery, deleteQuery, createQuery} from '~/actions/query'
-import {deleteAccount} from '~/actions/account'
+import {deleteAccount, updateCron} from '~/actions/account'
 
 const AccountContainer = React.createClass({
   propTypes: {
     queries: propTypes.QUERIES,
     username: propTypes.USERNAME,
-    id: propTypes.ACCOUNT_ID
+    id: propTypes.ACCOUNT_ID,
+    cron: propTypes.CRON
   },
 
   getInitialState: function() {
@@ -63,6 +64,10 @@ const AccountContainer = React.createClass({
     this.props.dispatch(deleteAccount(this.props.id))
   },
 
+  cronSubmit: function(cron) {
+    this.props.dispatch(updateCron(this.props.id, cron))
+  },
+
   render: function() {
     let showAddButton = true
 
@@ -82,6 +87,8 @@ const AccountContainer = React.createClass({
         addQuery={this.addQuery}
         delete={this.delete}
         showAddButton={showAddButton}
+        cron={this.props.cron}
+        cronSubmit={this.cronSubmit}
       />
     )
   }

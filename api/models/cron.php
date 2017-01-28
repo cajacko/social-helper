@@ -3,30 +3,16 @@
 require_once('db.php');
 
 class Cron_Model {
-  public static function get_user_cron($user_id) {
+  public static function set_account_cron($account_id, $cron) {
     $query = '
-      SELECT cron
-      FROM users
-      WHERE id = ?
-    ';
-
-    $params = array(
-      array('i', $user_id)
-    );
-
-    return Db::get_only_row($query, $params);
-  }
-
-  public static function set_user_cron($user_id, $cron) {
-    $query = '
-      UPDATE users
+      UPDATE accounts
       SET cron = ?
       WHERE id = ?
     ';
 
     $params = array(
       array('s', $cron),
-      array('i', $user_id)
+      array('i', $account_id)
     );
 
     return Db::query($query, $params);

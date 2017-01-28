@@ -152,7 +152,7 @@ switch($controller) {
     break;
 
   case 'cron':
-    require_once('../controllers/cron-controller.php');
+    require_once('../controllers/cron.php');
     $cron = new Cron_Controller;
 
     switch($endpoint) {
@@ -161,7 +161,11 @@ switch($controller) {
           error_response(37);
         }
 
-        $cron->update($user, $post_data['cron']);
+        if (!isset($post_data['accountId'])) {
+          error_response(38649);
+        }
+
+        $cron->update($user, $post_data['accountId'], $post_data['cron']);
         break;
 
       default:

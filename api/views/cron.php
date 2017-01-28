@@ -35,6 +35,10 @@ for each account
         exit and move on to next account
 
       i++
-
-
 */
+
+require_once('../helpers/common.php');
+require_once('../controllers/accounts.php');
+
+$accounts = new Accounts_Controller;
+$accounts->tweet_from_accounts();

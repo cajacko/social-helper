@@ -4,7 +4,7 @@ import * as propTypes from '~/constants/propTypes'
 
 const Accounts = React.createClass({
   propTypes: {
-    accounts: propTypes.ACCOUNTS
+    accounts: propTypes.ACCOUNTS,
   },
 
   render: function() {
@@ -21,6 +21,7 @@ const Accounts = React.createClass({
                   queries={account.queries}
                   username={account.username}
                   id={account.id}
+                  cron={account.cron}
                 />
               )
             })

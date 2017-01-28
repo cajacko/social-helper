@@ -1,6 +1,7 @@
 import React from 'react'
 import Queries from '~/components/Queries/Queries'
 import * as propTypes from '~/constants/propTypes'
+import Cron from '~/components/Cron/Cron'
 
 const Account = React.createClass({
   propTypes: {
@@ -11,7 +12,9 @@ const Account = React.createClass({
     createQuery: propTypes.QUERY_CREATE,
     addQuery: propTypes.QUERY_ADD,
     delete: propTypes.ACCOUNT_DELETE,
-    showAddButton: propTypes.QUERY_SHOW_ADD_BUTTON
+    showAddButton: propTypes.QUERY_SHOW_ADD_BUTTON,
+    cron: propTypes.CRON,
+    cronSubmit: propTypes.CRON_UPDATE
   },
 
   render: function() {
@@ -27,6 +30,11 @@ const Account = React.createClass({
           delete={this.props.deleteQuery}
           add={this.props.addQuery}
           showAddButton={this.props.showAddButton}
+        />
+
+        <Cron
+          cron={this.props.cron}
+          submit={this.props.cronSubmit}
         />
       </div>
     )

@@ -63,17 +63,24 @@ class Account_Model {
     return Db::get_only_row($query, $params);
   }
 
-  public static function create_account($token, $secret, $username, $twitter_id) {
+  public static function create_account(
+    $token,
+    $secret,
+    $username,
+    $twitter_id,
+    $cron
+  ) {
     $query = '
-      INSERT INTO accounts (token, username, secret, twitter_id)
-      VALUES (?, ?, ?, ?)
+      INSERT INTO accounts (token, username, secret, twitter_id, cron)
+      VALUES (?, ?, ?, ?, ?)
     ';
 
     $params = array(
       array('s', $token),
       array('s', $username),
       array('s', $secret),
-      array('s', $twitter_id)
+      array('s', $twitter_id),
+      array('s', $cron)
     );
 
     return Db::insert_return_row($query, $params, 'accounts');

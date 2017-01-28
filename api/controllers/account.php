@@ -13,6 +13,16 @@ class Account_Controller {
   private $twitter_id = false;
   private $queries = false;
   private $tweets = array();
+  private $cron = '5,35 9,12,16 * * *';
+
+  public function get_cron() {
+    return $this->cron;
+  }
+
+  public function tweet_if_ready() {
+    // TODO
+    return error_response(4865098);
+  }
 
   public function get_account_id() {
     return $this->id;
@@ -59,6 +69,7 @@ class Account_Controller {
     $this->token = $account['token'];
     $this->secret = $account['secret'];
     $this->username = $account['username'];
+    $this->cron = $account['cron'];
   }
 
   public function create($user, $token, $secret, $username, $twitter_id) {
@@ -100,7 +111,8 @@ class Account_Controller {
       $token,
       $secret,
       $username,
-      $twitter_id
+      $twitter_id,
+      $this->cron
     );
 
     if (!$account) {

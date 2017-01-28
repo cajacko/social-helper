@@ -14,7 +14,7 @@ const Cron = React.createClass({
     }
   },
 
-  componentWillReceiveProps(nextProps) {    
+  componentWillReceiveProps(nextProps) {
     if (this.props.cron == nextProps.cron) {
       return false
     }
@@ -37,7 +37,7 @@ const Cron = React.createClass({
   render: function() {
     return (
       <div>
-        <h2>Cron</h2>
+        <h3>Cron</h3>
 
         <TextInput
           placeholder="Cron"

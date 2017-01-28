@@ -11,7 +11,6 @@ class User_Controller {
   private $email = false;
   private $password = false;
   private $accounts = false;
-  private $cron = '5,35 9,12,16 * * *';
   private $token = false;
 
   public function get_user_id() {
@@ -22,7 +21,6 @@ class User_Controller {
     $this->id = $user['id'];
     $this->email = $user['email'];
     $this->password = $user['password'];
-    $this->cron = $user['cron'];
     return true;
   }
 
@@ -75,7 +73,7 @@ class User_Controller {
     }
 
     // Set the user and error if it fails
-    if (!User_Model::set_user($email, $password, $this->cron)) {
+    if (!User_Model::set_user($email, $password)) {
       return error_response(18);
     }
 
@@ -118,7 +116,6 @@ class User_Controller {
 
     $data = array(
       'accounts' => $this->accounts,
-      'cron' => $this->cron,
       'loggedIn' => true
     );
 

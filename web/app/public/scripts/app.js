@@ -29039,16 +29039,11 @@
 
 	var _accounts2 = _interopRequireDefault(_accounts);
 
-	var _cron = __webpack_require__(281);
-
-	var _cron2 = _interopRequireDefault(_cron);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var app = (0, _redux.combineReducers)({
 	  loggedIn: _loggedIn2.default,
 	  accounts: _accounts2.default,
-	  cron: _cron2.default,
 	  routing: _reactRouterRedux.routerReducer
 	});
 
@@ -29571,63 +29566,7 @@
 		var defaultState = false;
 
 /***/ },
-/* 281 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	exports.default = function () {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultState;
-	  var action = arguments[1];
-
-	  switch (action.type) {
-	    case (0, _getFetcherAction2.default)(actionTypes.USER_LOGIN, _fetcher.SUCCESS):
-	    case (0, _getFetcherAction2.default)(actionTypes.USER_READ, _fetcher.SUCCESS):
-	    case (0, _getFetcherAction2.default)(actionTypes.USER_CREATE, _fetcher.SUCCESS):
-	    case (0, _getFetcherAction2.default)(actionTypes.CRON_UPDATE, _fetcher.SUCCESS):
-	    case (0, _getFetcherAction2.default)(actionTypes.QUERY_UPDATE, _fetcher.SUCCESS):
-	    case (0, _getFetcherAction2.default)(actionTypes.QUERY_CREATE, _fetcher.SUCCESS):
-	    case (0, _getFetcherAction2.default)(actionTypes.QUERY_DELETE, _fetcher.SUCCESS):
-	    case (0, _getFetcherAction2.default)(actionTypes.ACCOUNT_DELETE, _fetcher.SUCCESS):
-	      if (action.payload.data.cron) {
-	        return action.payload.data.cron;
-	      }
-
-	      return state;
-
-	    case (0, _getFetcherAction2.default)(actionTypes.USER_LOGOUT, _fetcher.SUCCESS):
-	      if (!action.payload.data.loggedIn) {
-	        return defaultState;
-	      }
-
-	      return state;
-
-	    default:
-	      return state;
-	  }
-	};
-
-	var _actions = __webpack_require__(277);
-
-	var actionTypes = _interopRequireWildcard(_actions);
-
-	var _getFetcherAction = __webpack_require__(278);
-
-	var _getFetcherAction2 = _interopRequireDefault(_getFetcherAction);
-
-	var _fetcher = __webpack_require__(279);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-		var defaultState = false;
-
-/***/ },
+/* 281 */,
 /* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -33118,10 +33057,6 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Cron = __webpack_require__(360);
-
-	var _Cron2 = _interopRequireDefault(_Cron);
-
 	var _Accounts = __webpack_require__(363);
 
 	var _Accounts2 = _interopRequireDefault(_Accounts);
@@ -33155,8 +33090,7 @@
 	        { onClick: this.props.logout },
 	        'Log Out'
 	      ),
-	      _react2.default.createElement(_Accounts2.default, null),
-	      _react2.default.createElement(_Cron2.default, null)
+	      _react2.default.createElement(_Accounts2.default, null)
 	    );
 	  }
 	});
@@ -33164,53 +33098,7 @@
 		exports.default = Dashboard;
 
 /***/ },
-/* 360 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(233);
-
-	var _Cron = __webpack_require__(361);
-
-	var _Cron2 = _interopRequireDefault(_Cron);
-
-	var _cron = __webpack_require__(362);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var CronContainer = _react2.default.createClass({
-	  displayName: 'CronContainer',
-
-	  submit: function submit(cron) {
-	    this.props.dispatch((0, _cron.updateCron)(cron));
-	  },
-
-	  render: function render() {
-	    return _react2.default.createElement(_Cron2.default, {
-	      cron: this.props.cron,
-	      submit: this.submit
-	    });
-	  }
-	});
-
-	function mapStateToProps(state) {
-	  return {
-	    cron: state.cron
-	  };
-	}
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps)(CronContainer);
-
-/***/ },
+/* 360 */,
 /* 361 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -33276,7 +33164,7 @@
 	      'div',
 	      null,
 	      _react2.default.createElement(
-	        'h2',
+	        'h3',
 	        null,
 	        'Cron'
 	      ),
@@ -33298,37 +33186,7 @@
 		exports.default = Cron;
 
 /***/ },
-/* 362 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.updateCron = updateCron;
-
-	var _fetcher = __webpack_require__(285);
-
-	var _fetcher2 = _interopRequireDefault(_fetcher);
-
-	var _actions = __webpack_require__(277);
-
-	var actionTypes = _interopRequireWildcard(_actions);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function updateCron(cron) {
-	  var data = {
-	    cron: cron
-	  };
-
-	  return (0, _fetcher2.default)('cron/update', data, actionTypes.CRON_UPDATE);
-	}
-
-/***/ },
+/* 362 */,
 /* 363 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -33418,7 +33276,8 @@
 	            key: account.username,
 	            queries: account.queries,
 	            username: account.username,
-	            id: account.id
+	            id: account.id,
+	            cron: account.cron
 	          });
 	        })
 	      ),
@@ -33471,7 +33330,8 @@
 	  propTypes: {
 	    queries: propTypes.QUERIES,
 	    username: propTypes.USERNAME,
-	    id: propTypes.ACCOUNT_ID
+	    id: propTypes.ACCOUNT_ID,
+	    cron: propTypes.CRON
 	  },
 
 	  getInitialState: function getInitialState() {
@@ -33525,6 +33385,10 @@
 	    this.props.dispatch((0, _account.deleteAccount)(this.props.id));
 	  },
 
+	  cronSubmit: function cronSubmit(cron) {
+	    this.props.dispatch((0, _account.updateCron)(this.props.id, cron));
+	  },
+
 	  render: function render() {
 	    var showAddButton = true;
 
@@ -33542,7 +33406,9 @@
 	      createQuery: this.createQuery,
 	      addQuery: this.addQuery,
 	      'delete': this.delete,
-	      showAddButton: showAddButton
+	      showAddButton: showAddButton,
+	      cron: this.props.cron,
+	      cronSubmit: this.cronSubmit
 	    });
 	  }
 	});
@@ -33571,6 +33437,10 @@
 
 	var propTypes = _interopRequireWildcard(_propTypes);
 
+	var _Cron = __webpack_require__(361);
+
+	var _Cron2 = _interopRequireDefault(_Cron);
+
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -33586,7 +33456,9 @@
 	    createQuery: propTypes.QUERY_CREATE,
 	    addQuery: propTypes.QUERY_ADD,
 	    delete: propTypes.ACCOUNT_DELETE,
-	    showAddButton: propTypes.QUERY_SHOW_ADD_BUTTON
+	    showAddButton: propTypes.QUERY_SHOW_ADD_BUTTON,
+	    cron: propTypes.CRON,
+	    cronSubmit: propTypes.CRON_UPDATE
 	  },
 
 	  render: function render() {
@@ -33611,6 +33483,10 @@
 	        'delete': this.props.deleteQuery,
 	        add: this.props.addQuery,
 	        showAddButton: this.props.showAddButton
+	      }),
+	      _react2.default.createElement(_Cron2.default, {
+	        cron: this.props.cron,
+	        submit: this.props.cronSubmit
 	      })
 	    );
 	  }
@@ -33877,6 +33753,7 @@
 	  value: true
 	});
 	exports.deleteAccount = deleteAccount;
+	exports.updateCron = updateCron;
 
 	var _fetcher = __webpack_require__(285);
 
@@ -33896,6 +33773,15 @@
 	  };
 
 	  return (0, _fetcher2.default)('account/delete', data, actionTypes.ACCOUNT_DELETE);
+	}
+
+	function updateCron(accountId, cron) {
+	  var data = {
+	    cron: cron,
+	    accountId: accountId
+	  };
+
+	  return (0, _fetcher2.default)('cron/update', data, actionTypes.CRON_UPDATE);
 	}
 
 /***/ }

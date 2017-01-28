@@ -1,5 +1,4 @@
 import React from 'react'
-import Cron from '~/containers/Cron/Cron'
 import Accounts from '~/containers/Accounts/Accounts'
 import * as propTypes from '~/constants/propTypes'
 
@@ -15,7 +14,6 @@ const Dashboard = React.createClass({
         <button onClick={this.props.logout}>Log Out</button>
 
         <Accounts />
-        <Cron />
       </div>
     )
   }

@@ -58,16 +58,15 @@ class User_Model {
     return Db::get_only_row($query, $params);
   }
 
-  public static function set_user($email, $password, $cron) {
+  public static function set_user($email, $password) {
     $query = '
-      INSERT INTO users (email, password, cron)
-      VALUES (?, ?, ?)
+      INSERT INTO users (email, password)
+      VALUES (?, ?)
     ';
 
     $params = array(
       array('s', $email),
-      array('s', $password),
-      array('s', $cron)
+      array('s', $password)
     );
 
     if (Db::query($query, $params)) {
