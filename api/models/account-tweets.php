@@ -5,6 +5,7 @@ require_once('twitter.php');
 
 class Account_Tweets_Model {
   public static function get_query_ids_by_lowest_tweet_count($account_id, $count, $earliest_date = false) {
+    // TODO: Make sure this has croup by and count
     $query = '
       SELECT *
       FROM account_tweets
@@ -41,5 +42,20 @@ class Account_Tweets_Model {
     );
 
     return Db::query($query, $params, 'accounts');
+  }
+
+  public static function does_account_tweet_exist($tweet_id, $account_id) {
+    $query = '
+      SELECT *
+      FROM account_tweets
+      WHERE account_id = ? AND tweet_id = ?
+    ';
+
+    $params = array(
+      array('i', $account_id),
+      array('i', $tweet_id)
+    );
+
+    return Db::row_exists($query, $params);
   }
 }

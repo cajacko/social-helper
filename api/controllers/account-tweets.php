@@ -10,11 +10,14 @@ class Account_Tweets_Controller {
   private $account = false;
 
   public function retweet($query_id) {
-    $retweeted = Account_Tweets_Model::retweet(
-      $this->tweet->get_tweet_id(),
-      $this->account->get_token(),
-      $this->account->get_secret()
-    );
+    // $retweeted = Account_Tweets_Model::retweet(
+    //   $this->tweet->get_tweet_id(),
+    //   $this->account->get_token(),
+    //   $this->account->get_secret()
+    // );
+
+    echo "\n\nQuerd Id: " . $query_id . " Retweet: " . $this->tweet->get_tweet_id() . "\n\n"; return true;
+    $retweeted = true;
 
     if ($retweeted) {
       $response = Account_Tweets_Model::set_account_tweet(

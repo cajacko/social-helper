@@ -13,6 +13,15 @@ class Account_Queries_Controller {
   private $queries = array();
 
   private function filter($tweet) {
+    $exists = Account_Tweets_Model::does_account_tweet_exist(
+      $tweet->get_id(),
+      $this->account->get_account_id()
+    );
+
+    if ($exists) {
+      return false;
+    }
+
     return true;
   }
 
