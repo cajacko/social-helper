@@ -41,7 +41,7 @@ class Account_Controller {
     foreach ($queries as $query) {
       $array_item = array();
       $array_item['query'] = $query->get_query();
-      $array_item['id'] = $query->get_query_id();
+      $array_item['id'] = $query->get_id();
       $array[] = $array_item;
     }
 

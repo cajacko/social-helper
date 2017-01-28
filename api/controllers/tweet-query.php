@@ -1,19 +1,23 @@
 <?php
 
-// require_once('../models/tweet-query.php');
+require_once('../models/tweet-query.php');
 
 class Tweet_Query {
   private $tweet = false;
   private $query = false;
 
   public function exists() {
-    echo "\n tweet query exists \n";
-    return false;
+    return Tweet_Query_Model::exists(
+      $this->tweet->get_id(),
+      $this->query->get_id()
+    );
   }
 
   public function create() {
-    echo "\n tweet query create \n";
-    return false;
+    return Tweet_Query_Model::create(
+      $this->tweet->get_id(),
+      $this->query->get_id()
+    );
   }
 
   public function set_query($query) {

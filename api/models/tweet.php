@@ -23,7 +23,7 @@ class Tweet_Model {
       array('s', $tweet_id)
     );
 
-    return Db::row_exists($query, $params);
+    return Db::get_only_row($query, $params);
   }
 
   public function create($tweet_id, $created, $retweets, $favourites, $user_id, $json) {
@@ -41,7 +41,7 @@ class Tweet_Model {
       array('s', $json)
     );
 
-    return Db::query($query, $params);
+    return Db::insert_return_row($query, $params, 'tweets');
   }
 
   public function update($tweet_id, $created, $retweets, $favourites, $user_id, $json) {

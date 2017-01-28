@@ -36,8 +36,6 @@ class Tweets_Controller {
         $tweet->create();
         $tweet->query->create();
       }
-
-      exit;
     }
   }
 }

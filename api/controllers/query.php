@@ -22,7 +22,7 @@ class Query_Controller {
     return $this->query;
   }
 
-  public function get_query_id() {
+  public function get_id() {
     return $this->id;
   }
 

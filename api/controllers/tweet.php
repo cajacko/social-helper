@@ -2,6 +2,7 @@
 
 require_once('../controllers/tweet-query.php');
 require_once('../models/tweet.php');
+require_once('../helpers/error-response.php');
 
 class Tweet_Controller {
   private $json = false;
@@ -18,6 +19,10 @@ class Tweet_Controller {
     $this->query = new Tweet_Query;
   }
 
+  public function get_id() {
+    return $this->id;
+  }
+
   public function initialise($tweet_data, $query) {
     $this->data = $tweet_data;
     $this->json = json_encode($tweet_data);
@@ -31,7 +36,15 @@ class Tweet_Controller {
   }
 
   public function exists() {
-    return Tweet_Model::tweet_exists($this->tweet_id);
+    $row = Tweet_Model::tweet_exists($this->tweet_id);
+
+    if ($row && $row['id']) {
+      $this->id = $row['id'];
+      $this->query->set_tweet($this);
+      return true;
+    }
+
+    return error_response(89475);
   }
 
   public function update() {
@@ -46,7 +59,7 @@ class Tweet_Controller {
   }
 
   public function create() {
-    return Tweet_Model::create(
+    $row = Tweet_Model::create(
       $this->tweet_id,
       $this->created,
       $this->retweets,
@@ -54,5 +67,13 @@ class Tweet_Controller {
       $this->user_id,
       $this->json
     );
+
+    if ($row && $row['id']) {
+      $this->id = $row['id'];
+      $this->query->set_tweet($this);
+      return true;
+    }
+
+    return error_response(39864);
   }
 }

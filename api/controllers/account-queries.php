@@ -29,14 +29,14 @@ class Account_Queries_Controller {
   public function account_query_exists($account_id, $query) {
     return Account_Queries_Model::account_query_exists(
       $account_id,
-      $query->get_query_id()
+      $query->get_id()
     );
   }
 
   public function create_account_query($account_id, $query) {
     return Account_Queries_Model::create_account_query(
       $account_id,
-      $query->get_query_id()
+      $query->get_id()
     );
   }
 }
