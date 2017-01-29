@@ -11,7 +11,7 @@ class Queries_Controller {
     $queries = Queries_Model::get_queries();
 
     if (!$queries) {
-      return error_response();
+      return error_response(4450986);
     }
 
     $query_array = array();
