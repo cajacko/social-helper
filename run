@@ -3,5 +3,5 @@
 docker build --no-cache -t social-helper-api -f Dockerfile.api .
 docker build --no-cache -t social-helper-web -f Dockerfile.web .
 docker run -d -v $(pwd)/schema.sql:/docker-entrypoint-initdb.d/schema.sql -v db_data:/var/lib/mysql --name social-helper-db -p 3306:3306 --env-file ./.env mysql:5.7
-docker run --link social-helper-db:social-helper-db -p 3000:80 -d --name social-helper-api social-helper-api
-docker run --link social-helper-api:social-helper-api -p 80:3000 -d --name social-helper-web social-helper-web
+docker run --link social-helper-db:social-helper-db -p 3001:80 -d --name social-helper-api social-helper-api
+docker run --link social-helper-api:social-helper-api -p 3000:3000 -d --name social-helper-web social-helper-web
