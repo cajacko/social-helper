@@ -20,7 +20,7 @@
     "docker-api-bash": "docker exec -it --user root social-helper-api /bin/bash",
     "docker-run": "npm run docker-db-run && npm run docker-api-run && npm run docker-web-run",
     "docker-build": "npm run docker-api-build && npm run docker-web-build",
-    "docker-db-run": "docker run -d -v $(pwd)/schema.sql:/docker-entrypoint-initdb.d/schema.sql -v $(pwd)/mysql.conf://etc/mysql/conf.d/custom.conf --name social-helper-db -p 3306:3306 --env-file ./.env mysql:5.7",
+    "docker-db-run": "docker run -d -v $(pwd)/schema.sql:/docker-entrypoint-initdb.d/schema.sql --name social-helper-db -p 3306:3306 --env-file ./.env mysql:5.7",
     "docker-db-run-persist": "docker run -d -v social-helper-db:/var/lib/mysql -v schema.sql:/docker-entrypoint-initdb.d/data-dump.sql --name social-helper-db -p 3306:3306 --env-file ./.env mysql:5.7",
     "docker-db-backup": "docker exec social-helper-db sh -c 'exec mysqldump -d -uroot -p\"$MYSQL_ROOT_PASSWORD\" --databases $MYSQL_DATABASE' > `echo $PWD`/schema.sql"
   },

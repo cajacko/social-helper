@@ -7,10 +7,16 @@ class Account_Tweets_Model {
   public static function get_query_ids_by_lowest_tweet_count($account_id, $count, $earliest_date = false) {
     // TODO: Make sure this has croup by and count
     $query = '
-      SELECT *
-      FROM account_tweets
-      WHERE account_id = ?
-      LIMIT 0, ?
+      SELECT count(*) as count, t.query_id
+      FROM (
+        SELECT *
+        FROM account_tweets
+        WHERE account_id = ? AND error = 0
+        ORDER BY date_tweeted DESC
+        LIMIT 0, ?
+      ) t
+      GROUP BY t.query_id
+      ORDER BY count ASC
     ';
 
     $params = array(

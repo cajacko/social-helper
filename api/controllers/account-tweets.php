@@ -10,14 +10,11 @@ class Account_Tweets_Controller {
   private $account = false;
 
   public function retweet($query_id) {
-    // $retweeted = Account_Tweets_Model::retweet(
-    //   $this->tweet->get_tweet_id(),
-    //   $this->account->get_token(),
-    //   $this->account->get_secret()
-    // );
-
-    echo "\n\nQuerd Id: " . $query_id . " Retweet: " . $this->tweet->get_tweet_id() . "\n\n"; return true;
-    $retweeted = true;
+    $retweeted = Account_Tweets_Model::retweet(
+      $this->tweet->get_tweet_id(),
+      $this->account->get_token(),
+      $this->account->get_secret()
+    );
 
     if ($retweeted) {
       $response = Account_Tweets_Model::set_account_tweet(
@@ -64,14 +61,19 @@ class Account_Tweets_Controller {
 
   public function get_query_order() {
     $query_ids_by_lowest_count = Account_Tweets_Model::get_query_ids_by_lowest_tweet_count($this->account_id, 10);
+    $queries = array();
+
+    foreach($query_ids_by_lowest_count as $query) {
+      $queries[] = $query['query_id'];
+    }
 
     $account_queries = new Account_Queries_Model;
-    $queries = $account_queries->get_account_queries($this->account_id);
+    $all_queries = $account_queries->get_account_queries($this->account_id);
 
     $no_tweet_queries = array();
 
-    foreach($queries as $query_data) {
-      if (!in_array($query_data['id'], $query_ids_by_lowest_count)) {
+    foreach($all_queries as $query_data) {
+      if (!in_array($query_data['id'], $queries)) {
         $no_tweet_queries[] = $query_data['id'];
       }
     }
@@ -79,12 +81,12 @@ class Account_Tweets_Controller {
     shuffle($no_tweet_queries);
 
     foreach($no_tweet_queries as $query_id) {
-      array_unshift($query_ids_by_lowest_count, $query_id);
+      array_unshift($queries, $query_id);
     }
 
     $query_array = array();
 
-    foreach($query_ids_by_lowest_count as $query_id) {
+    foreach($queries as $query_id) {
       $account_query = new Account_Queries_Controller;
       $account_query->set_query($query_id);
       $account_query->set_account($this->account_id);
