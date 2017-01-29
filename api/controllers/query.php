@@ -9,6 +9,8 @@ class Query_Controller {
   private $id = false;
   private $query = false;
   private $tweets = array();
+  private $last_started_cron = false;
+  private $last_ran_cron = false;
 
   public function update() {
 
@@ -16,6 +18,14 @@ class Query_Controller {
 
   public function delete() {
 
+  }
+
+  public function get_last_started_cron() {
+    return $this->last_started_cron;
+  }
+
+  public function get_last_ran_cron() {
+    return $this->last_ran_cron;
   }
 
   public function set_last_started_cron() {
@@ -41,6 +51,8 @@ class Query_Controller {
   public function initilise($query) {
     $this->query = $query['query'];
     $this->id = $query['id'];
+    $this->last_started_cron = $query['last_started_cron'];
+    $this->last_ran_cron = $query['last_ran_cron'];
   }
 
   public function create($user, $account_id, $value) {

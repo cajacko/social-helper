@@ -25,13 +25,30 @@ class Queries_Controller {
     $this->queries = $query_array;
   }
 
+  private function should_save_new_tweets($query) {
+    $last_started = strtotime($query->get_last_started_cron());
+    $last_ran = strtotime($query->get_last_ran_cron());
+
+    if ($last_ran >= $last_started) {
+      return true;
+    }
+
+    if ($last_started > strtotime('+10 minutes')) {
+      return true;
+    }
+
+    return false;
+  }
+
   public function save_new_tweets() {
     $this->get_queries();
 
     foreach ($this->queries as $query) {
-      $query->set_last_started_cron();
-      $query->save_new_tweets();
-      $query->set_last_ran_cron();
+      if ($this->should_save_new_tweets($query)) {
+        $query->set_last_started_cron();
+        $query->save_new_tweets();
+        $query->set_last_ran_cron();
+      }
     }
   }
 }

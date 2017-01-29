@@ -17,6 +17,15 @@ class Account_Controller {
   private $cron = '5,35 9,12,16 * * * *';
   private $date_created = false;
   private $last_ran_cron = false;
+  private $last_started_cron = false;
+
+  public function get_last_started_cron() {
+    return $this->last_started_cron;
+  }
+
+  public function get_last_ran_cron() {
+    return $this->last_ran_cron;
+  }
 
   public function set_last_started_cron() {
     Account_Model::set_last_started_cron(date('Y-m-d H:i:s'), $this->id);
@@ -140,7 +149,8 @@ class Account_Controller {
     $this->username = $account['username'];
     $this->cron = $account['cron'];
     $this->date_created = $account['date_created'];
-    $this->last_ran_cron = $account['last_run_cron'];
+    $this->last_ran_cron = $account['last_ran_cron'];
+    $this->last_started_cron = $account['last_started_cron'];
   }
 
   public function create($user, $token, $secret, $username, $twitter_id) {

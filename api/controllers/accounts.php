@@ -25,13 +25,30 @@ class Accounts_Controller {
     $this->accounts = $accounts_array;
   }
 
+  private function should_tweet_if_ready($account) {
+    $last_started = strtotime($account->get_last_started_cron());
+    $last_ran = strtotime($account->get_last_ran_cron());
+
+    if ($last_ran >= $last_started) {
+      return true;
+    }
+
+    if ($last_started > strtotime('+10 minutes')) {
+      return true;
+    }
+
+    return false;
+  }
+
   public function tweet_from_accounts() {
     $this->get_accounts();
 
     foreach ($this->accounts as $account) {
-      $account->set_last_started_cron();
-      $account->tweet_if_ready();
-      $account->set_last_ran_cron();
+      if ($this->should_tweet_if_ready($account)) {
+        $account->set_last_started_cron();
+        $account->tweet_if_ready();
+        $account->set_last_ran_cron();
+      }
     }
   }
 }
