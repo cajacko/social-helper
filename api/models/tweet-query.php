@@ -3,6 +3,18 @@
 require_once('db.php');
 
 class Tweet_Query_Model {
+  public static function delete_floating_rows() {
+    $query = '
+      DELETE tweet_queries
+      FROM tweet_queries
+      LEFT JOIN tweets
+      ON tweet_queries.tweet_id = tweets.id
+      WHERE tweets.id IS NULL
+    ';
+
+    return Db::query($query, false);
+  }
+
   public static function create($tweet_id, $query_id) {
     $query = '
       INSERT INTO tweet_queries (tweet_id, query_id)

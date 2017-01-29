@@ -3,6 +3,19 @@
 require_once('db.php');
 
 class User_Tokens_Model {
+  public static function delete_expired_tokens($date) {
+    $query = '
+      DELETE FROM auth_tokens
+      WHERE expires < ?
+    ';
+
+    $params = array(
+      array('s', $date)
+    );
+
+    return Db::query($query, $params);
+  }
+
   public static function set_user_token($user_id, $token, $expires) {
     $query = '
       INSERT INTO auth_tokens (user_id, token, expires)

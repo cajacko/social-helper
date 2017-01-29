@@ -6,6 +6,10 @@ class Tweet_Query_Controller {
   private $tweet = false;
   private $query = false;
 
+  public function delete_floating_rows() {
+    return Tweet_Query_Model::delete_floating_rows();
+  }
+
   public function exists() {
     return Tweet_Query_Model::exists(
       $this->tweet->get_id(),

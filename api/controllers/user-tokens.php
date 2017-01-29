@@ -7,6 +7,11 @@ class User_Tokens_Controller {
   private $user = false;
   private $token = false;
 
+  public function delete_expired_tokens() {
+    $date = date('Y-m-d H:i:s');
+    User_Tokens_Model::delete_expired_tokens($date);
+  }
+
   public function get_user_by_token($token) {
     $user = User_Tokens_Model::get_user_by_token($token);
     return $user;

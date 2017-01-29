@@ -54,7 +54,7 @@ CREATE TABLE `account_tweets` (
   `error` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `account_id` (`account_id`,`tweet_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -129,7 +129,7 @@ CREATE TABLE `tweet_queries` (
   `query_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `tweet_id` (`tweet_id`,`query_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1335 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2222 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -147,9 +147,10 @@ CREATE TABLE `tweets` (
   `favourites` int(11) NOT NULL,
   `user_id` varchar(256) NOT NULL DEFAULT '',
   `tweet` text NOT NULL,
+  `added_to_database` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `tweet_id` (`tweet_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1326 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2204 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -192,4 +193,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-01-29 17:52:44
+-- Dump completed on 2017-01-29 18:49:24

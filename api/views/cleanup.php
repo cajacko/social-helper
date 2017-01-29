@@ -2,10 +2,12 @@
 
 define('CRON', true);
 
-// Delete old tweets, unless they have been tweeted by social helper
-// Delete any join tables that don't have parents
-// Delete any queries not attached to accounts
-// Delete any accounts not attached to users
-// Delete any tweets not attached to queries
-// Delete any auth tokens not attached to users
-// Delete old auth tokens
+require_once(dirname(__FILE__) . '/../helpers/common.php');
+require_once(dirname(__FILE__) . '/../controllers/tweets.php');
+require_once(dirname(__FILE__) . '/../controllers/user-tokens.php');
+
+$tweets = new Tweets_Controller;
+$tweets->delete_old_tweets();
+
+$user_tokens = new User_Tokens_Controller;
+$user_tokens->delete_expired_tokens();
