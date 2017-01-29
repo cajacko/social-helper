@@ -41,10 +41,14 @@ class Accounts_Controller {
   }
 
   public function tweet_from_accounts() {
+    logger('Accounts_Controller', 'tweet_from_accounts', 'Init');
     $this->get_accounts();
 
+    logger('Accounts_Controller', 'tweet_from_accounts', 'Foreach');
     foreach ($this->accounts as $account) {
+      logger('Accounts_Controller', 'tweet_from_accounts', '-account');
       if ($this->should_tweet_if_ready($account)) {
+        logger('Accounts_Controller', 'tweet_from_accounts', '--Should tweet');
         $account->set_last_started_cron();
         $account->tweet_if_ready();
         $account->set_last_ran_cron();

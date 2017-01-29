@@ -14,3 +14,21 @@ define('MYSQL_PASSWORD', getenv('MYSQL_PASSWORD'));
 
 define('CONSUMER_KEY', getenv('CONSUMER_KEY'));
 define('CONSUMER_SECRET', getenv('CONSUMER_SECRET'));
+
+function logger($class_name, $method_name, $message) {
+  $string = '';
+
+  if ($class_name) {
+    $string = $string . '-' . $class_name;
+
+    if ($method_name) {
+      $string = $string . '->' . $method_name;
+    }
+
+    $string = $string . ': ';
+  }
+
+  $string = $string . $message;
+
+  echo $string . "\n";
+}

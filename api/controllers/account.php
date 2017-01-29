@@ -82,24 +82,30 @@ class Account_Controller {
   }
 
   public function tweet_if_ready() {
+    logger('Account_Controller', 'tweet_if_ready', 'Init');
     $account_tweets = new Account_Tweets_Controller;
     $account_tweets->set_account_id($this->id);
 
     if (!$this->is_time_to_tweet($account_tweets)) {
+      logger('Account_Controller', 'tweet_if_ready', 'Isnt time to tweet');
       return false;
     }
 
     $query_order = $account_tweets->get_query_order();
 
     if (!$query_order) {
+      logger('Account_Controller', 'tweet_if_ready', 'Could not get query order');
       return false;
     }
 
     foreach ($query_order as $account_query) {
       if ($account_query->tweet_next()) {
+        logger('Account_Controller', 'tweet_if_ready', 'Tweeted');
         return true;
       }
     }
+
+    logger('Account_Controller', 'tweet_if_ready', 'Ran out of things to try and tweet');
 
     return false;
   }
