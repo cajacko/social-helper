@@ -1,8 +1,8 @@
 <?php
 
-require_once('../controllers/query.php');
-require_once('../models/queries.php');
-require_once('../helpers/error-response.php');
+require_once(dirname(__FILE__) . '/../controllers/query.php');
+require_once(dirname(__FILE__) . '/../models/queries.php');
+require_once(dirname(__FILE__) . '/../helpers/error-response.php');
 
 class Queries_Controller {
   private $queries = array();
@@ -29,7 +29,9 @@ class Queries_Controller {
     $this->get_queries();
 
     foreach ($this->queries as $query) {
+      $query->set_last_started_cron();
       $query->save_new_tweets();
+      $query->set_last_ran_cron();
     }
   }
 }

@@ -1,7 +1,7 @@
 <?php
 
-require_once('../models/user-accounts.php');
-require_once('../controllers/account.php');
+require_once(dirname(__FILE__) . '/../models/user-accounts.php');
+require_once(dirname(__FILE__) . '/../controllers/account.php');
 
 class User_Accounts_Controller {
   private $id = false;

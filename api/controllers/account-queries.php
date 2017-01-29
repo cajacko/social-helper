@@ -1,10 +1,10 @@
 <?php
 
-require_once('../models/account-queries.php');
-require_once('../controllers/query.php');
-require_once('../controllers/account.php');
-require_once('../controllers/tweet-query.php');
-require_once('../controllers/account-tweets.php');
+require_once(dirname(__FILE__) . '/../models/account-queries.php');
+require_once(dirname(__FILE__) . '/../controllers/query.php');
+require_once(dirname(__FILE__) . '/../controllers/account.php');
+require_once(dirname(__FILE__) . '/../controllers/tweet-query.php');
+require_once(dirname(__FILE__) . '/../controllers/account-tweets.php');
 
 class Account_Queries_Controller {
   private $account = false;

@@ -1,7 +1,7 @@
 <?php
 
-require_once('../models/tweets.php');
-require_once('../controllers/tweet.php');
+require_once(dirname(__FILE__) . '/../models/tweets.php');
+require_once(dirname(__FILE__) . '/../controllers/tweet.php');
 
 class Tweets_Controller {
   private $tweets = array();

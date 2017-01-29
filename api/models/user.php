@@ -1,7 +1,7 @@
 <?php
 
 require_once('db.php');
-require_once('../helpers/error-response.php');
+require_once(dirname(__FILE__) . '/../helpers/error-response.php');
 
 class User_Model {
   public static function get_user_id_by_email($email) {

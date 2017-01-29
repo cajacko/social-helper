@@ -1,7 +1,7 @@
 <?php
 
 require_once('db.php');
-require_once('../helpers/error-response.php');
+require_once(dirname(__FILE__) . '/../helpers/error-response.php');
 
 class Account_Model {
   public function set_last_started_cron($date, $account_id) {

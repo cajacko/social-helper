@@ -1,7 +1,7 @@
 <?php
 
-require_once('../helpers/error-response.php');
-require_once('../models/cron.php');
+require_once(dirname(__FILE__) . '/../helpers/error-response.php');
+require_once(dirname(__FILE__) . '/../models/cron.php');
 
 class Cron_Controller {
   private $cron = false;

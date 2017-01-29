@@ -1,7 +1,7 @@
 <?php
 
 function get_error($code) {
-  $json = file_get_contents('../constants/errors.json');
+  $json = file_get_contents(dirname(__FILE__) . '/../constants/errors.json');
   $json = json_decode($json, true);
 
   if (!isset($json[$code])) {

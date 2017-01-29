@@ -2,7 +2,7 @@
 
 // mysqli_report(MYSQLI_REPORT_ALL);
 
-require_once('../helpers/error-response.php');
+require_once(dirname(__FILE__) . '/../helpers/error-response.php');
 
 class Db {
   private static $connection;

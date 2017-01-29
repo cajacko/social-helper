@@ -1,8 +1,8 @@
 <?php
 
-require_once('../controllers/account-queries.php');
-require_once('../models/account-tweets.php');
-require_once('../models/account-queries.php');
+require_once(dirname(__FILE__) . '/../controllers/account-queries.php');
+require_once(dirname(__FILE__) . '/../models/account-tweets.php');
+require_once(dirname(__FILE__) . '/../models/account-queries.php');
 
 class Account_Tweets_Controller {
   private $account_id = false;

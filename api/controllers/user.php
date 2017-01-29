@@ -1,10 +1,10 @@
 <?php
 
-require_once('../helpers/success-response.php');
-require_once('../helpers/error-response.php');
-require_once('../models/user.php');
-require_once('../controllers/user-tokens.php');
-require_once('../controllers/user-accounts.php');
+require_once(dirname(__FILE__) . '/../helpers/success-response.php');
+require_once(dirname(__FILE__) . '/../helpers/error-response.php');
+require_once(dirname(__FILE__) . '/../models/user.php');
+require_once(dirname(__FILE__) . '/../controllers/user-tokens.php');
+require_once(dirname(__FILE__) . '/../controllers/user-accounts.php');
 
 class User_Controller {
   private $id = false;

@@ -1,9 +1,9 @@
 <?php
 
-require_once('../models/query.php');
-require_once('../controllers/account-queries.php');
-require_once('../controllers/tweets.php');
-require_once('../helpers/error-response.php');
+require_once(dirname(__FILE__) . '/../models/query.php');
+require_once(dirname(__FILE__) . '/../controllers/account-queries.php');
+require_once(dirname(__FILE__) . '/../controllers/tweets.php');
+require_once(dirname(__FILE__) . '/../helpers/error-response.php');
 
 class Query_Controller {
   private $id = false;
@@ -16,6 +16,14 @@ class Query_Controller {
 
   public function delete() {
 
+  }
+
+  public function set_last_started_cron() {
+    Query_Model::set_last_started_cron(date('Y-m-d H:i:s'), $this->id);
+  }
+
+  public function set_last_ran_cron() {
+    Query_Model::set_last_ran_cron(date('Y-m-d H:i:s'), $this->id);
   }
 
   public function get_query() {

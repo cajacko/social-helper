@@ -1,8 +1,8 @@
 <?php
 
-require_once('../controllers/account.php');
-require_once('../models/accounts.php');
-require_once('../helpers/error-response.php');
+require_once(dirname(__FILE__) . '/../controllers/account.php');
+require_once(dirname(__FILE__) . '/../models/accounts.php');
+require_once(dirname(__FILE__) . '/../helpers/error-response.php');
 
 class Accounts_Controller {
   private $accounts = array();

@@ -3,6 +3,36 @@
 require_once('db.php');
 
 class Query_Model {
+  public static function set_last_started_cron($date, $query_id) {
+    $query = '
+      UPDATE queries
+      SET last_started_cron = ?
+      WHERE id = ?
+    ';
+
+    $params = array(
+      array('s', $date),
+      array('s', $query_id)
+    );
+
+    return Db::query($query, $params);
+  }
+
+  public static function set_last_ran_cron($date, $query_id) {
+    $query = '
+      UPDATE queries
+      SET last_ran_cron = ?
+      WHERE id = ?
+    ';
+
+    $params = array(
+      array('s', $date),
+      array('s', $query_id)
+    );
+
+    return Db::query($query, $params);
+  }
+
   public static function get_query_by_value($query_string) {
     $query = '
       SELECT *

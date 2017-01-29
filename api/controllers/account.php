@@ -1,10 +1,10 @@
 <?php
 
-require_once('../models/account.php');
-require_once('../controllers/user-accounts.php');
-require_once('../controllers/account-queries.php');
-require_once('../controllers/account-tweets.php');
-require_once('../helpers/error-response.php');
+require_once(dirname(__FILE__) . '/../models/account.php');
+require_once(dirname(__FILE__) . '/../controllers/user-accounts.php');
+require_once(dirname(__FILE__) . '/../controllers/account-queries.php');
+require_once(dirname(__FILE__) . '/../controllers/account-tweets.php');
+require_once(dirname(__FILE__) . '/../helpers/error-response.php');
 
 class Account_Controller {
   private $id = false;

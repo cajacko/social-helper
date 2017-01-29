@@ -1,7 +1,7 @@
 <?php
 
 require_once('db.php');
-require_once('../helpers/error-response.php');
+require_once(dirname(__FILE__) . '/../helpers/error-response.php');
 
 class Token_Model {
   public static function set_user_token($user_id, $token, $expires) {

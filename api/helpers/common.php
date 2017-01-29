@@ -2,7 +2,7 @@
 
 date_default_timezone_set('Europe/London');
 
-require '../vendor/autoload.php';
+require dirname(__FILE__) . '/../vendor/autoload.php';
 
 $dotenv = new Dotenv\Dotenv(__DIR__ . '/../../');
 $dotenv->load();

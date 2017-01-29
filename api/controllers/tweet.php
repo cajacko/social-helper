@@ -1,8 +1,8 @@
 <?php
 
-require_once('../controllers/tweet-query.php');
-require_once('../models/tweet.php');
-require_once('../helpers/error-response.php');
+require_once(dirname(__FILE__) . '/../controllers/tweet-query.php');
+require_once(dirname(__FILE__) . '/../models/tweet.php');
+require_once(dirname(__FILE__) . '/../helpers/error-response.php');
 
 class Tweet_Controller {
   private $json = false;

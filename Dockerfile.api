@@ -2,12 +2,16 @@ FROM php:7.0-apache
 
 MAINTAINER Charlie Jackson <contact@charliejackson.com>
 
-RUN apt-get update && apt-get install -y
+RUN apt-get update && apt-get install -y && apt-get install cron rsyslog -y
 
 RUN docker-php-source extract
 RUN docker-php-ext-install mysqli
 RUN docker-php-source delete
 RUN a2enmod rewrite
+
+ADD api/crontab /etc/crontab
+
+RUN chmod 0644 /etc/crontab
 
 RUN mkdir -p /var/www/html/api
 WORKDIR /var/www/html/api
@@ -20,3 +24,5 @@ COPY .env /var/www/html/
 ADD api/apache-config.conf /etc/apache2/sites-enabled/000-default.conf
 
 RUN chown -R www-data:www-data /var/www/html
+
+CMD rsyslogd && cron -L15 && apache2-foreground

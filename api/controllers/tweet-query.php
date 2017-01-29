@@ -1,6 +1,6 @@
 <?php
 
-require_once('../models/tweet-query.php');
+require_once(dirname(__FILE__) . '/../models/tweet-query.php');
 
 class Tweet_Query_Controller {
   private $tweet = false;

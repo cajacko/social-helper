@@ -2,8 +2,8 @@
 
 define('CRON', false);
 
-require_once('../helpers/common.php');
-require_once('../helpers/error-response.php');
+require_once(dirname(__FILE__) . '/../helpers/common.php');
+require_once(dirname(__FILE__) . '/../helpers/error-response.php');
 
 $path = $_SERVER["REQUEST_URI"];
 $path_parts = explode('/', $path);
@@ -19,7 +19,7 @@ if (count($path_parts) != 3) {
 $controller = $path_parts[1];
 $endpoint = $path_parts[2];
 
-require_once('../controllers/app.php');
+require_once(dirname(__FILE__) . '/../controllers/app.php');
 
 $app = new App_Controller();
 
@@ -40,7 +40,7 @@ if (!$app->authenticate($post_data['appAuth'])) {
 
 // Unauthenticated endpoints
 
-require_once('../controllers/user.php');
+require_once(dirname(__FILE__) . '/../controllers/user.php');
 $user = new User_Controller;
 
 switch($controller) {
@@ -106,7 +106,7 @@ switch($controller) {
     break;
 
   case 'account':
-    require_once('../controllers/account.php');
+    require_once(dirname(__FILE__) . '/../controllers/account.php');
     $account = new Account_Controller;
 
     switch($endpoint) {
@@ -152,7 +152,7 @@ switch($controller) {
     break;
 
   case 'cron':
-    require_once('../controllers/cron.php');
+    require_once(dirname(__FILE__) . '/../controllers/cron.php');
     $cron = new Cron_Controller;
 
     switch($endpoint) {
@@ -175,7 +175,7 @@ switch($controller) {
     break;
 
   case 'query':
-    require_once('../controllers/query.php');
+    require_once(dirname(__FILE__) . '/../controllers/query.php');
     $query = new Query_Controller;
 
     switch($endpoint) {

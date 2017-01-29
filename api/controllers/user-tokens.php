@@ -1,6 +1,6 @@
 <?php
 
-require_once('../models/user-tokens.php');
+require_once(dirname(__FILE__) . '/../models/user-tokens.php');
 
 class User_Tokens_Controller {
   private $id = false;
