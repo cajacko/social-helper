@@ -12,12 +12,8 @@ class Query_Controller {
   private $last_started_cron = false;
   private $last_ran_cron = false;
 
-  public function update() {
-
-  }
-
-  public function delete() {
-
+  public function delete_floating_rows() {
+    Query_Model::delete_floating_rows();
   }
 
   public function get_last_started_cron() {

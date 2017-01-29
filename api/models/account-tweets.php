@@ -4,6 +4,18 @@ require_once('db.php');
 require_once('twitter.php');
 
 class Account_Tweets_Model {
+  public function delete_floating_rows() {
+    $query = '
+      DELETE account_tweets
+      FROM account_tweets
+      LEFT JOIN accounts
+      ON account_tweets.account_id = accounts.id
+      WHERE accounts.id IS NULL OR account_tweets.id IS NULL
+    ';
+
+    return Db::query($query, false);
+  }
+
   public static function get_last_account_tweet($account_id) {
     $query = '
       SELECT *

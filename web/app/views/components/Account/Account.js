@@ -7,7 +7,6 @@ const Account = React.createClass({
   propTypes: {
     queries: propTypes.QUERIES,
     username: propTypes.USERNAME,
-    updateQuery: propTypes.QUERY_UPDATE,
     deleteQuery: propTypes.QUERY_DELETE,
     createQuery: propTypes.QUERY_CREATE,
     addQuery: propTypes.QUERY_ADD,
@@ -25,7 +24,6 @@ const Account = React.createClass({
 
         <Queries
           queries={this.props.queries}
-          update={this.props.updateQuery}
           create={this.props.createQuery}
           delete={this.props.deleteQuery}
           add={this.props.addQuery}

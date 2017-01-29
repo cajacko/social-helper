@@ -1,18 +1,10 @@
 import fetcher from '~/helpers/fetcher'
 import * as actionTypes from '~/constants/actions'
 
-export function updateQuery(id, query) {
+export function deleteQuery(queryId, accountId) {
   const data = {
-    id: id,
-    query: query
-  }
-
-  return fetcher('query/update', data, actionTypes.QUERY_UPDATE)
-}
-
-export function deleteQuery(id) {
-  const data = {
-    id: id
+    queryId: queryId,
+    accountId: accountId
   }
 
   return fetcher('query/delete', data, actionTypes.QUERY_DELETE)

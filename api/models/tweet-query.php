@@ -9,7 +9,7 @@ class Tweet_Query_Model {
       FROM tweet_queries
       LEFT JOIN tweets
       ON tweet_queries.tweet_id = tweets.id
-      WHERE tweets.id IS NULL
+      WHERE tweets.id IS NULL OR tweet_queries.id IS NULL
     ';
 
     return Db::query($query, false);

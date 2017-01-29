@@ -30174,7 +30174,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.INPUT_VALUE = exports.INPUT_ON_CHANGE = exports.INPUT_PLACEHOLDER = exports.INPUT_HAS_PASSWORD = exports.CRON_UPDATE = exports.CRON = exports.LOGIN = exports.USER_CREATE = exports.LOGOUT = exports.QUERY_SHOW_ADD_BUTTON = exports.QUERY_ADD = exports.QUERY_CREATE = exports.QUERY_DELETE = exports.QUERY_UPDATE = exports.QUERY_ID = exports.QUERY = exports.QUERIES = exports.ACCOUNT_ID = exports.ACCOUNT_DELETE = exports.ACCOUNTS = exports.USERNAME = undefined;
+	exports.INPUT_VALUE = exports.INPUT_ON_CHANGE = exports.INPUT_PLACEHOLDER = exports.INPUT_HAS_PASSWORD = exports.CRON_UPDATE = exports.CRON = exports.LOGIN = exports.USER_CREATE = exports.LOGOUT = exports.QUERY_SHOW_ADD_BUTTON = exports.QUERY_ADD = exports.QUERY_CREATE = exports.QUERY_DELETE = exports.QUERY_ID = exports.QUERY = exports.QUERIES = exports.ACCOUNT_ID = exports.ACCOUNT_DELETE = exports.ACCOUNTS = exports.USERNAME = undefined;
 
 	var _react = __webpack_require__(1);
 
@@ -30191,7 +30191,6 @@
 	var QUERIES = exports.QUERIES = _react2.default.PropTypes.array.isRequired;
 	var QUERY = exports.QUERY = _react2.default.PropTypes.string.isRequired;
 	var QUERY_ID = exports.QUERY_ID = _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.number, _react2.default.PropTypes.bool]).isRequired;
-	var QUERY_UPDATE = exports.QUERY_UPDATE = _react2.default.PropTypes.func.isRequired;
 	var QUERY_DELETE = exports.QUERY_DELETE = _react2.default.PropTypes.func.isRequired;
 	var QUERY_CREATE = exports.QUERY_CREATE = _react2.default.PropTypes.func.isRequired;
 	var QUERY_ADD = exports.QUERY_ADD = _react2.default.PropTypes.func.isRequired;
@@ -33357,12 +33356,8 @@
 	    }
 	  },
 
-	  updateQuery: function updateQuery(id, query) {
-	    this.props.dispatch((0, _query.updateQuery)(id, query));
-	  },
-
 	  deleteQuery: function deleteQuery(id) {
-	    this.props.dispatch((0, _query.deleteQuery)(id));
+	    this.props.dispatch((0, _query.deleteQuery)(id, this.props.id));
 	  },
 
 	  createQuery: function createQuery(query) {
@@ -33401,7 +33396,6 @@
 	    return _react2.default.createElement(_Account2.default, {
 	      queries: this.state.queries,
 	      username: this.props.username,
-	      updateQuery: this.updateQuery,
 	      deleteQuery: this.deleteQuery,
 	      createQuery: this.createQuery,
 	      addQuery: this.addQuery,
@@ -33451,7 +33445,6 @@
 	  propTypes: {
 	    queries: propTypes.QUERIES,
 	    username: propTypes.USERNAME,
-	    updateQuery: propTypes.QUERY_UPDATE,
 	    deleteQuery: propTypes.QUERY_DELETE,
 	    createQuery: propTypes.QUERY_CREATE,
 	    addQuery: propTypes.QUERY_ADD,
@@ -33478,7 +33471,6 @@
 	      ),
 	      _react2.default.createElement(_Queries2.default, {
 	        queries: this.props.queries,
-	        update: this.props.updateQuery,
 	        create: this.props.createQuery,
 	        'delete': this.props.deleteQuery,
 	        add: this.props.addQuery,
@@ -33525,7 +33517,6 @@
 
 	  propTypes: {
 	    queries: propTypes.QUERIES,
-	    update: propTypes.QUERY_UPDATE,
 	    delete: propTypes.QUERY_DELETE,
 	    create: propTypes.QUERY_CREATE,
 	    add: propTypes.QUERY_ADD,
@@ -33565,7 +33556,6 @@
 	            key: query.id,
 	            id: query.id,
 	            query: query.query,
-	            update: updateQuery,
 	            'delete': deleteQuery,
 	            create: createQuery
 	          });
@@ -33610,7 +33600,6 @@
 	  propTypes: {
 	    query: propTypes.QUERY,
 	    id: propTypes.QUERY_ID,
-	    update: propTypes.QUERY_UPDATE,
 	    delete: propTypes.QUERY_DELETE,
 	    create: propTypes.QUERY_CREATE
 	  },
@@ -33649,11 +33638,7 @@
 	  },
 
 	  submit: function submit() {
-	    if (this.props.id) {
-	      this.props.update(this.props.id, this.state.query);
-	    } else {
-	      this.props.create(this.state.query);
-	    }
+	    this.props.create(this.state.query);
 	  },
 
 	  delete: function _delete() {
@@ -33662,12 +33647,19 @@
 
 	  render: function render() {
 	    var deleteQuery = false;
+	    var createQuery = false;
 
 	    if (this.props.id) {
 	      deleteQuery = _react2.default.createElement(
 	        'button',
 	        { onClick: this.delete },
 	        'Delete Query'
+	      );
+	    } else {
+	      createQuery = _react2.default.createElement(
+	        'button',
+	        { onClick: this.submit },
+	        'Create'
 	      );
 	    }
 
@@ -33680,11 +33672,7 @@
 	        value: this.state.query,
 	        password: false
 	      }),
-	      _react2.default.createElement(
-	        'button',
-	        { onClick: this.submit },
-	        this.state.updateText
-	      ),
+	      createQuery,
 	      deleteQuery
 	    );
 	  }
@@ -33701,7 +33689,6 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.updateQuery = updateQuery;
 	exports.deleteQuery = deleteQuery;
 	exports.createQuery = createQuery;
 
@@ -33717,18 +33704,10 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function updateQuery(id, query) {
+	function deleteQuery(queryId, accountId) {
 	  var data = {
-	    id: id,
-	    query: query
-	  };
-
-	  return (0, _fetcher2.default)('query/update', data, actionTypes.QUERY_UPDATE);
-	}
-
-	function deleteQuery(id) {
-	  var data = {
-	    id: id
+	    queryId: queryId,
+	    accountId: accountId
 	  };
 
 	  return (0, _fetcher2.default)('query/delete', data, actionTypes.QUERY_DELETE);

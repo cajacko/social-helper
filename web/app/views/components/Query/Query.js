@@ -6,7 +6,6 @@ const Query = React.createClass({
   propTypes: {
     query: propTypes.QUERY,
     id: propTypes.QUERY_ID,
-    update: propTypes.QUERY_UPDATE,
     delete: propTypes.QUERY_DELETE,
     create: propTypes.QUERY_CREATE
   },
@@ -44,11 +43,7 @@ const Query = React.createClass({
   },
 
   submit: function() {
-    if (this.props.id) {
-      this.props.update(this.props.id, this.state.query)
-    } else {
-      this.props.create(this.state.query)
-    }
+    this.props.create(this.state.query)
   },
 
   delete: function() {
@@ -57,9 +52,12 @@ const Query = React.createClass({
 
   render: function() {
     let deleteQuery = false
+    let createQuery = false
 
     if (this.props.id) {
       deleteQuery = <button onClick={this.delete}>Delete Query</button>
+    } else {
+      createQuery = <button onClick={this.submit}>Create</button>
     }
 
     return (
@@ -71,7 +69,7 @@ const Query = React.createClass({
           password={false}
         />
 
-        <button onClick={this.submit}>{this.state.updateText}</button>
+        {createQuery}
         {deleteQuery}
       </li>
     )

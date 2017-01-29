@@ -14,6 +14,10 @@ class Account_Tweets_Controller {
   private $tweet_id = false;
   private $error = false;
 
+  public function delete_floating_rows() {
+    return Account_Tweets_Model::delete_floating_rows();
+  }
+
   public function get_date() {
     return $this->date_tweeted;
   }

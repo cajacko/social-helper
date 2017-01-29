@@ -36,12 +36,8 @@ const AccountContainer = React.createClass({
     }
   },
 
-  updateQuery: function(id, query) {
-    this.props.dispatch(updateQuery(id, query))
-  },
-
   deleteQuery: function(id) {
-    this.props.dispatch(deleteQuery(id))
+    this.props.dispatch(deleteQuery(id, this.props.id))
   },
 
   createQuery: function(query) {
@@ -81,7 +77,6 @@ const AccountContainer = React.createClass({
       <Account
         queries={this.state.queries}
         username={this.props.username}
-        updateQuery={this.updateQuery}
         deleteQuery={this.deleteQuery}
         createQuery={this.createQuery}
         addQuery={this.addQuery}

@@ -12,7 +12,6 @@ export const QUERY_ID = React.PropTypes.oneOfType([
   React.PropTypes.number,
   React.PropTypes.bool
 ]).isRequired
-export const QUERY_UPDATE = React.PropTypes.func.isRequired
 export const QUERY_DELETE = React.PropTypes.func.isRequired
 export const QUERY_CREATE = React.PropTypes.func.isRequired
 export const QUERY_ADD = React.PropTypes.func.isRequired

@@ -12,6 +12,10 @@ class Account_Queries_Controller {
   private $id = false;
   private $queries = array();
 
+  public function delete_floating_rows() {
+    return Account_Queries_Model::delete_floating_rows();
+  }
+
   private function filter($tweet) {
     $exists = Account_Tweets_Model::does_account_tweet_exist(
       $tweet->get_id(),
@@ -23,6 +27,17 @@ class Account_Queries_Controller {
     }
 
     return true;
+  }
+
+  public function delete($user, $account_id, $query_id) {
+    if (!Account_Queries_Model::delete($account_id, $query_id)) {
+      return error_response(40759);
+    }
+
+    $query = new Query_Controller;
+    $query->delete_floating_rows();
+
+    return $user->read();
   }
 
   private function get_next_tweets($before_id = false) {

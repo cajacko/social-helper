@@ -9,6 +9,10 @@ class User_Accounts_Controller {
   private $account = false;
   private $accounts = array();
 
+  public function delete_floating_rows() {
+    return User_Accounts_Model::delete_floating_rows();
+  }
+
   public function get_accounts_by_user_id($user_id) {
     $accounts = User_Accounts_Model::get_accounts_by_user_id($user_id);
 

@@ -178,29 +178,10 @@ switch($controller) {
     require_once(dirname(__FILE__) . '/../controllers/query.php');
     $query = new Query_Controller;
 
+    require_once(dirname(__FILE__) . '/../controllers/account-queries.php');
+    $account_queries = new Account_Queries_Controller;
+
     switch($endpoint) {
-      case 'update':
-        if (!isset($post_data['accountId'])) {
-          error_response(65);
-        }
-
-        if (!isset($post_data['queryId'])) {
-          error_response(66);
-        }
-
-        if (!isset($post_data['query'])) {
-          error_response(67);
-        }
-
-        $query->update(
-          $user,
-          $post_data['accountId'],
-          $post_data['queryId'],
-          $post_data['query']
-        );
-
-        break;
-
       case 'delete':
         if (!isset($post_data['accountId'])) {
           error_response(65);
@@ -210,7 +191,7 @@ switch($controller) {
           error_response(66);
         }
 
-        $query->delete(
+        $account_queries->delete(
           $user,
           $post_data['accountId'],
           $post_data['queryId']

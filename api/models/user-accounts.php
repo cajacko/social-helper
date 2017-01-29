@@ -3,6 +3,18 @@
 require_once('db.php');
 
 class User_Accounts_Model {
+  public function delete_floating_rows() {
+    $query = '
+      DELETE user_accounts
+      FROM user_accounts
+      LEFT JOIN accounts
+      ON user_accounts.account_id = accounts.id
+      WHERE accounts.id IS NULL OR user_accounts.id IS NULL
+    ';
+
+    return Db::query($query, false);
+  }
+
   public static function get_accounts_by_user_id($user_id) {
     $query = '
       SELECT accounts.*

@@ -3,6 +3,17 @@
 require_once('db.php');
 
 class Query_Model {
+  public function delete_floating_rows() {
+    $query = '
+      DELETE queries FROM queries
+      LEFT JOIN account_queries
+      ON queries.id = account_queries.query_id
+      WHERE account_queries.query_id IS NULL
+    ';
+
+    return Db::query($query, false);
+  }
+
   public static function set_last_started_cron($date, $query_id) {
     $query = '
       UPDATE queries

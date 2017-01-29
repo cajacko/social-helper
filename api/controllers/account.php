@@ -4,6 +4,8 @@ require_once(dirname(__FILE__) . '/../models/account.php');
 require_once(dirname(__FILE__) . '/../controllers/user-accounts.php');
 require_once(dirname(__FILE__) . '/../controllers/account-queries.php');
 require_once(dirname(__FILE__) . '/../controllers/account-tweets.php');
+require_once(dirname(__FILE__) . '/../controllers/tweet-query.php');
+require_once(dirname(__FILE__) . '/../controllers/query.php');
 require_once(dirname(__FILE__) . '/../helpers/error-response.php');
 
 class Account_Controller {
@@ -111,13 +113,26 @@ class Account_Controller {
   }
 
   public function delete($user, $account_id) {
-    $reponse = Account_Model::delete($account_id);
-
-    if ($response) {
-      return $user->read();
+    if (!Account_Model::delete($account_id)) {
+      return error_response(49865, $reponse);
     }
 
-    return error_response(49865, $reponse);
+    $user_accounts = new User_Accounts_Controller;
+    $user_accounts->delete_floating_rows();
+
+    $account_queries = new Account_Queries_Controller;
+    $account_queries->delete_floating_rows();
+
+    $query = new Query_Controller;
+    $query->delete_floating_rows();
+
+    $account_tweets = new Account_Tweets_Controller;
+    $account_tweets->delete_floating_rows();
+
+    $tweet_controller = new Tweet_Query_Controller;
+    $tweet_controller->delete_floating_rows();
+
+    return $user->read();
   }
 
   public function get_account_queries() {

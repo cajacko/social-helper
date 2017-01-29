@@ -5,7 +5,6 @@ import * as propTypes from '~/constants/propTypes'
 const Queries = React.createClass({
   propTypes: {
     queries: propTypes.QUERIES,
-    update: propTypes.QUERY_UPDATE,
     delete: propTypes.QUERY_DELETE,
     create: propTypes.QUERY_CREATE,
     add: propTypes.QUERY_ADD,
@@ -37,7 +36,6 @@ const Queries = React.createClass({
                   key={query.id}
                   id={query.id}
                   query={query.query}
-                  update={updateQuery}
                   delete={deleteQuery}
                   create={createQuery}
                 />
