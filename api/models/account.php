@@ -4,6 +4,36 @@ require_once('db.php');
 require_once('../helpers/error-response.php');
 
 class Account_Model {
+  public function set_last_started_cron($date, $account_id) {
+    $query = '
+      UPDATE accounts
+      SET last_started_cron = ?
+      WHERE id = ?
+    ';
+
+    $params = array(
+      array('s', $date),
+      array('i', $account_id)
+    );
+
+    return Db::query($query, $params);
+  }
+
+  public function set_last_ran_cron($date, $account_id) {
+    $query = '
+      UPDATE accounts
+      SET last_ran_cron = ?
+      WHERE id = ?
+    ';
+
+    $params = array(
+      array('s', $date),
+      array('i', $account_id)
+    );
+
+    return Db::query($query, $params);
+  }
+
   public static function get_user_accounts($user_id) {
     $query = '
       SELECT *

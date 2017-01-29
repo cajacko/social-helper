@@ -18,6 +18,14 @@ class Account_Controller {
   private $date_created = false;
   private $last_ran_cron = false;
 
+  public function set_last_started_cron() {
+    Account_Model::set_last_started_cron(date('Y-m-d H:i:s'), $this->id);
+  }
+
+  public function set_last_ran_cron() {
+    Account_Model::set_last_ran_cron(date('Y-m-d H:i:s'), $this->id);
+  }
+
   public function get_cron() {
     return $this->cron;
   }

@@ -29,7 +29,9 @@ class Accounts_Controller {
     $this->get_accounts();
 
     foreach ($this->accounts as $account) {
+      $account->set_last_started_cron();
       $account->tweet_if_ready();
+      $account->set_last_ran_cron();
     }
   }
 }
