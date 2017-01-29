@@ -4,8 +4,23 @@ require_once('db.php');
 require_once('twitter.php');
 
 class Account_Tweets_Model {
+  public static function get_last_account_tweet($account_id) {
+    $query = '
+      SELECT *
+      FROM account_tweets
+      WHERE account_id = ? AND error = 0
+      ORDER BY date_tweeted DESC
+      LIMIT 0, 1
+    ';
+
+    $params = array(
+      array('i', $account_id)
+    );
+
+    return Db::get_only_row($query, $params);
+  }
+
   public static function get_query_ids_by_lowest_tweet_count($account_id, $count, $earliest_date = false) {
-    // TODO: Make sure this has croup by and count
     $query = '
       SELECT count(*) as count, t.query_id
       FROM (

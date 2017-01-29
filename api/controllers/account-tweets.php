@@ -8,6 +8,37 @@ class Account_Tweets_Controller {
   private $account_id = false;
   private $tweet = false;
   private $account = false;
+  private $date_tweeted = false;
+  private $id = false;
+  private $query_id = false;
+  private $tweet_id = false;
+  private $error = false;
+
+  public function get_date() {
+    return $this->date_tweeted;
+  }
+
+  public function initialise($account_tweet_data) {
+    $this->date_tweeted = $account_tweet_data['date_tweeted'];
+    $this->id = $account_tweet_data['id'];
+    $this->account_id = $account_tweet_data['account_id'];
+    $this->query_id = $account_tweet_data['query_id'];
+    $this->tweet_id = $account_tweet_data['tweet_id'];
+    $this->error = $account_tweet_data['error'];
+  }
+
+  public function get_last_tweet() {
+    $account_tweet = Account_Tweets_Model::get_last_account_tweet(
+      $this->account_id
+    );
+
+    if (!$account_tweet) {
+      return false;
+    }
+
+    $this->initialise($account_tweet);
+    return true;
+  }
 
   public function retweet($query_id) {
     $retweeted = Account_Tweets_Model::retweet(

@@ -14,7 +14,9 @@ class Account_Controller {
   private $twitter_id = false;
   private $queries = false;
   private $tweets = array();
-  private $cron = '5,35 9,12,16 * * *';
+  private $cron = '5,35 9,12,16 * * * *';
+  private $date_created = false;
+  private $last_ran_cron = false;
 
   public function get_cron() {
     return $this->cron;
@@ -28,19 +30,26 @@ class Account_Controller {
     return $this->secret;
   }
 
-  private function is_time_to_tweet($account_tweets) {
-    return true;
+  public function get_latest_cron_date() {
+    $cron = Cron\CronExpression::factory($this->cron);
+    $date = $cron->getPreviousRunDate()->format('Y-m-d H:i:s');
+    return $date;
+  }
 
-    // TODO
-    // $account_tweet->get_last_tweet();
-    // $tweet_date = $account_tweet->get_date();
-    // $latest_cron_date = $this->get_latest_cron_date();
-    //
-    // if ($tweet_date >= $latest_cron_date) {
-    //   return false;
-    // }
-    //
-    // return true;
+  private function is_time_to_tweet($account_tweets) {
+    if ($account_tweets->get_last_tweet()) {
+      $tweet_date = $account_tweets->get_date();
+    } else {
+      $tweet_date = $this->date_created;
+    }
+
+    $latest_cron_date = $this->get_latest_cron_date();
+
+    if (strtotime($tweet_date) >= strtotime($latest_cron_date)) {
+      return false;
+    }
+
+    return true;
   }
 
   public function get_account_by_id($account_id) {
@@ -122,6 +131,8 @@ class Account_Controller {
     $this->secret = $account['secret'];
     $this->username = $account['username'];
     $this->cron = $account['cron'];
+    $this->date_created = $account['date_created'];
+    $this->last_ran_cron = $account['last_run_cron'];
   }
 
   public function create($user, $token, $secret, $username, $twitter_id) {
