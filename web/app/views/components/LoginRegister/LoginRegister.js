@@ -2,6 +2,8 @@ import React from 'react'
 import TextInput from '~/components/TextInput/TextInput'
 import validator from 'validator'
 import * as propTypes from '~/constants/propTypes'
+import Heading from '~/components/Heading/Heading'
+import Button from '~/components/Button/Button'
 
 const INPUT_TYPE = {
   EMAIL: 'EMAIL',
@@ -71,7 +73,7 @@ const LoginRegister = React.createClass({
 
     return (
       <div>
-        <h2>{title}</h2>
+        <Heading text={title} level={2} />
 
         <TextInput
           password={false}
@@ -91,7 +93,7 @@ const LoginRegister = React.createClass({
 
         {confirm}
 
-        <button onClick={this.onSubmit}>Submit</button>
+        <Button text="Submit" onClick={this.onSubmit} />
       </div>
     )
   }

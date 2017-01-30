@@ -1,4 +1,5 @@
 import React from 'react'
+import {style} from '~/components/TextInput/TextInput.style'
 import * as propTypes from '~/constants/propTypes'
 
 const TextInput = React.createClass({
@@ -17,8 +18,9 @@ const TextInput = React.createClass({
     }
 
     return (
-      <div>
+      <div style={style.container}>
         <input
+          style={style.input}
           type={type}
           placeholder={this.props.placeholder}
           onChange={this.props.onChange}
