@@ -1,4 +1,6 @@
-config.json
-vendor
-node_modules
-actions/*.txt
+.env
+api/vendor/*
+web/node_modules/*
+web/.gulp-cache
+web/sessions/*
+api/composer.lock

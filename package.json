@@ -1,8 +1,29 @@
 {
   "name": "social-helper",
-  "version": "0.2.0",
-  "description": "A web service that helps you find and share great content",
-  "main": "./public/index.php",
+  "version": "1.0.0",
+  "description": "Social Helper is a tool that automates your social media profiles",
+  "main": "index.js",
+  "scripts": {
+    "setup": "npm run docker-build && npm run docker-run",
+    "start": "docker start $(docker ps -a -q)",
+    "remove": "npm run stop && docker rm $(docker ps -a -q)",
+    "stop": "docker stop $(docker ps -a -q)",
+    "flush": "npm run remove && npm run setup",
+    "remove-volume": "docker volume rm charliejacksonwebsite_db_data",
+    "docker-web-build": "docker build --no-cache -t social-helper-web -f Dockerfile.web .",
+    "docker-web-run": "docker run --link social-helper-api:social-helper-api -p 3000:3000 -d --name social-helper-web -v $(pwd)/web:/usr/src/app/web social-helper-web",
+    "docker-web-log": "docker logs --follow social-helper-web",
+    "docker-web-bash": "docker exec -i -t social-helper-web /bin/bash",
+    "docker-api-build": "docker build -t social-helper-api -f Dockerfile.api .",
+    "docker-api-run": "docker run --link social-helper-db:social-helper-db -p 3001:80 -d --name social-helper-api -v $(pwd)/api:/var/www/html/api -v $(pwd)/api/crontab:/etc/crontab social-helper-api",
+    "docker-api-log": "docker logs --follow social-helper-api",
+    "docker-api-bash": "docker exec -it --user root social-helper-api /bin/bash",
+    "docker-run": "npm run docker-db-run && npm run docker-api-run && npm run docker-web-run",
+    "docker-build": "npm run docker-api-build && npm run docker-web-build",
+    "docker-db-run": "docker run -d -v $(pwd)/schema.sql:/docker-entrypoint-initdb.d/schema.sql --name social-helper-db -p 3306:3306 --env-file ./.env mysql:5.7",
+    "docker-db-run-persist": "docker run -d -v social-helper-db:/var/lib/mysql -v schema.sql:/docker-entrypoint-initdb.d/data-dump.sql --name social-helper-db -p 3306:3306 --env-file ./.env mysql:5.7",
+    "docker-db-backup": "docker exec social-helper-db sh -c 'exec mysqldump -d -uroot -p\"$MYSQL_ROOT_PASSWORD\" --databases $MYSQL_DATABASE' > `echo $PWD`/schema.sql"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cajacko/social-helper.git"
@@ -12,33 +33,5 @@
   "bugs": {
     "url": "https://github.com/cajacko/social-helper/issues"
   },
-  "homepage": "https://github.com/cajacko/social-helper#readme",
-  "devDependencies": {
-    "browser-sync": "^2.11.2",
-    "browserify": "^13.0.0",
-    "check-pages": "^0.10.0",
-    "font-awesome": "^4.5.0",
-    "gulp": "^3.9.0",
-    "gulp-autoprefixer": "^3.1.0",
-    "gulp-concat": "^2.6.0",
-    "gulp-minify-css": "^1.2.2",
-    "gulp-modernizr": "^1.0.0-alpha",
-    "gulp-rename": "^1.2.2",
-    "gulp-replace": "^0.5.4",
-    "gulp-sass": "^2.1.1",
-    "gulp-sass-import-json": "git+https://github.com/cajacko/gulp-sass-import-json.git",
-    "gulp-svgmin": "^1.2.2",
-    "gulp-svgstore": "^6.0.0",
-    "gulp-uglify": "^1.5.1",
-    "html-validator": "^1.0.0",
-    "ini": "^1.3.4",
-    "jquery": "^2.1.4",
-    "node-sass-json-importer": "^1.0.6",
-    "normalize.css": "^3.0.3",
-    "request": "^2.72.0",
-    "sass-mq": "^3.2.5",
-    "sitemapper": "^1.0.1",
-    "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0"
-  }
+  "homepage": "https://github.com/cajacko/social-helper#readme"
 }
