@@ -1,0 +1,34 @@
+FROM php:7.0-apache
+
+MAINTAINER Charlie Jackson <contact@charliejackson.com>
+
+RUN apt-get update && apt-get install -y && apt-get install cron rsyslog git -y
+
+RUN docker-php-source extract
+RUN docker-php-ext-install mysqli
+RUN docker-php-source delete
+RUN a2enmod rewrite
+
+ADD api/crontab /etc/crontab
+
+RUN chmod 0644 /etc/crontab
+
+RUN mkdir -p /var/www/html/api
+WORKDIR /var/www/html/api
+
+COPY api/composer.json /var/www/html/api
+
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+RUN php -r "if (hash_file('SHA384', 'composer-setup.php') === '55d6ead61b29c7bdee5cccfb50076874187bd9f21f65d8991d46ec5cc90518f447387fb9f76ebae1fbbacf329e583e30') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+RUN php composer-setup.php
+RUN php -r "unlink('composer-setup.php');"
+
+RUN php composer.phar install
+
+COPY api /var/www/html/api
+COPY .env /var/www/html/
+ADD api/apache-config.conf /etc/apache2/sites-enabled/000-default.conf
+
+RUN chown -R www-data:www-data /var/www/html
+
+CMD rsyslogd && cron -L15 && apache2-foreground

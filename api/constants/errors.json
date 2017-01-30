@@ -1,0 +1,270 @@
+{
+  "1": {
+    "status": 404,
+    "message": "No endpoint specified"
+  },
+  "2": {
+    "status": 404,
+    "message": "Bad endpoint supplied"
+  },
+  "3": {
+    "status": 500,
+    "message": "Finished execution but nothing has been sent"
+  },
+  "4": {
+    "status": 404,
+    "message": "This user endpoint does not exist"
+  },
+  "5": {
+    "status": 404,
+    "message": "This controller does not exist"
+  },
+  "6": {
+    "status": 404,
+    "message": "This account endpoint does not exist"
+  },
+  "7": {
+    "status": 404,
+    "message": "This cron endpoint does not exist"
+  },
+  "8": {
+    "status": 404,
+    "message": "This query endpoint does not exist"
+  },
+  "9": {
+    "status": 401,
+    "message": "User is not authenticated"
+  },
+  "10": {
+    "status": 401,
+    "message": "The application is not authenticated"
+  },
+  "11": {
+    "status": 401,
+    "message": "No application authentication was supplied"
+  },
+  "12": {
+    "status": 500,
+    "message": "Undefined error"
+  },
+  "13": {
+    "status": 500,
+    "message": "Badly formatted post data"
+  },
+  "14": {
+    "status": 401,
+    "message": "No user authentication was supplied"
+  },
+  "15": {
+    "status": 200,
+    "message": "Passwords do not match"
+  },
+  "16": {
+    "status": 200,
+    "message": "Email is invalid"
+  },
+  "17": {
+    "status": 200,
+    "message": "User already exists, please login"
+  },
+  "18": {
+    "status": 200,
+    "message": "Could not create user"
+  },
+  "19": {
+    "status": 200,
+    "message": "Email parameter was not given"
+  },
+  "20": {
+    "status": 200,
+    "message": "Password parameter was not given"
+  },
+  "21": {
+    "status": 200,
+    "message": "Email parameter was not given"
+  },
+  "22": {
+    "status": 200,
+    "message": "Password parameter was not given"
+  },
+  "23": {
+    "status": 200,
+    "message": "Password confirmation parameter was not given"
+  },
+  "24": {
+    "status": 200,
+    "message": "Could not get user by email"
+  },
+  "26": {
+    "status": 200,
+    "message": "Passwords do not match"
+  },
+  "27": {
+    "status": 200,
+    "message": "Could not generate new login token"
+  },
+  "28": {
+    "status": 200,
+    "message": "Could not get cron"
+  },
+  "29": {
+    "status": 200,
+    "message": "Could not get accounts for this user"
+  },
+  "30": {
+    "status": 200,
+    "message": "Could not connect to the database"
+  },
+  "31": {
+    "status": 200,
+    "message": "No query supplied but query method called"
+  },
+  "32": {
+    "status": 200,
+    "message": "MySQL prepare statement failed"
+  },
+  "33": {
+    "status": 200,
+    "message": "MySQL bind_param failed"
+  },
+  "34": {
+    "status": 200,
+    "message": "MySQL execute failed"
+  },
+  "35": {
+    "status": 200,
+    "message": "Saving new user failed"
+  },
+  "36": {
+    "status": 200,
+    "message": "Getting only row returned more than 1"
+  },
+  "37": {
+    "status": 200,
+    "message": "No cron POST data given"
+  },
+  "38": {
+    "status": 200,
+    "message": "Cron controller could not get user id"
+  },
+  "39": {
+    "status": 200,
+    "message": "Could not set new cron"
+  },
+  "40": {
+    "status": 200,
+    "message": "No username given"
+  },
+  "41": {
+    "status": 200,
+    "message": "No access token given"
+  },
+  "42": {
+    "status": 200,
+    "message": "No secret given"
+  },
+  "43": {
+    "status": 200,
+    "message": "Could not create user account"
+  },
+  "44": {
+    "status": 200,
+    "message": "Could not update user account"
+  },
+  "45": {
+    "status": 200,
+    "message": "Could not delete account"
+  },
+  "46": {
+    "status": 200,
+    "message": "Could not insert row and get id"
+  },
+  "47": {
+    "status": 200,
+    "message": "Could not create account"
+  },
+  "48": {
+    "status": 200,
+    "message": "Could not generate auth token"
+  },
+  "49": {
+    "status": 200,
+    "message": "No user exists with that email"
+  },
+  "50": {
+    "status": 200,
+    "message": "The passwords do not match"
+  },
+  "51": {
+    "status": 200,
+    "message": "No user exists with that token"
+  },
+  "52": {
+    "status": 200,
+    "message": "Could not get user accounts"
+  },
+  "53": {
+    "status": 200,
+    "message": "User id is not defined"
+  },
+  "54": {
+    "status": 200,
+    "message": "Could not get accounts"
+  },
+  "55": {
+    "status": 200,
+    "message": "Could not insert row"
+  },
+  "56": {
+    "status": 200,
+    "message": "The query already exists for this account"
+  },
+  "57": {
+    "status": 200,
+    "message": "Could not add the query to the account"
+  },
+  "58": {
+    "status": 200,
+    "message": "Could not create the query"
+  },
+  "59": {
+    "status": 200,
+    "message": "Could not add the query to the account"
+  },
+  "60": {
+    "status": 200,
+    "message": "User account already exists"
+  },
+  "61": {
+    "status": 200,
+    "message": "Could not create user account"
+  },
+  "62": {
+    "status": 200,
+    "message": "Could not create account"
+  },
+  "63": {
+    "status": 200,
+    "message": "Could not create user account"
+  },
+  "64": {
+    "status": 200,
+    "message": "Could not update account"
+  },
+  "65": {
+    "status": 200,
+    "message": "Account id is not set"
+  },
+  "66": {
+    "status": 200,
+    "message": "Query id is not set"
+  },
+  "67": {
+    "status": 200,
+    "message": "Query is not set"
+  },
+  "68": {
+    "status": 200,
+    "message": "Could not get insert id"
+  }
+}

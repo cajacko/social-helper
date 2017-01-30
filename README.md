@@ -1,2 +1,9 @@
-# social-helper
-A web service that helps you find and share great content
+```
+chmod +x ./run
+./run
+```
+
+Check cron logs
+```
+cat /var/log/syslog
+```
