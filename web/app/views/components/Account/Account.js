@@ -2,6 +2,9 @@ import React from 'react'
 import Queries from '~/components/Queries/Queries'
 import * as propTypes from '~/constants/propTypes'
 import Cron from '~/components/Cron/Cron'
+import Heading from '~/components/Heading/Heading'
+import {style} from '~/components/Account/Account.style'
+import Button from '~/components/Button/Button'
 
 const Account = React.createClass({
   propTypes: {
@@ -17,10 +20,14 @@ const Account = React.createClass({
   },
 
   render: function() {
+    const heading = '@' + this.props.username
+
     return (
-      <div>
-        <h3>@{this.props.username}</h3>
-        <button onClick={this.props.delete}>Remove Account</button>
+      <div style={style.container}>
+        <div style={style.header}>
+          <Heading text={heading} level={4} />
+          <Button onClick={this.props.delete} text="Remove Account" />
+        </div>
 
         <Queries
           queries={this.props.queries}

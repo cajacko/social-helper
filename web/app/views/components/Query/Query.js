@@ -1,6 +1,8 @@
 import React from 'react'
 import TextInput from '~/components/TextInput/TextInput'
 import * as propTypes from '~/constants/propTypes'
+import Button from '~/components/Button/Button'
+import {style} from '~/components/Query/Query.style'
 
 const Query = React.createClass({
   propTypes: {
@@ -55,13 +57,13 @@ const Query = React.createClass({
     let createQuery = false
 
     if (this.props.id) {
-      deleteQuery = <button onClick={this.delete}>Delete Query</button>
+      deleteQuery = <Button onClick={this.delete} text="Delete Query" />
     } else {
-      createQuery = <button onClick={this.submit}>Create</button>
+      createQuery = <Button onClick={this.submit} text="Create" />
     }
 
     return (
-      <li>
+      <li style={style.container}>
         <TextInput
           placeholder="Query"
           onChange={this.onChange}

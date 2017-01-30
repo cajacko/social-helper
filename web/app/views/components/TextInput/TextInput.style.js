@@ -15,6 +15,7 @@ export const style = {
   container: {
     display: 'flex',
     marginBottom: PADDING.D2,
-    marginTop: PADDING.D2
+    marginTop: PADDING.D2,
+    flex: 1
   }
 }

@@ -1,6 +1,9 @@
 import React from 'react'
 import TextInput from '~/components/TextInput/TextInput'
 import * as propTypes from '~/constants/propTypes'
+import {style} from '~/components/Cron/Cron.style'
+import Heading from '~/components/Heading/Heading'
+import Button from '~/components/Button/Button'
 
 const Cron = React.createClass({
   propTypes: {
@@ -37,7 +40,7 @@ const Cron = React.createClass({
   render: function() {
     return (
       <div>
-        <h3>Cron</h3>
+        <Heading text="Cron" level={5} />
 
         <TextInput
           placeholder="Cron"
@@ -46,7 +49,7 @@ const Cron = React.createClass({
           password={false}
         />
 
-        <button onClick={this.submit}>Submit</button>
+        <Button onClick={this.submit} text="Submit" />
       </div>
     )
   }

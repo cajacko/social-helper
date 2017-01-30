@@ -34,3 +34,5 @@ export const HEADING_LEVEL = React.PropTypes.number.isRequired
 
 export const BUTTON_ACTION = React.PropTypes.func.isRequired
 export const BUTTON_TEXT = React.PropTypes.func.isRequired
+
+export const TEXT = React.PropTypes.string.isRequired

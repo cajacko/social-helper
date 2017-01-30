@@ -4,6 +4,8 @@ import validator from 'validator'
 import * as propTypes from '~/constants/propTypes'
 import Heading from '~/components/Heading/Heading'
 import Button from '~/components/Button/Button'
+import Text from '~/components/Text/Text'
+import {style} from '~/components/LoginRegister/LoginRegister.style'
 
 const INPUT_TYPE = {
   EMAIL: 'EMAIL',
@@ -68,11 +70,11 @@ const LoginRegister = React.createClass({
     }
 
     if (this.state.emailError && this.state[INPUT_TYPE.EMAIL].length > 3) {
-      emailError = <div>Email error</div>
+      emailError = <Text text="Email error" />
     }
 
     return (
-      <div>
+      <div style={style.container}>
         <Heading text={title} level={2} />
 
         <TextInput

@@ -30016,6 +30016,12 @@
 
 	var _Button2 = _interopRequireDefault(_Button);
 
+	var _Text = __webpack_require__(378);
+
+	var _Text2 = _interopRequireDefault(_Text);
+
+	var _LoginRegister = __webpack_require__(377);
+
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -30081,16 +30087,12 @@
 	    }
 
 	    if (this.state.emailError && this.state[INPUT_TYPE.EMAIL].length > 3) {
-	      emailError = _react2.default.createElement(
-	        'div',
-	        null,
-	        'Email error'
-	      );
+	      emailError = _react2.default.createElement(_Text2.default, { text: 'Email error' });
 	    }
 
 	    return _react2.default.createElement(
 	      'div',
-	      null,
+	      { style: _LoginRegister.style.container },
 	      _react2.default.createElement(_Heading2.default, { text: title, level: 2 }),
 	      _react2.default.createElement(_TextInput2.default, {
 	        password: false,
@@ -30183,7 +30185,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.BUTTON_TEXT = exports.BUTTON_ACTION = exports.HEADING_LEVEL = exports.HEADING_TEXT = exports.INPUT_VALUE = exports.INPUT_ON_CHANGE = exports.INPUT_PLACEHOLDER = exports.INPUT_HAS_PASSWORD = exports.CRON_UPDATE = exports.CRON = exports.LOGIN = exports.USER_CREATE = exports.LOGOUT = exports.QUERY_SHOW_ADD_BUTTON = exports.QUERY_ADD = exports.QUERY_CREATE = exports.QUERY_DELETE = exports.QUERY_ID = exports.QUERY = exports.QUERIES = exports.ACCOUNT_ID = exports.ACCOUNT_DELETE = exports.ACCOUNTS = exports.USERNAME = undefined;
+	exports.TEXT = exports.BUTTON_TEXT = exports.BUTTON_ACTION = exports.HEADING_LEVEL = exports.HEADING_TEXT = exports.INPUT_VALUE = exports.INPUT_ON_CHANGE = exports.INPUT_PLACEHOLDER = exports.INPUT_HAS_PASSWORD = exports.CRON_UPDATE = exports.CRON = exports.LOGIN = exports.USER_CREATE = exports.LOGOUT = exports.QUERY_SHOW_ADD_BUTTON = exports.QUERY_ADD = exports.QUERY_CREATE = exports.QUERY_DELETE = exports.QUERY_ID = exports.QUERY = exports.QUERIES = exports.ACCOUNT_ID = exports.ACCOUNT_DELETE = exports.ACCOUNTS = exports.USERNAME = undefined;
 
 	var _react = __webpack_require__(1);
 
@@ -30222,6 +30224,8 @@
 
 	var BUTTON_ACTION = exports.BUTTON_ACTION = _react2.default.PropTypes.func.isRequired;
 	var BUTTON_TEXT = exports.BUTTON_TEXT = _react2.default.PropTypes.func.isRequired;
+
+	var TEXT = exports.TEXT = _react2.default.PropTypes.string.isRequired;
 
 /***/ },
 /* 292 */
@@ -33079,6 +33083,16 @@
 
 	var propTypes = _interopRequireWildcard(_propTypes);
 
+	var _Heading = __webpack_require__(371);
+
+	var _Heading2 = _interopRequireDefault(_Heading);
+
+	var _Button = __webpack_require__(374);
+
+	var _Button2 = _interopRequireDefault(_Button);
+
+	var _Dashboard = __webpack_require__(380);
+
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -33095,14 +33109,10 @@
 	      'div',
 	      null,
 	      _react2.default.createElement(
-	        'h1',
-	        null,
-	        'Dashboard'
-	      ),
-	      _react2.default.createElement(
-	        'button',
-	        { onClick: this.props.logout },
-	        'Log Out'
+	        'div',
+	        { style: _Dashboard.style.heading },
+	        _react2.default.createElement(_Heading2.default, { level: 2, text: 'Dashboard' }),
+	        _react2.default.createElement(_Button2.default, { onClick: this.props.logout, text: 'Log Out' })
 	      ),
 	      _react2.default.createElement(_Accounts2.default, null)
 	    );
@@ -33173,6 +33183,16 @@
 
 	var propTypes = _interopRequireWildcard(_propTypes);
 
+	var _Heading = __webpack_require__(371);
+
+	var _Heading2 = _interopRequireDefault(_Heading);
+
+	var _Accounts = __webpack_require__(381);
+
+	var _Button = __webpack_require__(374);
+
+	var _Button2 = _interopRequireDefault(_Button);
+
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -33184,15 +33204,15 @@
 	    accounts: propTypes.ACCOUNTS
 	  },
 
+	  addAccount: function addAccount() {
+	    window.location.href = '/auth/twitter/login';
+	  },
+
 	  render: function render() {
 	    return _react2.default.createElement(
 	      'div',
-	      null,
-	      _react2.default.createElement(
-	        'h2',
-	        null,
-	        'Accounts'
-	      ),
+	      { style: _Accounts.style.container },
+	      _react2.default.createElement(_Heading2.default, { level: 3, text: 'Accounts' }),
 	      _react2.default.createElement(
 	        'div',
 	        null,
@@ -33206,11 +33226,7 @@
 	          });
 	        })
 	      ),
-	      _react2.default.createElement(
-	        'a',
-	        { href: '/auth/twitter/login' },
-	        'Add Account'
-	      )
+	      _react2.default.createElement(_Button2.default, { onClick: this.addAccount, text: 'Add Account' })
 	    );
 	  }
 	});
@@ -33361,6 +33377,16 @@
 
 	var _Cron2 = _interopRequireDefault(_Cron);
 
+	var _Heading = __webpack_require__(371);
+
+	var _Heading2 = _interopRequireDefault(_Heading);
+
+	var _Account = __webpack_require__(382);
+
+	var _Button = __webpack_require__(374);
+
+	var _Button2 = _interopRequireDefault(_Button);
+
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -33381,19 +33407,16 @@
 	  },
 
 	  render: function render() {
+	    var heading = '@' + this.props.username;
+
 	    return _react2.default.createElement(
 	      'div',
-	      null,
+	      { style: _Account.style.container },
 	      _react2.default.createElement(
-	        'h3',
-	        null,
-	        '@',
-	        this.props.username
-	      ),
-	      _react2.default.createElement(
-	        'button',
-	        { onClick: this.props.delete },
-	        'Remove Account'
+	        'div',
+	        { style: _Account.style.header },
+	        _react2.default.createElement(_Heading2.default, { text: heading, level: 4 }),
+	        _react2.default.createElement(_Button2.default, { onClick: this.props.delete, text: 'Remove Account' })
 	      ),
 	      _react2.default.createElement(_Queries2.default, {
 	        queries: this.props.queries,
@@ -33434,6 +33457,16 @@
 
 	var propTypes = _interopRequireWildcard(_propTypes);
 
+	var _Button = __webpack_require__(374);
+
+	var _Button2 = _interopRequireDefault(_Button);
+
+	var _Heading = __webpack_require__(371);
+
+	var _Heading2 = _interopRequireDefault(_Heading);
+
+	var _Queries = __webpack_require__(384);
+
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -33459,24 +33492,16 @@
 	    var addButton = false;
 
 	    if (this.props.showAddButton) {
-	      addButton = _react2.default.createElement(
-	        'button',
-	        { onClick: this.props.add },
-	        'Add query'
-	      );
+	      addButton = _react2.default.createElement(_Button2.default, { onClick: this.props.add, text: 'Add Query' });
 	    }
 
 	    return _react2.default.createElement(
 	      'div',
-	      null,
-	      _react2.default.createElement(
-	        'h4',
-	        null,
-	        'Queries'
-	      ),
+	      { style: _Queries.style.container },
+	      _react2.default.createElement(_Heading2.default, { text: 'Queries', level: 5 }),
 	      _react2.default.createElement(
 	        'ul',
-	        null,
+	        { style: _Queries.style.list },
 	        this.props.queries.map(function (query) {
 	          return _react2.default.createElement(_Query2.default, {
 	            key: query.id,
@@ -33515,6 +33540,12 @@
 	var _propTypes = __webpack_require__(291);
 
 	var propTypes = _interopRequireWildcard(_propTypes);
+
+	var _Button = __webpack_require__(374);
+
+	var _Button2 = _interopRequireDefault(_Button);
+
+	var _Query = __webpack_require__(385);
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -33576,22 +33607,14 @@
 	    var createQuery = false;
 
 	    if (this.props.id) {
-	      deleteQuery = _react2.default.createElement(
-	        'button',
-	        { onClick: this.delete },
-	        'Delete Query'
-	      );
+	      deleteQuery = _react2.default.createElement(_Button2.default, { onClick: this.delete, text: 'Delete Query' });
 	    } else {
-	      createQuery = _react2.default.createElement(
-	        'button',
-	        { onClick: this.submit },
-	        'Create'
-	      );
+	      createQuery = _react2.default.createElement(_Button2.default, { onClick: this.submit, text: 'Create' });
 	    }
 
 	    return _react2.default.createElement(
 	      'li',
-	      null,
+	      { style: _Query.style.container },
 	      _react2.default.createElement(_TextInput2.default, {
 	        placeholder: 'Query',
 	        onChange: this.onChange,
@@ -33627,6 +33650,16 @@
 	var _propTypes = __webpack_require__(291);
 
 	var propTypes = _interopRequireWildcard(_propTypes);
+
+	var _Cron = __webpack_require__(383);
+
+	var _Heading = __webpack_require__(371);
+
+	var _Heading2 = _interopRequireDefault(_Heading);
+
+	var _Button = __webpack_require__(374);
+
+	var _Button2 = _interopRequireDefault(_Button);
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -33671,22 +33704,14 @@
 	    return _react2.default.createElement(
 	      'div',
 	      null,
-	      _react2.default.createElement(
-	        'h3',
-	        null,
-	        'Cron'
-	      ),
+	      _react2.default.createElement(_Heading2.default, { text: 'Cron', level: 5 }),
 	      _react2.default.createElement(_TextInput2.default, {
 	        placeholder: 'Cron',
 	        onChange: this.onChange,
 	        value: this.state.cron,
 	        password: false
 	      }),
-	      _react2.default.createElement(
-	        'button',
-	        { onClick: this.submit },
-	        'Submit'
-	      )
+	      _react2.default.createElement(_Button2.default, { onClick: this.submit, text: 'Submit' })
 	    );
 	  }
 	});
@@ -33811,7 +33836,8 @@
 
 	var PADDING = exports.PADDING = {
 	  D2: BASE_PADDING / 2,
-	  X1: BASE_PADDING
+	  X1: BASE_PADDING,
+	  X2: BASE_PADDING * 2
 		};
 
 /***/ },
@@ -33984,7 +34010,8 @@
 	  container: {
 	    display: 'flex',
 	    marginBottom: _spacing.PADDING.D2,
-	    marginTop: _spacing.PADDING.D2
+	    marginTop: _spacing.PADDING.D2,
+	    flex: 1
 	  }
 		};
 
@@ -34051,6 +34078,8 @@
 
 	var _fonts = __webpack_require__(370);
 
+	var _colours = __webpack_require__(376);
+
 	var style = exports.style = {
 	  button: {
 	    borderRadius: 0,
@@ -34064,7 +34093,230 @@
 	    fontFamily: _fonts.FONT_FAMILY,
 	    fontWeight: _fonts.FONT_WEIGHTS.LIGHT,
 	    width: 150,
-	    display: 'block'
+	    display: 'block',
+	    background: _colours.BUTTON_BACKGROUND,
+	    color: _colours.BUTTON_TEXT,
+	    cursor: 'pointer',
+	    height: _fonts.FONT_SIZES.SMALL + _spacing.PADDING.X1
+	  }
+		};
+
+/***/ },
+/* 376 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var BUTTON_BACKGROUND = exports.BUTTON_BACKGROUND = '#24b3ca';
+	var BUTTON_TEXT = exports.BUTTON_TEXT = 'white';
+
+/***/ },
+/* 377 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.style = undefined;
+
+	var _spacing = __webpack_require__(369);
+
+	var style = exports.style = {
+	  container: {
+	    marginBottom: _spacing.PADDING.X2
+	  }
+		};
+
+/***/ },
+/* 378 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Text = __webpack_require__(379);
+
+	var _propTypes = __webpack_require__(291);
+
+	var propTypes = _interopRequireWildcard(_propTypes);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Text = _react2.default.createClass({
+	  displayName: 'Text',
+
+	  propTypes: {
+	    text: propTypes.TEXT
+	  },
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'span',
+	      { style: _Text.style.text },
+	      this.props.text
+	    );
+	  }
+	});
+
+		exports.default = Text;
+
+/***/ },
+/* 379 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.style = undefined;
+
+	var _fonts = __webpack_require__(370);
+
+	var style = exports.style = {
+	  text: {
+	    fontSize: _fonts.FONT_SIZES.MEDIUM,
+	    lineHeight: _fonts.LINE_HEIGHTS.MEDIUM,
+	    margin: 0,
+	    padding: 0,
+	    fontFamily: _fonts.FONT_FAMILY,
+	    fontWeight: _fonts.FONT_WEIGHTS.LIGHT
+	  }
+		};
+
+/***/ },
+/* 380 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var style = exports.style = {
+	  heading: {
+	    display: 'flex',
+	    justifyContent: 'space-between'
+	  }
+		};
+
+/***/ },
+/* 381 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.style = undefined;
+
+	var _spacing = __webpack_require__(369);
+
+	var style = exports.style = {
+	  container: {
+	    marginTop: _spacing.PADDING.X2
+	  }
+		};
+
+/***/ },
+/* 382 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.style = undefined;
+
+	var _spacing = __webpack_require__(369);
+
+	var style = exports.style = {
+	  container: {
+	    paddingLeft: _spacing.PADDING.X2,
+	    borderLeft: '4px solid black',
+	    marginTop: _spacing.PADDING.X2,
+	    marginBottom: _spacing.PADDING.X2
+	  },
+
+	  header: {
+	    display: 'flex',
+	    justifyContent: 'space-between'
+	  }
+		};
+
+/***/ },
+/* 383 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+		var style = exports.style = {};
+
+/***/ },
+/* 384 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.style = undefined;
+
+	var _spacing = __webpack_require__(369);
+
+	var style = exports.style = {
+	  container: {
+	    marginTop: _spacing.PADDING.X2,
+	    marginBottom: _spacing.PADDING.X2
+	  },
+
+	  list: {
+	    listStyle: 'none',
+	    padding: 0,
+	    margin: 0
+	  }
+		};
+
+/***/ },
+/* 385 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.style = undefined;
+
+	var _spacing = __webpack_require__(369);
+
+	var style = exports.style = {
+	  container: {
+	    display: 'flex',
+	    marginTop: _spacing.PADDING.X1,
+	    marginBottom: _spacing.PADDING.X1,
+	    justifyContent: 'space-between',
+	    alignItems: 'center'
 	  }
 		};
 

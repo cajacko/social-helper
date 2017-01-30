@@ -1,6 +1,9 @@
 import React from 'react'
 import Query from '~/components/Query/Query'
 import * as propTypes from '~/constants/propTypes'
+import Button from '~/components/Button/Button'
+import Heading from '~/components/Heading/Heading'
+import {style} from '~/components/Queries/Queries.style'
 
 const Queries = React.createClass({
   propTypes: {
@@ -21,14 +24,14 @@ const Queries = React.createClass({
     let addButton = false
 
     if (this.props.showAddButton) {
-      addButton = <button onClick={this.props.add}>Add query</button>
+      addButton = <Button onClick={this.props.add} text="Add Query" />
     }
 
     return (
-      <div>
-        <h4>Queries</h4>
+      <div style={style.container}>
+        <Heading text="Queries" level={5} />
 
-        <ul>
+        <ul style={style.list}>
           {
             this.props.queries.map(function(query) {
               return (
