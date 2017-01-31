@@ -16,6 +16,9 @@ export const QUERY_DELETE = React.PropTypes.func.isRequired
 export const QUERY_CREATE = React.PropTypes.func.isRequired
 export const QUERY_ADD = React.PropTypes.func.isRequired
 export const QUERY_SHOW_ADD_BUTTON = React.PropTypes.bool.isRequired
+export const QUERIES_TITLE = React.PropTypes.string.isRequired
+export const QUERY_ADD_TEXT = React.PropTypes.string.isRequired
+export const QUERY_REMOVE_TEXT = React.PropTypes.string.isRequired
 
 export const LOGOUT = React.PropTypes.func.isRequired
 export const USER_CREATE = React.PropTypes.func.isRequired

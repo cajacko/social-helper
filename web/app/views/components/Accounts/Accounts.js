@@ -29,6 +29,7 @@ const Accounts = React.createClass({
                   username={account.username}
                   id={account.id}
                   cron={account.cron}
+                  blacklist={account.blacklist}
                 />
               )
             })

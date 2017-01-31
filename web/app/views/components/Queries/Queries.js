@@ -11,25 +11,26 @@ const Queries = React.createClass({
     delete: propTypes.QUERY_DELETE,
     create: propTypes.QUERY_CREATE,
     add: propTypes.QUERY_ADD,
-    showAddButton: propTypes.QUERY_SHOW_ADD_BUTTON
+    showAddButton: propTypes.QUERY_SHOW_ADD_BUTTON,
+    title: propTypes.QUERIES_TITLE,
+    addText: propTypes.QUERY_ADD_TEXT,
+    removeText: propTypes.QUERY_REMOVE_TEXT
   },
 
   render: function() {
-    const updateQuery = this.props.update
     const deleteQuery = this.props.delete
     const createQuery = this.props.create
-
-    console.log('render', this.props.queries)
+    const removeText = this.props.removeText
 
     let addButton = false
 
     if (this.props.showAddButton) {
-      addButton = <Button onClick={this.props.add} text="Add Query" />
+      addButton = <Button onClick={this.props.add} text={this.props.addText} />
     }
 
     return (
       <div style={style.container}>
-        <Heading text="Queries" level={5} />
+        <Heading text={this.props.title} level={5} />
 
         <ul style={style.list}>
           {
@@ -41,6 +42,7 @@ const Queries = React.createClass({
                   query={query.query}
                   delete={deleteQuery}
                   create={createQuery}
+                  removeText={removeText}
                 />
               )
             })

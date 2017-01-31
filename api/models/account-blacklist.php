@@ -30,7 +30,7 @@ class Account_Blacklist_Model {
     return Db::get_rows($query, $params);
   }
 
-  public static function create($account_id, $query) {
+  public static function create($account_id, $query_string) {
     $query = '
       INSERT INTO account_blacklist (account_id, query)
       VALUES (?, ?)
@@ -38,7 +38,7 @@ class Account_Blacklist_Model {
 
     $params = array(
       array('i', $account_id),
-      array('s', $query)
+      array('s', $query_string)
     );
 
     return Db::query($query, $params);

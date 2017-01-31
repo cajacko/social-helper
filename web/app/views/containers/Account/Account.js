@@ -4,13 +4,15 @@ import Account from '~/components/Account/Account'
 import * as propTypes from '~/constants/propTypes'
 import {updateQuery, deleteQuery, createQuery} from '~/actions/query'
 import {deleteAccount, updateCron} from '~/actions/account'
+import {createBlacklistItem, deleteBlacklistItem} from '~/actions/blacklist'
 
 const AccountContainer = React.createClass({
   propTypes: {
     queries: propTypes.QUERIES,
     username: propTypes.USERNAME,
     id: propTypes.ACCOUNT_ID,
-    cron: propTypes.CRON
+    cron: propTypes.CRON,
+    blacklist: propTypes.QUERIES
   },
 
   getInitialState: function() {
@@ -23,16 +25,37 @@ const AccountContainer = React.createClass({
       })
     }
 
+    let blacklist = Object.assign([], this.props.blacklist)
+
+    if (!blacklist.length) {
+      blacklist.push({
+        query: '',
+        id: false
+      })
+    }
+
     return {
-      queries: queries
+      queries: queries,
+      blacklist: blacklist
     }
   },
 
   componentWillReceiveProps: function(nextProps) {
+    let changeState = false
+    let state = {}
+
     if (this.props.queries !== nextProps.queries) {
-      this.setState({
-        queries: nextProps.queries
-      })
+      state.queries = nextProps.queries
+      changeState = true
+    }
+
+    if (this.props.blacklist !== nextProps.blacklist) {
+      state.blacklist = nextProps.blacklist
+      changeState = true
+    }
+
+    if (changeState) {
+      this.setState(state)
     }
   },
 
@@ -44,8 +67,30 @@ const AccountContainer = React.createClass({
     this.props.dispatch(createQuery(query, this.props.id))
   },
 
+  createBlacklistItem: function(query) {
+    this.props.dispatch(createBlacklistItem(query, this.props.id))
+  },
+
+  deleteBlacklistItem: function(id) {
+    this.props.dispatch(deleteBlacklistItem(id, this.props.id))
+  },
+
+  addBlacklist: function() {
+    let blacklist = Object.assign([], this.state.blacklist)
+
+    blacklist.push({
+      query: '',
+      id: false
+    })
+
+    this.setState({
+      blacklist: blacklist
+    })
+  },
+
   addQuery: function() {
     let queries = Object.assign([], this.state.queries)
+
     queries.push({
       query: '',
       id: false
@@ -84,6 +129,10 @@ const AccountContainer = React.createClass({
         showAddButton={showAddButton}
         cron={this.props.cron}
         cronSubmit={this.cronSubmit}
+        blacklist={this.state.blacklist}
+        deleteBlacklistItem={this.deleteBlacklistItem}
+        createBlacklistItem={this.createBlacklistItem}
+        addBlacklist={this.addBlacklist}
       />
     )
   }

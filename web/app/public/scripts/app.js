@@ -29475,9 +29475,11 @@
 
 	var CRON_UPDATE = exports.CRON_UPDATE = 'CRON_UPDATE';
 
-	var QUERY_UPDATE = exports.QUERY_UPDATE = 'QUERY_UPDATE';
 	var QUERY_DELETE = exports.QUERY_DELETE = 'QUERY_DELETE';
 	var QUERY_CREATE = exports.QUERY_CREATE = 'QUERY_CREATE';
+
+	var BLACKLIST_ITEM_DELETE = exports.BLACKLIST_ITEM_DELETE = 'BLACKLIST_ITEM_DELETE';
+	var BLACKLIST_ITEM_CREATE = exports.BLACKLIST_ITEM_CREATE = 'BLACKLIST_ITEM_CREATE';
 
 	var ACCOUNT_DELETE = exports.ACCOUNT_DELETE = 'ACCOUNT_DELETE';
 
@@ -29530,6 +29532,8 @@
 	    case (0, _getFetcherAction2.default)(actionTypes.QUERY_UPDATE, _fetcher.SUCCESS):
 	    case (0, _getFetcherAction2.default)(actionTypes.QUERY_CREATE, _fetcher.SUCCESS):
 	    case (0, _getFetcherAction2.default)(actionTypes.QUERY_DELETE, _fetcher.SUCCESS):
+	    case (0, _getFetcherAction2.default)(actionTypes.BLACKLIST_ITEM_DELETE, _fetcher.SUCCESS):
+	    case (0, _getFetcherAction2.default)(actionTypes.BLACKLIST_ITEM_CREATE, _fetcher.SUCCESS):
 	    case (0, _getFetcherAction2.default)(actionTypes.ACCOUNT_DELETE, _fetcher.SUCCESS):
 	      if (action.payload.data.accounts) {
 	        return action.payload.data.accounts;
@@ -29737,7 +29741,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.TEXT = exports.BUTTON_TEXT = exports.BUTTON_ACTION = exports.HEADING_LEVEL = exports.HEADING_TEXT = exports.INPUT_VALUE = exports.INPUT_ON_CHANGE = exports.INPUT_PLACEHOLDER = exports.INPUT_HAS_PASSWORD = exports.CRON_UPDATE = exports.CRON = exports.LOGIN = exports.USER_CREATE = exports.LOGOUT = exports.QUERY_SHOW_ADD_BUTTON = exports.QUERY_ADD = exports.QUERY_CREATE = exports.QUERY_DELETE = exports.QUERY_ID = exports.QUERY = exports.QUERIES = exports.ACCOUNT_ID = exports.ACCOUNT_DELETE = exports.ACCOUNTS = exports.USERNAME = undefined;
+	exports.TEXT = exports.BUTTON_TEXT = exports.BUTTON_ACTION = exports.HEADING_LEVEL = exports.HEADING_TEXT = exports.INPUT_VALUE = exports.INPUT_ON_CHANGE = exports.INPUT_PLACEHOLDER = exports.INPUT_HAS_PASSWORD = exports.CRON_UPDATE = exports.CRON = exports.LOGIN = exports.USER_CREATE = exports.LOGOUT = exports.QUERY_REMOVE_TEXT = exports.QUERY_ADD_TEXT = exports.QUERIES_TITLE = exports.QUERY_SHOW_ADD_BUTTON = exports.QUERY_ADD = exports.QUERY_CREATE = exports.QUERY_DELETE = exports.QUERY_ID = exports.QUERY = exports.QUERIES = exports.ACCOUNT_ID = exports.ACCOUNT_DELETE = exports.ACCOUNTS = exports.USERNAME = undefined;
 
 	var _react = __webpack_require__(1);
 
@@ -29758,6 +29762,9 @@
 	var QUERY_CREATE = exports.QUERY_CREATE = _react2.default.PropTypes.func.isRequired;
 	var QUERY_ADD = exports.QUERY_ADD = _react2.default.PropTypes.func.isRequired;
 	var QUERY_SHOW_ADD_BUTTON = exports.QUERY_SHOW_ADD_BUTTON = _react2.default.PropTypes.bool.isRequired;
+	var QUERIES_TITLE = exports.QUERIES_TITLE = _react2.default.PropTypes.string.isRequired;
+	var QUERY_ADD_TEXT = exports.QUERY_ADD_TEXT = _react2.default.PropTypes.string.isRequired;
+	var QUERY_REMOVE_TEXT = exports.QUERY_REMOVE_TEXT = _react2.default.PropTypes.string.isRequired;
 
 	var LOGOUT = exports.LOGOUT = _react2.default.PropTypes.func.isRequired;
 	var USER_CREATE = exports.USER_CREATE = _react2.default.PropTypes.func.isRequired;
@@ -33619,7 +33626,8 @@
 	            queries: account.queries,
 	            username: account.username,
 	            id: account.id,
-	            cron: account.cron
+	            cron: account.cron,
+	            blacklist: account.blacklist
 	          });
 	        })
 	      ),
@@ -33658,6 +33666,8 @@
 
 	var _account = __webpack_require__(383);
 
+	var _blacklist = __webpack_require__(386);
+
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -33669,7 +33679,8 @@
 	    queries: propTypes.QUERIES,
 	    username: propTypes.USERNAME,
 	    id: propTypes.ACCOUNT_ID,
-	    cron: propTypes.CRON
+	    cron: propTypes.CRON,
+	    blacklist: propTypes.QUERIES
 	  },
 
 	  getInitialState: function getInitialState() {
@@ -33682,16 +33693,37 @@
 	      });
 	    }
 
+	    var blacklist = Object.assign([], this.props.blacklist);
+
+	    if (!blacklist.length) {
+	      blacklist.push({
+	        query: '',
+	        id: false
+	      });
+	    }
+
 	    return {
-	      queries: queries
+	      queries: queries,
+	      blacklist: blacklist
 	    };
 	  },
 
 	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    var changeState = false;
+	    var state = {};
+
 	    if (this.props.queries !== nextProps.queries) {
-	      this.setState({
-	        queries: nextProps.queries
-	      });
+	      state.queries = nextProps.queries;
+	      changeState = true;
+	    }
+
+	    if (this.props.blacklist !== nextProps.blacklist) {
+	      state.blacklist = nextProps.blacklist;
+	      changeState = true;
+	    }
+
+	    if (changeState) {
+	      this.setState(state);
 	    }
 	  },
 
@@ -33703,8 +33735,30 @@
 	    this.props.dispatch((0, _query.createQuery)(query, this.props.id));
 	  },
 
+	  createBlacklistItem: function createBlacklistItem(query) {
+	    this.props.dispatch((0, _blacklist.createBlacklistItem)(query, this.props.id));
+	  },
+
+	  deleteBlacklistItem: function deleteBlacklistItem(id) {
+	    this.props.dispatch((0, _blacklist.deleteBlacklistItem)(id, this.props.id));
+	  },
+
+	  addBlacklist: function addBlacklist() {
+	    var blacklist = Object.assign([], this.state.blacklist);
+
+	    blacklist.push({
+	      query: '',
+	      id: false
+	    });
+
+	    this.setState({
+	      blacklist: blacklist
+	    });
+	  },
+
 	  addQuery: function addQuery() {
 	    var queries = Object.assign([], this.state.queries);
+
 	    queries.push({
 	      query: '',
 	      id: false
@@ -33741,7 +33795,11 @@
 	      'delete': this.delete,
 	      showAddButton: showAddButton,
 	      cron: this.props.cron,
-	      cronSubmit: this.cronSubmit
+	      cronSubmit: this.cronSubmit,
+	      blacklist: this.state.blacklist,
+	      deleteBlacklistItem: this.deleteBlacklistItem,
+	      createBlacklistItem: this.createBlacklistItem,
+	      addBlacklist: this.addBlacklist
 	    });
 	  }
 	});
@@ -33800,7 +33858,11 @@
 	    delete: propTypes.ACCOUNT_DELETE,
 	    showAddButton: propTypes.QUERY_SHOW_ADD_BUTTON,
 	    cron: propTypes.CRON,
-	    cronSubmit: propTypes.CRON_UPDATE
+	    cronSubmit: propTypes.CRON_UPDATE,
+	    blacklist: propTypes.QUERIES,
+	    deleteBlacklistItem: propTypes.QUERY_DELETE,
+	    createBlacklistItem: propTypes.QUERY_CREATE,
+	    addBlacklist: propTypes.QUERY_ADD
 	  },
 
 	  render: function render() {
@@ -33820,7 +33882,20 @@
 	        create: this.props.createQuery,
 	        'delete': this.props.deleteQuery,
 	        add: this.props.addQuery,
-	        showAddButton: this.props.showAddButton
+	        showAddButton: this.props.showAddButton,
+	        title: 'Queries',
+	        addText: 'Add Query',
+	        removeText: 'Delete Query'
+	      }),
+	      _react2.default.createElement(_Queries2.default, {
+	        queries: this.props.blacklist,
+	        create: this.props.createBlacklistItem,
+	        'delete': this.props.deleteBlacklistItem,
+	        add: this.props.addBlacklist,
+	        showAddButton: this.props.showAddButton,
+	        title: 'Blacklist',
+	        addText: 'Add Item',
+	        removeText: 'Delete Item'
 	      }),
 	      _react2.default.createElement(_Cron2.default, {
 	        cron: this.props.cron,
@@ -33876,26 +33951,27 @@
 	    delete: propTypes.QUERY_DELETE,
 	    create: propTypes.QUERY_CREATE,
 	    add: propTypes.QUERY_ADD,
-	    showAddButton: propTypes.QUERY_SHOW_ADD_BUTTON
+	    showAddButton: propTypes.QUERY_SHOW_ADD_BUTTON,
+	    title: propTypes.QUERIES_TITLE,
+	    addText: propTypes.QUERY_ADD_TEXT,
+	    removeText: propTypes.QUERY_REMOVE_TEXT
 	  },
 
 	  render: function render() {
-	    var updateQuery = this.props.update;
 	    var deleteQuery = this.props.delete;
 	    var createQuery = this.props.create;
-
-	    console.log('render', this.props.queries);
+	    var removeText = this.props.removeText;
 
 	    var addButton = false;
 
 	    if (this.props.showAddButton) {
-	      addButton = _react2.default.createElement(_Button2.default, { onClick: this.props.add, text: 'Add Query' });
+	      addButton = _react2.default.createElement(_Button2.default, { onClick: this.props.add, text: this.props.addText });
 	    }
 
 	    return _react2.default.createElement(
 	      'div',
 	      { style: _Queries.style.container },
-	      _react2.default.createElement(_Heading2.default, { text: 'Queries', level: 5 }),
+	      _react2.default.createElement(_Heading2.default, { text: this.props.title, level: 5 }),
 	      _react2.default.createElement(
 	        'ul',
 	        { style: _Queries.style.list },
@@ -33905,7 +33981,8 @@
 	            id: query.id,
 	            query: query.query,
 	            'delete': deleteQuery,
-	            create: createQuery
+	            create: createQuery,
+	            removeText: removeText
 	          });
 	        })
 	      ),
@@ -33955,21 +34032,19 @@
 	    query: propTypes.QUERY,
 	    id: propTypes.QUERY_ID,
 	    delete: propTypes.QUERY_DELETE,
-	    create: propTypes.QUERY_CREATE
+	    create: propTypes.QUERY_CREATE,
+	    removeText: propTypes.QUERY_REMOVE_TEXT
 	  },
 
 	  getInitialState: function getInitialState() {
 	    var query = '';
-	    var updateText = 'Create';
 
 	    if (this.props.id) {
 	      query = this.props.query;
-	      updateText = 'Update';
 	    }
 
 	    return {
-	      query: query,
-	      updateText: updateText
+	      query: query
 	    };
 	  },
 
@@ -34004,7 +34079,7 @@
 	    var createQuery = false;
 
 	    if (this.props.id) {
-	      deleteQuery = _react2.default.createElement(_Button2.default, { onClick: this.delete, text: 'Delete Query' });
+	      deleteQuery = _react2.default.createElement(_Button2.default, { onClick: this.delete, text: this.props.removeText });
 	    } else {
 	      createQuery = _react2.default.createElement(_Button2.default, { onClick: this.submit, text: 'Create' });
 	    }
@@ -34013,7 +34088,7 @@
 	      'li',
 	      { style: _Query.style.container },
 	      _react2.default.createElement(_TextInput2.default, {
-	        placeholder: 'Query',
+	        placeholder: 'Text',
 	        onChange: this.onChange,
 	        value: this.state.query,
 	        password: false
@@ -34319,6 +34394,48 @@
 	    justifyContent: 'space-between'
 	  }
 		};
+
+/***/ },
+/* 386 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.deleteBlacklistItem = deleteBlacklistItem;
+	exports.createBlacklistItem = createBlacklistItem;
+
+	var _fetcher = __webpack_require__(290);
+
+	var _fetcher2 = _interopRequireDefault(_fetcher);
+
+	var _actions = __webpack_require__(277);
+
+	var actionTypes = _interopRequireWildcard(_actions);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function deleteBlacklistItem(id, accountId) {
+	  var data = {
+	    id: id,
+	    accountId: accountId
+	  };
+
+	  return (0, _fetcher2.default)('blacklist/delete', data, actionTypes.BLACKLIST_ITEM_DELETE);
+	}
+
+	function createBlacklistItem(query, accountId) {
+	  var data = {
+	    query: query,
+	    accountId: accountId
+	  };
+
+	  return (0, _fetcher2.default)('blacklist/create', data, actionTypes.BLACKLIST_ITEM_CREATE);
+	}
 
 /***/ }
 /******/ ]);
