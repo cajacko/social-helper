@@ -221,6 +221,45 @@ switch($controller) {
 
     break;
 
+  case 'blacklist':
+    require_once(dirname(__FILE__) . '/../controllers/account-blacklist.php');
+    $account_blacklist = new Account_Blacklist_Controller;
+
+    switch($endpoint) {
+      case 'delete':
+        if (!isset($post_data['id'])) {
+          error_response(3986);
+        }
+
+        $account_blacklist->delete(
+          $user,
+          $post_data['id']
+        );
+
+        break;
+
+      case 'create':
+        if (!isset($post_data['accountId'])) {
+          error_response(45333);
+        }
+
+        if (!isset($post_data['query'])) {
+          error_response(22466);
+        }
+
+        $account_blacklist->create(
+          $user,
+          $post_data['accountId'],
+          $post_data['query']
+        );
+        break;
+
+      default:
+        error_response(30987098);
+    }
+
+    break;
+
   default:
     error_response(5);
 }

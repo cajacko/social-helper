@@ -16,7 +16,11 @@ const Account = React.createClass({
     delete: propTypes.ACCOUNT_DELETE,
     showAddButton: propTypes.QUERY_SHOW_ADD_BUTTON,
     cron: propTypes.CRON,
-    cronSubmit: propTypes.CRON_UPDATE
+    cronSubmit: propTypes.CRON_UPDATE,
+    blacklist: propTypes.QUERIES,
+    deleteBlacklistItem: propTypes.QUERY_DELETE,
+    createBlacklistItem: propTypes.QUERY_CREATE,
+    addBlacklist: propTypes.QUERY_ADD,
   },
 
   render: function() {
@@ -35,6 +39,20 @@ const Account = React.createClass({
           delete={this.props.deleteQuery}
           add={this.props.addQuery}
           showAddButton={this.props.showAddButton}
+          title="Queries"
+          addText="Add Query"
+          removeText="Delete Query"
+        />
+
+        <Queries
+          queries={this.props.blacklist}
+          create={this.props.createBlacklistItem}
+          delete={this.props.deleteBlacklistItem}
+          add={this.props.addBlacklist}
+          showAddButton={this.props.showAddButton}
+          title="Blacklist"
+          addText="Add Item"
+          removeText="Delete Item"
         />
 
         <Cron
