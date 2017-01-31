@@ -31,13 +31,13 @@ class Account_Blacklist_Controller {
   public function initialise($blacklist_query_data) {
     $this->id = $blacklist_query_data['id'];
     $this->account_id = $blacklist_query_data['account_id'];
-    $this->query = $blacklist_query_data['query'];
+    $this->query = strtolower($blacklist_query_data['query']);
   }
 
   public function is_tweet_in_blacklist($tweet) {
     $data = $tweet->get_json();
     $data = json_decode($data);
-    $tweet_text = $data->text;
+    $tweet_text = strtolower($data->text);
 
     logger('Account_Blacklist_Controller', 'is_tweet_in_blacklist', $this->query);
     logger('Account_Blacklist_Controller', 'is_tweet_in_blacklist', $tweet_text);
@@ -51,7 +51,7 @@ class Account_Blacklist_Controller {
       $username = substr($this->query, 1);
       logger('Account_Blacklist_Controller', 'is_tweet_in_blacklist', $username);
       logger('Account_Blacklist_Controller', 'is_tweet_in_blacklist', $data->user->screen_name);
-      if ($data->user->screen_name == $username) {
+      if (strtolower($data->user->screen_name) == $username) {
         logger('Account_Blacklist_Controller', 'is_tweet_in_blacklist', '-Blacklist query is user');
         return true;
       }

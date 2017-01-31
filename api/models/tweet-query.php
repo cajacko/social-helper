@@ -44,38 +44,28 @@ class Tweet_Query_Model {
     return Db::row_exists($query, $params);
   }
 
-  public static function get_tweets($query_id) {
+  public static function get_tweets($account_id, $query_id, $offset = 0) {
     $query = '
       SELECT tweets.*
       FROM tweet_queries
       INNER JOIN tweets
       ON tweets.id = tweet_queries.tweet_id
-      WHERE tweet_queries.query_id = ?
-      ORDER BY tweets.id DESC
-      LIMIT 0, 25
-    ';
-
-    $params = array(
-      array('i', $query_id)
-    );
-
-    return Db::get_rows($query, $params);
-  }
-
-  public static function get_tweets_before_id($query_id, $before_id) {
-    $query = '
-      SELECT tweets.*
-      FROM tweet_queries
-      INNER JOIN tweets
-      ON tweets.id = tweet_queries.tweet_id
-      WHERE tweet_queries.query_id = ? AND tweet_queries.id < ?
-      ORDER BY tweets.id DESC
-      LIMIT 0, 25
+      LEFT JOIN account_tweets
+      ON account_tweets.tweet_id = tweets.id
+      WHERE
+        tweet_queries.query_id = ?
+        AND (
+          account_tweets.account_id != ?
+          OR account_tweets.account_id IS NULL
+        )
+      ORDER BY retweets DESC, tweets.id DESC
+      LIMIT ?, 25
     ';
 
     $params = array(
       array('i', $query_id),
-      array('i', $before_id)
+      array('i', $account_id),
+      array('i', $offset)
     );
 
     return Db::get_rows($query, $params);

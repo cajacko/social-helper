@@ -24,15 +24,12 @@ class Tweet_Query_Controller {
     );
   }
 
-  public function get_query_tweets($before_id = false) {
-    if ($before_id) {
-      $tweets = Tweet_Query_Model::get_tweets_before_id(
-        $this->query->get_id(),
-        $before_id
-      );
-    } else {
-      $tweets = Tweet_Query_Model::get_tweets($this->query->get_id());
-    }
+  public function get_query_tweets($account_id, $offset = 0) {
+    $tweets = Tweet_Query_Model::get_tweets(
+      $account_id,
+      $this->query->get_id(),
+      $offset
+    );
 
     if (!$tweets) {
       return false;

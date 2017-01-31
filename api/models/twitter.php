@@ -20,7 +20,8 @@ class Twitter_Model {
       'count' => 100,
       'exclude_replies' => true,
       'q' => $query,
-      'result_type' => 'popular' // mixed, recent or popular
+      'lang' => 'en',
+      'result_type' => 'mixed' // mixed, recent or popular
     );
 
     $tweets = $this->app->get($endpoint, $params);
@@ -33,6 +34,8 @@ class Twitter_Model {
   }
 
   public function retweet($tweet_id) {
+    logger('Twitter_Model', 'retweet', $tweet_id);
+
     $endpoint = 'statuses/retweet';
 
     $params = array(
