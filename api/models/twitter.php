@@ -20,7 +20,7 @@ class Twitter_Model {
       'count' => 100,
       'exclude_replies' => true,
       'q' => $query,
-      'result_type' => 'mixed' // mixed, recent or popular
+      'result_type' => 'popular' // mixed, recent or popular
     );
 
     $tweets = $this->app->get($endpoint, $params);

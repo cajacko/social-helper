@@ -2,6 +2,7 @@
 
 require_once(dirname(__FILE__) . '/../models/user-accounts.php');
 require_once(dirname(__FILE__) . '/../controllers/account.php');
+require_once(dirname(__FILE__) . '/../controllers/account-blacklist.php');
 
 class User_Accounts_Controller {
   private $id = false;
@@ -30,6 +31,7 @@ class User_Accounts_Controller {
 
   public function get_accounts_array() {
     $accounts = array();
+    $account_blacklist = new Account_Blacklist_Controller();
 
     foreach($this->accounts as $account) {
       $account_array = array();
@@ -37,6 +39,9 @@ class User_Accounts_Controller {
       $account_array['username'] = $account->get_account_username();
       $account_array['queries'] = $account->get_account_queries_array();
       $account_array['cron'] = $account->get_cron();
+      $account_array['blacklist'] = $account_blacklist->get_blacklist_queries(
+        $account->get_account_id()
+      );
       $accounts[] = $account_array;
     }
 

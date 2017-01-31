@@ -52,6 +52,8 @@ class Accounts_Controller {
         $account->set_last_started_cron();
         $account->tweet_if_ready();
         $account->set_last_ran_cron();
+      } else {
+        logger('Accounts_Controller', 'tweet_from_accounts', '-should_tweet_if_ready = false');
       }
     }
   }

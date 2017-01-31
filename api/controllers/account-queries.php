@@ -5,12 +5,40 @@ require_once(dirname(__FILE__) . '/../controllers/query.php');
 require_once(dirname(__FILE__) . '/../controllers/account.php');
 require_once(dirname(__FILE__) . '/../controllers/tweet-query.php');
 require_once(dirname(__FILE__) . '/../controllers/account-tweets.php');
+require_once(dirname(__FILE__) . '/../controllers/account-blacklist.php');
 
 class Account_Queries_Controller {
   private $account = false;
   private $query = false;
   private $id = false;
   private $queries = array();
+  private $blacklist_queries = array();
+
+  private function is_tweet_in_blacklist($tweet) {
+    foreach($this->blacklist_queries as $blacklist_query) {
+      if ($blacklist_query->is_tweet_in_blacklist($tweet)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  private function get_blacklist_queries() {
+    $account_blacklist = new Account_Blacklist_Controller();
+    
+    $blacklist_queries = $account_blacklist->get_blacklist_queries(
+      $this->account->get_account_id()
+    );
+
+    if ($blacklist_queries) {
+      foreach($blacklist_queries as $blacklist_query_data) {
+        $blacklist_query = new Account_Blacklist_Controller;
+        $blacklist_query->initialise($blacklist_query_data);
+        $this->blacklist_queries[] = $blacklist_query;
+      }
+    }
+  }
 
   public function delete_floating_rows() {
     return Account_Queries_Model::delete_floating_rows();
@@ -23,6 +51,10 @@ class Account_Queries_Controller {
     );
 
     if ($exists) {
+      return false;
+    }
+
+    if ($this->is_tweet_in_blacklist($tweet)) {
       return false;
     }
 
@@ -82,14 +114,19 @@ class Account_Queries_Controller {
   }
 
   public function tweet_next() {
+    logger('Account_Queries_Controller', 'tweet_next', 'Init');
+    $this->get_blacklist_queries();
     $tweets = $this->get_next_tweets();
 
     if ($tweets) {
+      logger('Account_Queries_Controller', 'tweet_next', 'Has tweets');
       foreach($tweets as $account_tweets) {
         if ($account_tweets->retweet($this->query->get_id())) {
           return true;
         }
       }
+    } else {
+      logger('Account_Queries_Controller', 'tweet_next', 'Does not have tweets');
     }
 
     return false;
