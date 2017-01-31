@@ -61,7 +61,7 @@ class Query_Controller {
     $account_queries = new Account_Queries_Controller;
 
     if ($this->id) {
-      if ($account_queries->account_query_exists($user, $this)) {
+      if ($account_queries->account_query_exists($account_id, $this)) {
         return error_response(56);
       }
 
