@@ -27,6 +27,10 @@ class Tweet_Controller {
     return $this->id;
   }
 
+  public function get_json() {
+    return $this->json;
+  }
+
   public function initialise_from_db($tweet_data) {
     $this->json = $tweet_data['tweet'];
     $this->tweet_id = $tweet_data['tweet_id'];

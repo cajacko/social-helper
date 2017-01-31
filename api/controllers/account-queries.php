@@ -5,12 +5,48 @@ require_once(dirname(__FILE__) . '/../controllers/query.php');
 require_once(dirname(__FILE__) . '/../controllers/account.php');
 require_once(dirname(__FILE__) . '/../controllers/tweet-query.php');
 require_once(dirname(__FILE__) . '/../controllers/account-tweets.php');
+require_once(dirname(__FILE__) . '/../controllers/account-blacklist.php');
 
 class Account_Queries_Controller {
   private $account = false;
   private $query = false;
   private $id = false;
   private $queries = array();
+  private $blacklist_queries = array();
+
+  private function is_tweet_in_blacklist($tweet) {
+    foreach($this->blacklist_queries as $blacklist_query) {
+      if ($blacklist_query->is_tweet_in_blacklist($tweet)) {
+        Account_Tweets_Model::set_account_tweet(
+          $this->account->get_account_id(),
+          $tweet->get_id(),
+          $this->query->get_id(),
+          date('Y-m-d H:i:s'),
+          1
+        );
+
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  private function get_blacklist_queries() {
+    $account_blacklist = new Account_Blacklist_Controller();
+
+    $blacklist_queries = $account_blacklist->get_blacklist_queries(
+      $this->account->get_account_id()
+    );
+
+    if ($blacklist_queries) {
+      foreach($blacklist_queries as $blacklist_query_data) {
+        $blacklist_query = new Account_Blacklist_Controller;
+        $blacklist_query->initialise($blacklist_query_data);
+        $this->blacklist_queries[] = $blacklist_query;
+      }
+    }
+  }
 
   public function delete_floating_rows() {
     return Account_Queries_Model::delete_floating_rows();
@@ -23,6 +59,10 @@ class Account_Queries_Controller {
     );
 
     if ($exists) {
+      return false;
+    }
+
+    if ($this->is_tweet_in_blacklist($tweet)) {
       return false;
     }
 
@@ -40,21 +80,17 @@ class Account_Queries_Controller {
     return $user->read();
   }
 
-  private function get_next_tweets($before_id = false) {
+  private function get_next_tweets($offset = 0) {
     // get query tweets in best order (by id for now, as twitter figures out ordr for us)
     $tweet_queries = new Tweet_Query_Controller;
     $tweet_queries->set_query($this->query);
-    $tweets = $tweet_queries->get_query_tweets($before_id);
+    $tweets = $tweet_queries->get_query_tweets(
+      $this->account->get_account_id(),
+      $offset
+    );
 
     if (!$tweets) {
       return false;
-    }
-
-    $last_count = count($tweets) - 1;
-    $last_id = $tweets[$last_count]->get_id();
-
-    if (!$last_id) {
-      return error_response(385709);
     }
 
     $tweet_array = array();
@@ -66,7 +102,8 @@ class Account_Queries_Controller {
     }
 
     if (!$tweet_array) {
-      return $this->get_next_tweets($last_id);
+      $offset = $offset + 25;
+      return $this->get_next_tweets($offset);
     }
 
     $account_tweets = array();
@@ -82,14 +119,19 @@ class Account_Queries_Controller {
   }
 
   public function tweet_next() {
+    logger('Account_Queries_Controller', 'tweet_next', 'Init');
+    $this->get_blacklist_queries();
     $tweets = $this->get_next_tweets();
 
     if ($tweets) {
+      logger('Account_Queries_Controller', 'tweet_next', 'Has tweets');
       foreach($tweets as $account_tweets) {
         if ($account_tweets->retweet($this->query->get_id())) {
           return true;
         }
       }
+    } else {
+      logger('Account_Queries_Controller', 'tweet_next', 'Does not have tweets');
     }
 
     return false;

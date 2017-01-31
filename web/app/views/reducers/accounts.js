@@ -13,6 +13,8 @@ export default function(state = defaultState, action) {
     case getFetcherAction(actionTypes.QUERY_UPDATE, SUCCESS):
     case getFetcherAction(actionTypes.QUERY_CREATE, SUCCESS):
     case getFetcherAction(actionTypes.QUERY_DELETE, SUCCESS):
+    case getFetcherAction(actionTypes.BLACKLIST_ITEM_DELETE, SUCCESS):
+    case getFetcherAction(actionTypes.BLACKLIST_ITEM_CREATE, SUCCESS):
     case getFetcherAction(actionTypes.ACCOUNT_DELETE, SUCCESS):
       if (action.payload.data.accounts) {
         return action.payload.data.accounts
