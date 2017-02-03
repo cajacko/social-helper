@@ -3,4 +3,4 @@
 ./backup
 docker stop $(docker ps -a -q)
 docker rm $(docker ps -a -q)
-docker volume rm db_data
+./run
