@@ -45,6 +45,7 @@ class Account_Tweets_Controller {
   }
 
   public function retweet($query_id) {
+    logger('Account_Tweets_Controller', 'retweet', 'Init');
     $retweeted = Account_Tweets_Model::retweet(
       $this->tweet->get_tweet_id(),
       $this->account->get_token(),
