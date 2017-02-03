@@ -51,3 +51,16 @@ When adding a shell script change the file permission using:
 chmod +x filename.sh
 ```
 Before committing.
+
+To stop, delete and remove all docker volumes and containers run:
+```
+./reset
+```
+To update to the latest version of social helper, without changing the database run (Makes a backup before running):
+```
+./update-no-db-changes
+```
+To make a manual backup run:
+```
+./backup
+```
