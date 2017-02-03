@@ -45,3 +45,9 @@ npm run docker-api-bash
 cat /var/log/syslog
 ```
 To check out the system logs.
+
+When adding a shell script change the file permission using:
+```
+chmod +x filename.sh
+```
+Before committing.
